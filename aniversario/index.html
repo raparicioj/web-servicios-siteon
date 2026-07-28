@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cuando el mar aprendió nuestros nombres — Rodrigo & Carmen Gloria</title>
+  <meta name="description" content="Edición de Aniversario: Rodrigo & Carmen Gloria. Una historia que todavía se sigue escribiendo. Estilo Moderno de Mar, Jinjer Pisces, Viña del Mar.">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Caveat:wght@400;600&family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Outfit:wght@200;300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="theme-light-sea">
+
+  <!-- OFFICIAL JINJER - PISCES AUDIO PLAYER BAR -->
+  <div class="audio-control-bar" id="audioControlBar">
+    <button class="audio-toggle-btn" id="audioToggleBtn" title="Abrir Reproductor Oficial: Jinjer - Pisces">
+      <i data-lucide="disc" class="audio-icon spin-slow"></i>
+      <span class="audio-text">Jinjer — "Pisces" (Reproductor Oficial)</span>
+      <span class="audio-pulse"></span>
+    </button>
+  </div>
+
+  <!-- FLOATING JINJER PISCES PLAYER MODAL -->
+  <div class="jinjer-player-popup" id="jinjerPlayerPopup">
+    <div class="jinjer-player-header">
+      <div class="jinjer-track-info">
+        <i data-lucide="music" class="music-icon"></i>
+        <div>
+          <strong>Jinjer — Pisces</strong>
+          <span>Napalm Records • Versión Oficial</span>
+        </div>
+      </div>
+      <button class="close-player-btn" id="closePlayerBtn"><i data-lucide="x"></i></button>
+    </div>
+    <div class="jinjer-iframe-wrapper">
+      <iframe id="jinjerIframe" src="https://www.youtube-nocookie.com/embed/SQNtGoM3FVU?autoplay=1&enablejsapi=1" title="Jinjer - Pisces (Official Live Session)" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </div>
+  </div>
+
+  <!-- Header Navigation -->
+  <header class="master-header">
+    <div class="brand-tag">
+      <span class="sub-tag">EDICIÓN ANIVERSARIO</span>
+      <span class="gold-dot"></span>
+      <span class="sub-tag">VIÑA DEL MAR</span>
+    </div>
+    <div class="header-edition-label">
+      <span>NUESTRA HISTORIA</span>
+    </div>
+  </header>
+
+  <!-- MAIN WRAPPER FOR MODERN UNIFIED POSTER VIEW -->
+  <main class="poster-container active-view">
+
+    <!-- HERO EDITORIAL BANNER -->
+    <section class="hero-editorial ocean-hero">
+      <div class="hero-bg-overlay" style="background-image: url('assets/images/first_date_cafe.jpg');"></div>
+      <div class="hero-vignette"></div>
+      
+      <div class="hero-content">
+        <div class="issue-badge gold-ocean-badge">
+          <i data-lucide="heart" class="badge-icon"></i>
+          <span>NUESTRO ANIVERSARIO</span>
+          <span class="divider">•</span>
+          <span>VIÑA DEL MAR</span>
+          <span class="divider">•</span>
+          <span>AGOSTO</span>
+        </div>
+        <h1 class="main-title ocean-title">Cuando el mar aprendió nuestros nombres ♡</h1>
+        <h2 class="main-subtitle">LA HISTORIA DE RODRIGO <span class="ampersand">&</span> CARMEN GLORIA</h2>
+        
+        <p class="hero-subtitle">
+          "Hay personas que llegan haciendo ruido. Y hay otras que llegan como la lluvia sobre el mar de Viña: silenciosas, inevitables y capaces de cambiar el paisaje sin pedir permiso."
+        </p>
+
+        <div class="hero-meta">
+          <div class="meta-item">
+            <i data-lucide="coffee"></i>
+            <span>Primera Cita: Café frente al Pacífico</span>
+          </div>
+          <div class="meta-item">
+            <i data-lucide="music"></i>
+            <span>Jinjer "Pisces" & Alice in Chains</span>
+          </div>
+          <div class="meta-item">
+            <i data-lucide="book"></i>
+            <span>Primer Libro Leído Juntos: "Sonó un violín en París"</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STORY PART 1: EL INICIO & LOS MUNDOS -->
+    <section class="editorial-section story-chapter-section">
+      <div class="chapter-badge">CAPÍTULO I</div>
+      <h2 class="chapter-main-title">Dos Mundos & Una Forma Distinta de Mirar</h2>
+      
+      <div class="story-layout-grid">
+        <div class="story-text-card card-shadow">
+          <p class="story-lead">
+            Rodrigo llevaba años resolviendo problemas. Servidores caídos, plataformas complejas, dashboards, Kubernetes, Dynatrace... Su mente era un mapa de conexiones. Había aprendido que casi todo podía explicarse con lógica.
+          </p>
+          <p class="story-paragraph">
+            Hasta que apareció <strong>Carmen Gloria</strong>.
+          </p>
+          <p class="story-paragraph">
+            Ella no venía a resolver ecuaciones. Venía a enseñar niños, a crear, a pintar emociones donde otros solo veían dificultades. Tenía esa forma de mirar el mundo que no necesitaba algoritmos para encontrar belleza.
+          </p>
+
+          <div class="highlight-callout">
+            <i data-lucide="sparkles" class="callout-icon"></i>
+            <p>"Y ahí empezó todo."</p>
+          </div>
+        </div>
+
+        <div class="story-image-card">
+          <div class="hero-polaroid-frame ocean-frame">
+            <div class="tape-corner top-left gold-tape"></div>
+            <div class="polaroid-photo-wrapper">
+              <img src="assets/images/first_date_cafe.jpg" alt="Nuestra primera cita en el café" class="canonical-photo">
+            </div>
+            <div class="polaroid-caption">
+              <p class="handwritten-note">"1. Nuestra primera cita en el café frente al mar..."</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STORY PART 2: SISTEMAS & PERSONAS -->
+    <section class="editorial-section story-chapter-section bg-soft-blue">
+      <div class="chapter-badge">CAPÍTULO II</div>
+      <h2 class="chapter-main-title">Uno Construía Sistemas. La Otra Construía Personas.</h2>
+      
+      <div class="story-layout-grid reverse">
+        <div class="story-image-card">
+          <div class="hero-polaroid-frame ocean-frame">
+            <div class="tape-corner top-right gold-tape"></div>
+            <div class="polaroid-photo-wrapper">
+              <img src="assets/images/home_vinyl_cuddle.jpg" alt="Tocadiscos en casa" class="canonical-photo">
+            </div>
+            <div class="polaroid-caption">
+              <p class="handwritten-note">"Tardes de vinilos, tocadiscos y abrazos..."</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="story-text-card card-shadow">
+          <p class="story-paragraph">
+            Mientras Rodrigo afinaba una Les Paul para tocar un riff de rock, Carmen afinaba el corazón de quienes la rodeaban con una paciencia infinita. Eran diferentes, pero precisamente por eso parecían piezas de un mismo rompecabezas.
+          </p>
+          <p class="story-paragraph">
+            Con el tiempo llegaron las conversaciones interminables, las bromas, los días buenos y los días difíciles. Hubo momentos de incertidumbre, de trabajo intenso, de reconstruir proyectos, de pensar en el futuro una y otra vez.
+          </p>
+          <p class="story-paragraph">
+            Rodrigo soñaba con empresas, inteligencia artificial, nuevas tecnologías y proyectos que aún no existían. Carmen soñaba con personas, con hacer del mundo un lugar un poco más amable para quienes más lo necesitaban.
+          </p>
+
+          <div class="twin-statement">
+            <div class="statement-box">
+              <i data-lucide="cpu"></i>
+              <span>Uno construía sistemas.</span>
+            </div>
+            <div class="statement-box">
+              <i data-lucide="heart"></i>
+              <span>La otra construía personas.</span>
+            </div>
+          </div>
+
+          <p class="story-quote-footer">
+            "Y ambos aprendieron que las dos cosas requieren exactamente lo mismo: <strong>Paciencia. Confianza. Y muchísimo amor.</strong>"
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- STORY PART 3: LOS PEQUEÑOS DETALLES -->
+    <section class="editorial-section story-chapter-section">
+      <div class="chapter-badge">CAPÍTULO III</div>
+      <h2 class="chapter-main-title">Las Grandes Historias Se Escriben con Detalles Pequeños</h2>
+      
+      <div class="details-narrative-container">
+        <blockquote class="details-lead-quote">
+          "Había días en que el cielo de Viña del Mar amanecía gris. Esos días eran perfectos para una película de terror, una taza caliente y alguna conversación absurda que terminaba en carcajadas."
+        </blockquote>
+
+        <div class="details-columns-grid">
+          <div class="detail-card">
+            <i data-lucide="message-square-heart" class="detail-icon"></i>
+            <h4>Las Notas de Buenos Días</h4>
+            <p>
+              Estaban las mañanas en que Rodrigo buscaba la forma perfecta de desearle un buen día. No un simple "buenos días", sino una nota que hiciera sonreír antes de empezar la jornada.
+            </p>
+          </div>
+
+          <div class="detail-card">
+            <i data-lucide="music" class="detail-icon"></i>
+            <h4>Recordar una Canción</h4>
+            <p>
+              Porque las grandes historias nunca se escriben con gestos enormes. Se escriben con preguntar cómo estuvo el día, recordar una canción o compartir el silencio sin que resulte incómodo.
+            </p>
+          </div>
+
+          <div class="detail-card">
+            <i data-lucide="shield-check" class="detail-icon"></i>
+            <h4>Creer en el Otro</h4>
+            <p>
+              Saber estar presente con fe ciega: creer en el otro incluso cuando el otro duda de sí mismo.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MUSIC SPOTLIGHT SECTION: JINJER PISCES -->
+    <section class="editorial-section music-spotlight-section">
+      <div class="music-spotlight-card">
+        <div class="music-card-header">
+          <div class="music-badge"><i data-lucide="disc"></i> MÚSICA & ATMÓSFERA</div>
+          <h3>Atmósfera Sonora: <span>Jinjer — "Pisces"</span></h3>
+          <p>La canción que nos acompaña. Haz clic abajo para escuchar la versión oficial.</p>
+        </div>
+        <div class="embedded-player-container">
+          <iframe src="https://www.youtube-nocookie.com/embed/SQNtGoM3FVU" title="Jinjer - Pisces (Official Live Session)" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+      </div>
+    </section>
+
+    <!-- STORY PART 4: LA CANCIÓN & EL MAR -->
+    <section class="editorial-section story-chapter-section bg-soft-blue">
+      <div class="chapter-badge">CAPÍTULO IV</div>
+      <h2 class="chapter-main-title">Las Mejores Canciones Empiezan Cuando Alguien Decide Quedarse a Escuchar</h2>
+      
+      <div class="story-layout-grid">
+        <div class="story-text-card card-shadow">
+          <p class="story-lead">
+            Había una imagen que parece resumirlos:
+          </p>
+          <p class="story-paragraph italic-highlight">
+            Él, con una guitarra entre las manos, preparando los primeros acordes de una canción que lleva años esperando tocar completa.
+          </p>
+          <p class="story-paragraph italic-highlight">
+            Ella, escuchando antes de cantar.
+          </p>
+          
+          <blockquote class="sea-quote">
+            "Porque las mejores canciones no empiezan cuando suena la primera nota.<br>
+            Empiezan cuando alguien decide quedarse a escuchar."
+          </blockquote>
+
+          <p class="story-paragraph">
+            Quizás por eso su historia nunca ha sido una línea recta. Ha sido como el mar frente a Viña: a veces tranquilo, a veces bravo, pero siempre regresando a la orilla.
+          </p>
+        </div>
+
+        <div class="story-image-card">
+          <div class="hero-polaroid-frame ocean-frame">
+            <div class="tape-corner top-left gold-tape"></div>
+            <div class="polaroid-photo-wrapper">
+              <img src="assets/images/concert_drinks.jpg" alt="Concierto Rock" class="canonical-photo">
+            </div>
+            <div class="polaroid-caption">
+              <p class="handwritten-note">"Brindando en el recital por nuestra música..."</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FULL CHRONOLOGICAL GALLERY (8 FOTOS) -->
+    <section class="chronological-gallery-section">
+      <div class="section-header-centered">
+        <span class="gold-kicker">NUESTRA CRONOLOGÍA COMPLETA</span>
+        <h2 class="display-title">Nuestra Historia en Imágenes</h2>
+        <p class="section-subtext">Desde nuestra primera cita en el café hasta cada concierto y tarde en casa.</p>
+      </div>
+
+      <div class="timeline-gallery-grid">
+        <article class="timeline-photo-card hero-card">
+          <div class="card-date-badge gold-badge">1. NUESTRA PRIMERA CITA • AGOSTO 2025</div>
+          <div class="card-photo-wrapper">
+            <img src="assets/images/first_date_cafe.jpg" alt="Nuestra primera cita en el café">
+          </div>
+          <div class="card-info">
+            <h3 class="card-title">CAFÉ FRENTE AL PACÍFICO</h3>
+            <p class="card-desc">"Nuestra primera cita en Viña del Mar, compartiendo torta, café y miradas que lo cambiaron todo."</p>
+          </div>
+        </article>
+
+        <article class="timeline-photo-card">
+          <div class="card-date-badge">2. CAMINATAS EN LA PLAYA</div>
+          <div class="card-photo-wrapper">
+            <img src="assets/images/hero_beach_vina.jpg" alt="Playa de Viña del Mar">
+          </div>
+          <div class="card-info">
+            <h3 class="card-title">EL MAR COMO TESTIGO</h3>
+            <p class="card-desc">"Frente a las olas de Viña del Mar, disfrutando de la brisa marina juntos."</p>
+          </div>
+        </article>
+
+        <article class="timeline-photo-card">
+          <div class="card-date-badge">3. NOCHE EN EL MUELLE</div>
+          <div class="card-photo-wrapper">
+            <img src="assets/images/night_pier_walk.jpg" alt="Paseo nocturno muelle">
+          </div>
+          <div class="card-info">
+            <h3 class="card-title">PASEO NOCTURNO COSTERO</h3>
+            <p class="card-desc">"Noches heladas junto al muelle, abrigados y sonrientes frente a las luces del puerto."</p>
+          </div>
+        </article>
+
+        <article class="timeline-photo-card">
+          <div class="card-date-badge">4. DÍAS DE SOL & COSTA</div>
+          <div class="card-photo-wrapper">
+            <img src="assets/images/sunny_hug.jpg" alt="Sol y Costa">
+          </div>
+          <div class="card-info">
+            <h3 class="card-title">ABRAZOS BAJO EL SOL</h3>
+            <p class="card-desc">"Lentes polarizados, la fogata costera y la calidez del abrazo."</p>
+          </div>
+        </article>
+
+        <article class="timeline-photo-card">
+          <div class="card-date-badge">5. VINILOS EN CASA</div>
+          <div class="card-photo-wrapper">
+            <img src="assets/images/home_vinyl_cuddle.jpg" alt="Música y Tocadiscos en casa">
+          </div>
+          <div class="card-info">
+            <h3 class="card-title">TARDES DE TOCADISCOS & MÚSICA</h3>
+            <p class="card-desc">"En el sillón de casa, escuchando vinilos juntos y encontrando la paz absoluta."</p>
+          </div>
+        </article>
+
+        <article class="timeline-photo-card">
+          <div class="card-date-badge">6. ROCK EN EL PARQUE</div>
+          <div class="card-photo-wrapper">
+            <img src="assets/images/park_rock.jpg" alt="Parque Alice in Chains">
+          </div>
+          <div class="card-info">
+            <h3 class="card-title">ALICE IN CHAINS PARQUE</h3>
+            <p class="card-desc">"T-shirts de rock, un vaso de cerveza y la música al aire libre."</p>
+          </div>
+        </article>
+
+        <article class="timeline-photo-card">
+          <div class="card-date-badge">7. SHOWS EN VIVO</div>
+          <div class="card-photo-wrapper">
+            <img src="assets/images/concert_drinks.jpg" alt="Concierto Teatro">
+          </div>
+          <div class="card-info">
+            <h3 class="card-title">NUESTROS CONCIERTOS</h3>
+            <p class="card-desc">"En las graderías del teatro, festejando con cerveza helada y canciones inolvidables."</p>
+          </div>
+        </article>
+
+        <article class="timeline-photo-card">
+          <div class="card-date-badge">8. EUFORIA & BRINDIS</div>
+          <div class="card-photo-wrapper">
+            <img src="assets/images/arena_concert.jpg" alt="Arena Show">
+          </div>
+          <div class="card-info">
+            <h3 class="card-title">BRINDIS POR NUESTRO FUTURO</h3>
+            <p class="card-desc">"Copas en alto y sonrisas radiantes en el balcón del show."</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- PROFILES: ÉL & ELLA (DOCENTE) -->
+    <section class="editorial-section profiles-diaptych">
+      <div class="section-header-centered">
+        <span class="gold-kicker">RETRATOS DE NOSOTROS</span>
+        <h2 class="display-title">Él & Ella</h2>
+        <p class="diaptych-connection">"Dos mundos distintos que aprendieron el mismo idioma: el amor. ♡"</p>
+        <div class="title-underline ocean-glow"></div>
+      </div>
+
+      <div class="diaptych-grid">
+        <!-- RODRIGO -->
+        <article class="profile-card ocean-glass">
+          <div class="profile-header">
+            <div class="profile-icon ocean-icon">
+              <i data-lucide="laptop"></i>
+            </div>
+            <div class="profile-titles">
+              <span class="profile-role">INGENIERO & MÚSICO</span>
+              <h3 class="profile-name">Él</h3>
+              <span class="profile-subname">EL HOMBRE QUE HABLABA CON LAS MÁQUINAS 💻</span>
+            </div>
+          </div>
+
+          <div class="profile-body">
+            <p class="profile-intro">
+              Ingeniero, curioso, apasionado por la tecnología, Kubernetes, Dynatrace y los desafíos imposibles. Ve sistemas donde otros ven problemas.
+            </p>
+            <div class="profile-divider"></div>
+            <div class="profile-details">
+              <h4>Música & Pasión</h4>
+              <p>
+                Afinaba una Gibson Les Paul y también ideas que podían cambiar el mundo. Sueña en grande. No se conforma. Siempre busca aprender, mejorar y construir. Y encuentra su máxima serenidad en el café frente al mar con Carmen Gloria.
+              </p>
+            </div>
+            <div class="tags-container">
+              <span class="tag ocean-tag">Gibson Les Paul</span>
+              <span class="tag ocean-tag">Jinjer - Pisces</span>
+              <span class="tag ocean-tag">Kubernetes & AI</span>
+              <span class="tag ocean-tag">Tocadiscos</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- CARMEN GLORIA (DOCENTE) -->
+        <article class="profile-card ocean-glass">
+          <div class="profile-header">
+            <div class="profile-icon ocean-icon">
+              <i data-lucide="sparkles"></i>
+            </div>
+            <div class="profile-titles">
+              <span class="profile-role">DOCENTE & ARTISTA</span>
+              <h3 class="profile-name">Ella</h3>
+              <span class="profile-subname">LA MUJER QUE ENSEÑA A MIRAR DISTINTO ♡</span>
+            </div>
+          </div>
+
+          <div class="profile-body">
+            <p class="profile-intro">
+              Docente, artista, luz para muchos niños que solo necesitaban alguien que creyera en ellos.
+            </p>
+            <div class="profile-divider"></div>
+            <div class="profile-details">
+              <h4>El Don de Enseñar con el Corazón</h4>
+              <p>
+                Convierte "No puedo" en "Inténtalo una vez más". Tiene ese don que no se enseña en libros: ver lo mejor de cada persona. Su creatividad, su corazón y su fuerza hacen de cada día algo extraordinario.
+              </p>
+            </div>
+            <div class="tags-container">
+              <span class="tag ocean-tag">Docente</span>
+              <span class="tag ocean-tag">Arte & Dibujo</span>
+              <span class="tag ocean-tag">Lectura Compartida</span>
+              <span class="tag ocean-tag">Paz Profunda</span>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- SPECIAL FEATURE: PRIMER LIBRO LEÍDO JUNTOS -->
+    <section class="editorial-section book-highlight-section">
+      <div class="book-highlight-card">
+        <div class="book-badge"><i data-lucide="book-open"></i> NUESTRO PRIMER LIBRO LEÍDO</div>
+        <div class="book-highlight-content">
+          <h3>El Primer Libro que Leímos Juntos: <span>"Sonó un violín en París"</span></h3>
+          <p>
+            Un libro especial que disfrutamos y compartimos juntos, alimentando nuestras conversaciones y tardes de lectura.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- STORY PART 5: EPÍLOGO & LA HISTORIA QUE TODAVÍA SE SIGUE ESCRIBIENDO -->
+    <section class="editorial-section final-story-epilogue">
+      <div class="epilogue-box">
+        <span class="gold-kicker">EPÍLOGO</span>
+        <h2 class="epilogue-title">Una Historia que Todavía Se Sigue Escribiendo</h2>
+        
+        <p class="epilogue-text">
+          Y si algún día alguien preguntara cuál fue el verdadero secreto de Rodrigo y Carmen Gloria, probablemente la respuesta sería muy sencilla:
+        </p>
+
+        <div class="secret-box">
+          <p>No fue la suerte.</p>
+          <p>No fue el destino.</p>
+          <p class="highlight-secret">Fue elegir, una y otra vez, caminar en la misma dirección, aun cuando el camino cambiaba.</p>
+        </div>
+
+        <p class="epilogue-text">
+          Porque el amor no siempre consiste en encontrar a la persona perfecta.<br>
+          A veces consiste en encontrar a alguien con quien incluso los días ordinarios terminan convirtiéndose en recuerdos extraordinarios.
+        </p>
+
+        <blockquote class="final-epilogue-quote">
+          "Y quizás esa sea la mejor definición de ustedes.<br>
+          No una historia perfecta.<br>
+          Sino una historia que todavía se sigue escribiendo."
+        </blockquote>
+      </div>
+    </section>
+
+    <!-- LETTER SECTION -->
+    <section class="editorial-section letter-section">
+      <div class="letter-container">
+        <div class="wax-seal-badge ocean-seal">
+          <i data-lucide="heart" class="seal-heart"></i>
+          <span>R & CG</span>
+        </div>
+
+        <div class="letter-paper ocean-paper">
+          <div class="letter-header">
+            <span class="letter-date">Agosto — Aniversario</span>
+            <span class="letter-location">Viña del Mar, Chile</span>
+          </div>
+
+          <div class="letter-content">
+            <h3 class="letter-salutation">PARA TI, CARMEN GLORIA</h3>
+            
+            <p class="handwritten-body">
+              Gracias por creer en mí incluso cuando ni yo lo hacía.<br><br>
+              Gracias por tu paciencia, tu ternura y tu fuerza.<br><br>
+              Gracias por tu risa, por tu luz y por hacer de lo ordinario algo mágico.<br><br>
+              Gracias por quedarte.<br>
+              Por elegirme.<br>
+              Por caminar conmigo.<br><br>
+              No sé qué nos espera mañana, pero sí sé que mientras estés a mi lado, todo tendrá sentido.
+            </p>
+
+            <div class="letter-signature">
+              <span class="sig-prefix">TE AMO HOY, MAÑANA Y SIEMPRE.</span>
+              <span class="sig-name">- Rodrigo</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FINAL QUOTE & FOOTER -->
+    <section class="editorial-section quote-footer-section">
+      <div class="quote-wrapper">
+        <div class="gold-quote-icon">“</div>
+        <blockquote class="master-quote">
+          Hay personas que llegan para cambiar un momento.<br>
+          Tú llegaste para cambiar toda mi historia.
+        </blockquote>
+        <div class="quote-gold-line ocean-line"></div>
+        <p class="footer-dedication">
+          NUESTRO ANIVERSARIO • RODRIGO & CARMEN GLORIA • SIEMPRE
+        </p>
+      </div>
+
+      <footer class="museum-footer">
+        <div class="footer-logo">
+          <span>RODRIGO & CARMEN GLORIA</span>
+          <span class="dot">•</span>
+          <span>NUESTRO ANIVERSARIO</span>
+          <span class="dot">•</span>
+          <span>ESTILO CLARO DE MAR</span>
+        </div>
+        <p class="copyright">
+          "Sonó un violín en París" (Leído juntos) • Reproductor Jinjer "Pisces" • Océano Pacífico, Viña del Mar.
+        </p>
+      </footer>
+    </section>
+
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

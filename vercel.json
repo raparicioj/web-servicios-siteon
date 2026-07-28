@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "rewrites": [
+    {
+      "source": "/aniversario",
+      "destination": "/aniversario/index.html"
+    },
+    {
+      "source": "/aniversario/",
+      "destination": "/aniversario/index.html"
+    }
+  ]
+}

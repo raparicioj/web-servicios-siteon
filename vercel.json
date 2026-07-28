@@ -1,14 +1,17 @@
 {
   "version": 2,
+  "cleanUrls": true,
+  "trailingSlash": true,
   "routes": [
     { "handle": "filesystem" },
     {
-      "src": "/aniversario",
-      "dest": "/aniversario/index.html"
+      "src": "^/aniversario$",
+      "status": 308,
+      "headers": { "Location": "/aniversario/" }
     },
     {
-      "src": "/aniversario/",
-      "dest": "/aniversario/index.html"
+      "src": "^/aniversario/(.*)",
+      "dest": "/aniversario/$1"
     }
   ]
 }

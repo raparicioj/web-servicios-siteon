@@ -936,9 +936,21 @@ html, body {
   font-weight: 500;
 }
 
-/* BOOK HIGHLIGHT CARD */
+/* BOOK HIGHLIGHT CARD & TREASURES GRID */
 .book-highlight-section {
   padding: 40px 8%;
+}
+
+.treasures-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+}
+
+@media (max-width: 850px) {
+  .treasures-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .book-highlight-card {
@@ -947,16 +959,33 @@ html, body {
   border-radius: var(--radius-lg);
   padding: 36px 40px;
   display: flex;
-  align-items: center;
-  gap: 30px;
+  align-items: flex-start;
+  gap: 20px;
   box-shadow: var(--shadow-teal);
+  flex-direction: column;
 }
 
-@media (max-width: 700px) {
-  .book-highlight-card {
-    flex-direction: column;
-    text-align: center;
-  }
+.book-highlight-card.scarf-card {
+  background: linear-gradient(135deg, #fffbf0 0%, #fef3c7 100%);
+  border-color: var(--gold-primary);
+  box-shadow: var(--shadow-gold);
+}
+
+.gold-badge-scarf {
+  background: var(--gold-gradient) !important;
+  color: #ffffff !important;
+  border: none !important;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.romantic-scarf-text {
+  font-family: var(--font-sub);
+  font-size: 1.1rem;
+  font-style: italic;
+  color: #78350f;
+  line-height: 1.6;
 }
 
 .book-badge {
@@ -1240,8 +1269,8 @@ html, body {
             <span>Jinjer "Pisces" & Alice in Chains</span>
           </div>
           <div class="meta-item">
-            <i data-lucide="book"></i>
-            <span>Primer Libro Leído Juntos: "Sonó un violín en París"</span>
+            <i data-lucide="heart"></i>
+            <span>Primer Libro: "Sonó un violín en París" • La Bufanda Tejida a Mano</span>
           </div>
         </div>
       </div>
@@ -1601,15 +1630,29 @@ html, body {
       </div>
     </section>
 
-    <!-- SPECIAL FEATURE: PRIMER LIBRO LEÍDO JUNTOS -->
+    <!-- SPECIAL FEATURE: NUESTROS TESOROS & DETALLES ESPECIALES -->
     <section class="editorial-section book-highlight-section">
-      <div class="book-highlight-card">
-        <div class="book-badge"><i data-lucide="book-open"></i> NUESTRO PRIMER LIBRO LEÍDO</div>
-        <div class="book-highlight-content">
-          <h3>El Primer Libro que Leímos Juntos: <span>"Sonó un violín en París"</span></h3>
-          <p>
-            Un libro especial que disfrutamos y compartimos juntos, alimentando nuestras conversaciones y tardes de lectura.
-          </p>
+      <div class="treasures-grid">
+        <!-- PRIMER LIBRO LEÍDO JUNTOS -->
+        <div class="book-highlight-card">
+          <div class="book-badge"><i data-lucide="book-open"></i> PRIMER LIBRO LEÍDO JUNTOS</div>
+          <div class="book-highlight-content">
+            <h3><span>"Sonó un violín en París"</span></h3>
+            <p>
+              El primer libro que leímos y compartimos juntos, disfrutando cada página en nuestras tardes de lectura y alimentando conversaciones que aún conservamos en el corazón.
+            </p>
+          </div>
+        </div>
+
+        <!-- LA BUFANDA TEJIDA A MANO -->
+        <div class="book-highlight-card scarf-card">
+          <div class="book-badge gold-badge-scarf"><i data-lucide="heart"></i> HECHO A MANO CON AMOR</div>
+          <div class="book-highlight-content">
+            <h3>La Bufanda Tejida a Mano 🧶</h3>
+            <p class="romantic-scarf-text">
+              "Cada punto, cada hilo y cada vuelta de lana que Carmen Gloria tejió pacientemente con sus propias manos para Rodrigo no solo abrigaron los días fríos del invierno costero, sino que tejieron una promesa silenciosa de cuidado, tibieza y dedicación infinita. Porque regalar algo hecho con las manos es regalar tiempo, pensamientos y amor en su forma más pura."
+            </p>
+          </div>
         </div>
       </div>
     </section>

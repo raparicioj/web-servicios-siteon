@@ -1324,7 +1324,209 @@ html, body {
 .footer-logo .dot {
   color: var(--sea-cyan);
 }
-  </style>
+  
+/* SECRET PROMISE MODAL OVERLAY */
+.secret-promise-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(12, 74, 110, 0.88);
+  backdrop-filter: blur(16px);
+  z-index: 3000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  opacity: 0;
+  transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.secret-promise-modal.active {
+  display: flex;
+  opacity: 1;
+}
+
+.secret-promise-card {
+  background: url('/aniversario/assets/images/paper_texture.png'), #fffdfa;
+  background-size: cover;
+  border: 3px solid var(--gold-primary);
+  border-radius: var(--radius-lg);
+  max-width: 680px;
+  width: 100%;
+  max-height: 85vh;
+  overflow-y: auto;
+  padding: 50px 40px;
+  box-shadow: 0 25px 70px rgba(217, 119, 6, 0.45);
+  text-align: center;
+  position: relative;
+  transform: scale(0.9);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.secret-promise-modal.active .secret-promise-card {
+  transform: scale(1);
+}
+
+.secret-modal-close {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  background: #ffffff;
+  border: 1px solid var(--gold-primary);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  color: var(--gold-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+  transition: var(--transition-smooth);
+  z-index: 10;
+}
+
+.secret-modal-close:hover {
+  background: var(--gold-primary);
+  color: #ffffff;
+  transform: scale(1.1);
+}
+
+.floating-heart-seal {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #d97706 0%, #b45309 100%);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: -75px auto 16px;
+  font-size: 2.2rem;
+  box-shadow: 0 12px 30px rgba(180, 83, 9, 0.5);
+  border: 3px solid #ffffff;
+}
+
+.heart-pulse-icon {
+  width: 38px;
+  height: 38px;
+  fill: #ffffff;
+  animation: heartPulse 1.4s ease-in-out infinite;
+}
+
+@keyframes heartPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.18); }
+  100% { transform: scale(1); }
+}
+
+.secret-kicker {
+  font-family: var(--font-heading);
+  font-size: 0.75rem;
+  letter-spacing: 3px;
+  color: var(--gold-primary);
+  font-weight: 700;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.secret-card-title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  color: var(--text-cream);
+  margin-bottom: 24px;
+}
+
+.secret-lead-text {
+  font-family: var(--font-sub);
+  font-size: 1.35rem;
+  font-style: italic;
+  color: var(--text-cream);
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+.secret-paragraph {
+  font-size: 1.05rem;
+  color: var(--text-muted);
+  margin-bottom: 18px;
+  line-height: 1.7;
+}
+
+.promises-list {
+  background: #fff8eb;
+  border-left: 4px solid var(--gold-primary);
+  padding: 20px 24px;
+  border-radius: var(--radius-sm);
+  margin: 24px 0;
+  text-align: left;
+}
+
+.promises-list p {
+  font-size: 1.05rem;
+  color: var(--text-cream);
+  margin-bottom: 10px;
+  font-weight: 500;
+}
+
+.promises-list p:last-child {
+  margin-bottom: 0;
+}
+
+.secret-highlight-quote {
+  font-family: var(--font-handwritten);
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  color: var(--gold-primary);
+  margin: 30px 0;
+  line-height: 1.35;
+  border-top: 1px solid #fde68a;
+  border-bottom: 1px solid #fde68a;
+  padding: 20px 0;
+}
+
+.secret-thank-you {
+  margin: 30px 0 20px;
+}
+
+.secret-thank-you p {
+  font-family: var(--font-sub);
+  font-size: 1.2rem;
+  font-style: italic;
+  color: var(--text-cream);
+  margin-bottom: 6px;
+}
+
+.secret-signature-box {
+  margin-top: 30px;
+  border-top: 2px dashed rgba(217, 119, 6, 0.3);
+  padding-top: 24px;
+}
+
+.secret-love {
+  display: block;
+  font-family: var(--font-heading);
+  letter-spacing: 2px;
+  font-size: 0.9rem;
+  color: var(--gold-primary);
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.secret-from {
+  display: block;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.secret-author {
+  font-family: var(--font-handwritten);
+  font-size: 3.5rem;
+  color: var(--sea-cyan);
+  line-height: 1;
+  display: block;
+  margin-top: 8px;
+}
+
+</style>
 </head>
 <body class="theme-light-sea">
 
@@ -1874,6 +2076,74 @@ html, body {
       </div>
     </div>
 
+    
+    <!-- SECRET PROMISE MODAL OVERLAY -->
+    <div class="secret-promise-modal" id="secretPromiseModal">
+      <div class="secret-promise-card">
+        <button class="secret-modal-close" id="closeSecretPromiseBtn"><i data-lucide="x"></i></button>
+
+        <div class="floating-heart-seal">
+          <i data-lucide="heart" class="heart-pulse-icon"></i>
+        </div>
+
+        <div class="secret-card-header">
+          <span class="secret-kicker">PROMESA SECRETA DE ANIVERSARIO</span>
+          <h2 class="secret-card-title">Una Parte de Mi Corazón ♡</h2>
+        </div>
+
+        <div class="secret-card-body">
+          <p class="secret-lead-text">
+            Si llegaste hasta aquí, es porque encontraste una pequeña parte de mi corazón.
+          </p>
+
+          <p class="secret-paragraph">
+            Hoy no quiero prometerte castillos ni perfección. Quiero prometerte algo mucho más valioso.
+          </p>
+
+          <div class="promises-list">
+            <p>✦ Te prometo elegirte incluso en los días difíciles.</p>
+            <p>✦ Te prometo escucharte cuando el mundo haga demasiado ruido.</p>
+            <p>✦ Te prometo abrazarte cuando las palabras no alcancen.</p>
+          </div>
+
+          <p class="secret-paragraph">
+            Prometo seguir aprendiendo quién eres, porque cada día descubro una mujer distinta, más hermosa, más fuerte y más admirable que el día anterior.
+          </p>
+
+          <p class="secret-paragraph">
+            Prometo celebrar tus triunfos como si fueran míos y sostener tu mano cuando la vida decida ponernos pruebas.
+          </p>
+
+          <blockquote class="secret-highlight-quote">
+            "Quiero que nunca olvides esto:<br>
+            <strong>Eres el lugar donde mi corazón descansa.</strong>"
+          </blockquote>
+
+          <p class="secret-paragraph">
+            No sé cuántos aniversarios nos esperan, pero sí sé una cosa...<br>
+            <strong style="color: var(--gold-primary); font-size: 1.15rem;">Quiero vivir cada uno contigo.</strong>
+          </p>
+
+          <p class="secret-paragraph">
+            Y cuando pasen los años, cuando aparezcan algunas canas y las fotografías cuenten nuestra historia, espero poder mirarte igual que hoy, con la misma emoción de quien encontró a la persona correcta.
+          </p>
+
+          <div class="secret-thank-you">
+            <p>Gracias por existir.</p>
+            <p>Gracias por elegirme.</p>
+            <p>Gracias por convertir mis días comunes en recuerdos extraordinarios.</p>
+          </div>
+
+          <div class="secret-signature-box">
+            <span class="secret-love">Te amo infinitamente.</span>
+            <span class="secret-from">Con todo mi corazón,</span>
+            <span class="secret-author">Rodrigo ❤️</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
     <!-- STORY PART 5: EPÍLOGO & LA HISTORIA QUE TODAVÍA SE SIGUE ESCRIBIENDO -->
     <section class="editorial-section final-story-epilogue">
       <div class="epilogue-box">
@@ -2222,11 +2492,36 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 6. SECRET ENVELOPE MODAL / UNLOCK
   const envelopeWrapper = document.getElementById('envelopeWrapper');
-  if (envelopeWrapper) {
+  const secretPromiseModal = document.getElementById('secretPromiseModal');
+  const closeSecretPromiseBtn = document.getElementById('closeSecretPromiseBtn');
+
+  if (envelopeWrapper && secretPromiseModal) {
     envelopeWrapper.addEventListener('click', () => {
-      alert("♡ PROMESA SECRETA DESBLOQUEADA ♡\n\nPara Carmen Gloria:\n\nGracias por caminar conmigo en esta historia que aún se sigue escribiendo. Prometo seguir aprendiendo tus canciones, preparando las notas de buenos días, cuidando nuestra bufanda tejida a mano y caminando a tu lado en cada playa y concierto.\n\n¡Te amo hoy, mañana y siempre!\n- Rodrigo");
+      secretPromiseModal.classList.add('active');
+      
+      // Spawn burst of heart particles
+      const rect = envelopeWrapper.getBoundingClientRect();
+      for (let i = 0; i < 25; i++) {
+        particles.push(new Sparkle(rect.left + rect.width / 2, rect.top + rect.height / 2));
+      }
     });
   }
+
+  if (closeSecretPromiseBtn && secretPromiseModal) {
+    closeSecretPromiseBtn.addEventListener('click', () => {
+      secretPromiseModal.classList.remove('active');
+    });
+  }
+
+  if (secretPromiseModal) {
+    secretPromiseModal.addEventListener('click', (e) => {
+      if (e.target === secretPromiseModal) secretPromiseModal.classList.remove('active');
+    });
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && secretPromiseModal) secretPromiseModal.classList.remove('active');
+  });
 
   // 7. POLAROID LIGHTBOX MODAL NAVIGATION
   const polaroidModal = document.getElementById('polaroidModal');

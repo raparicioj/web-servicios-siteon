@@ -12,285 +12,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Caveat:wght@400;600&family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Outfit:wght@200;300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
   
   <!-- Lucide Icons -->
-  <script src="https://unpkg.com/lucide@latest">
-  // 1. SPARKLE CURSOR & TOUCH PARTICLES SYSTEM
-  const canvas = document.getElementById('sparkleCanvas');
-  const ctx = canvas ? canvas.getContext('2d') : null;
-  let particles = [];
-
-  function resizeCanvas() {
-    if (canvas) {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    }
-  }
-  window.addEventListener('resize', resizeCanvas);
-  resizeCanvas();
-
-  class Sparkle {
-    constructor(x, y) {
-      this.x = x;
-      this.y = y;
-      this.size = Math.random() * 5 + 2;
-      this.speedX = (Math.random() - 0.5) * 1.5;
-      this.speedY = (Math.random() - 0.5) * 1.5 - 0.5;
-      this.color = Math.random() > 0.4 ? '#d97706' : '#0284c7';
-      this.opacity = 1;
-    }
-    update() {
-      this.x += this.speedX;
-      this.y += this.speedY;
-      this.opacity -= 0.02;
-      if (this.size > 0.2) this.size -= 0.05;
-    }
-    draw() {
-      if (!ctx) return;
-      ctx.save();
-      ctx.globalAlpha = this.opacity;
-      ctx.fillStyle = this.color;
-      ctx.beginPath();
-      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.restore();
-    }
-  }
-
-  function addParticles(e) {
-    const x = e.clientX || (e.touches && e.touches[0].clientX);
-    const y = e.clientY || (e.touches && e.touches[0].clientY);
-    if (x && y) {
-      for (let i = 0; i < 2; i++) {
-        particles.push(new Sparkle(x, y));
-      }
-    }
-  }
-
-  window.addEventListener('pointermove', addParticles);
-
-  function animateSparkles() {
-    if (ctx) {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      for (let i = 0; i < particles.length; i++) {
-        particles[i].update();
-        particles[i].draw();
-        if (particles[i].opacity <= 0) {
-          particles.splice(i, 1);
-          i--;
-        }
-      }
-    }
-    requestAnimationFrame(animateSparkles);
-  }
-  animateSparkles();
-
-  // 2. OCEAN WAVES AUDIO SYNTHESIZER (WEB AUDIO API)
-  let wavesAudioCtx = null;
-  let wavesGainNode = null;
-  let isWavesPlaying = false;
-  const wavesToggleBtn = document.getElementById('wavesToggleBtn');
-
-  function initWavesAudio() {
-    const AudioCtx = window.AudioContext || window.webkitAudioContext;
-    wavesAudioCtx = new AudioCtx();
-    
-    // Create pink noise buffer for realistic ocean wave sound
-    const bufferSize = wavesAudioCtx.sampleRate * 4;
-    const noiseBuffer = wavesAudioCtx.createBuffer(1, bufferSize, wavesAudioCtx.sampleRate);
-    const output = noiseBuffer.getChannelData(0);
-    let b0 = 0, b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0;
-
-    for (let i = 0; i < bufferSize; i++) {
-      let white = Math.random() * 2 - 1;
-      b0 = 0.99886 * b0 + white * 0.0555179;
-      b1 = 0.99332 * b1 + white * 0.0750759;
-      b2 = 0.96900 * b2 + white * 0.1538520;
-      b3 = 0.86650 * b3 + white * 0.3104856;
-      b4 = 0.55000 * b4 + white * 0.5329522;
-      b5 = -0.7616 * b5 - white * 0.0168980;
-      output[i] = b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362;
-      output[i] *= 0.11;
-      b6 = white * 0.115926;
-    }
-
-    const whiteNoise = wavesAudioCtx.createBufferSource();
-    whiteNoise.buffer = noiseBuffer;
-    whiteNoise.loop = true;
-
-    // Filter to simulate ocean swells
-    const filter = wavesAudioCtx.createBiquadFilter();
-    filter.type = 'lowpass';
-    filter.frequency.value = 400;
-
-    wavesGainNode = wavesAudioCtx.createGain();
-    wavesGainNode.gain.setValueAtTime(0.01, wavesAudioCtx.currentTime);
-
-    whiteNoise.connect(filter);
-    filter.connect(wavesGainNode);
-    wavesGainNode.connect(wavesAudioCtx.destination);
-    whiteNoise.start();
-
-    // Modulate gain for periodic ocean wave ebbing and flowing
-    let waveCycle = 0;
-    setInterval(() => {
-      if (isWavesPlaying && wavesGainNode) {
-        waveCycle += 0.05;
-        const waveVolume = 0.05 + Math.sin(waveCycle) * 0.04;
-        filter.frequency.setValueAtTime(300 + Math.sin(waveCycle) * 250, wavesAudioCtx.currentTime);
-        wavesGainNode.gain.setValueAtTime(waveVolume, wavesAudioCtx.currentTime);
-      }
-    }, 100);
-  }
-
-  if (wavesToggleBtn) {
-    wavesToggleBtn.addEventListener('click', () => {
-      if (!wavesAudioCtx) initWavesAudio();
-      if (wavesAudioCtx.state === 'suspended') wavesAudioCtx.resume();
-
-      isWavesPlaying = !isWavesPlaying;
-      if (isWavesPlaying) {
-        wavesToggleBtn.classList.add('playing');
-        wavesToggleBtn.querySelector('.waves-text').textContent = 'Olas de Viña (Sonando 🌊)';
-      } else {
-        wavesToggleBtn.classList.remove('playing');
-        wavesToggleBtn.querySelector('.waves-text').textContent = 'Mar de Viña del Mar';
-        if (wavesGainNode) wavesGainNode.gain.setValueAtTime(0.001, wavesAudioCtx.currentTime);
-      }
-    });
-  }
-
-  // 3. REASONS GENERATOR (15+ PERSONALIZED ROMANTIC REASONS)
-  const reasonsList = [
-    "Por la bufanda que tejiste punto a punto con tus propias manos para abrigarme en invierno.",
-    "Por transformar cada 'No puedo' en un 'Inténtalo una vez más' con tu paciencia infinita.",
-    "Por nuestras tardes de café frente al Pacífico en Viña del Mar compartiendo torta y sonrisas.",
-    "Por cómo escuchas atenta antes de cantar cuando tomo la Gibson Les Paul.",
-    "Por el primer libro que leímos juntos, 'Sonó un violín en París', y por cada conversación después.",
-    "Por las tardes en el sillón de casa escuchando vinilos mientras la lluvia cae afuera.",
-    "Por tus notas de buenos días y tu risa que ilumina cualquier día gris.",
-    "Porque uno construía sistemas y la otra construía personas, y juntos aprendimos el mismo lenguaje de amor.",
-    "Por ir a conciertos de rock con poleras de Alice in Chains y brindar por nuestro futuro.",
-    "Por elegir caminatas junto al mar de Viña del Mar y regresar siempre a la orilla.",
-    "Por tu paciencia, tu ternura y tu fuerza inquebrantable.",
-    "Por hacer de lo cotidiano y ordinario algo profundamente mágico.",
-    "Por creer en mí incluso cuando yo dudaba de mí mismo.",
-    "Por cada mirada complice en medio de un show en vivo.",
-    "Porque tu amor es silencioso, inevitable y capaz de cambiar el paisaje sin pedir permiso."
-  ];
-
-  let currentReasonIndex = 0;
-  const generateReasonBtn = document.getElementById('generateReasonBtn');
-  const reasonBadge = document.getElementById('reasonBadge');
-  const reasonText = document.getElementById('reasonText');
-  const reasonDisplayBox = document.getElementById('reasonDisplayBox');
-
-  if (generateReasonBtn) {
-    generateReasonBtn.addEventListener('click', () => {
-      reasonDisplayBox.style.opacity = '0';
-      reasonDisplayBox.style.transform = 'scale(0.95)';
-      
-      setTimeout(() => {
-        currentReasonIndex = (currentReasonIndex + 1) % reasonsList.length;
-        reasonBadge.textContent = `RAZÓN #${currentReasonIndex + 1} DE ${reasonsList.length}`;
-        reasonText.textContent = `"${reasonsList[currentReasonIndex]}"`;
-        reasonDisplayBox.style.opacity = '1';
-        reasonDisplayBox.style.transform = 'scale(1)';
-        
-        // Spawn heart burst particles
-        const rect = generateReasonBtn.getBoundingClientRect();
-        for (let i = 0; i < 15; i++) {
-          particles.push(new Sparkle(rect.left + rect.width / 2, rect.top));
-        }
-      }, 250);
-    });
-  }
-
-  // 4. COUNTDOWN TIMER TO NEXT ANNIVERSARY (AUGUST 2026)
-  function updateCountdown() {
-    const nextAnniversary = new Date('2026-08-01T00:00:00');
-    const now = new Date();
-    const diff = nextAnniversary - now;
-
-    if (diff > 0) {
-      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-      const mins = Math.floor((diff / 1000 / 60) % 60);
-      const secs = Math.floor((diff / 1000) % 60);
-
-      document.getElementById('countDays').textContent = days;
-      document.getElementById('countHours').textContent = hours < 10 ? '0' + hours : hours;
-      document.getElementById('countMins').textContent = mins < 10 ? '0' + mins : mins;
-      document.getElementById('countSecs').textContent = secs < 10 ? '0' + secs : secs;
-    }
-  }
-  setInterval(updateCountdown, 1000);
-  updateCountdown();
-
-  // 5. SECRET ENVELOPE MODAL / UNLOCK
-  const envelopeWrapper = document.getElementById('envelopeWrapper');
-  if (envelopeWrapper) {
-    envelopeWrapper.addEventListener('click', () => {
-      alert("♡ CARTA SECRETA DESBLOQUEADA ♡\n\nPara Carmen Gloria:\n\nGracias por caminar conmigo en esta historia que aún se sigue escribiendo. Prometo seguir aprendiendo tus canciones, preparando las notas de buenos días y caminando a tu lado en cada playa y concierto.\n\n¡Te amo hoy, mañana y siempre!\n- Rodrigo");
-    });
-  }
-
-  // 6. POLAROID LIGHTBOX MODAL NAVIGATION
-  const polaroidModal = document.getElementById('polaroidModal');
-  const modalImg = document.getElementById('modalImg');
-  const modalCaption = document.getElementById('modalCaption');
-  const modalCloseBtn = document.getElementById('modalCloseBtn');
-  const modalPrevBtn = document.getElementById('modalPrevBtn');
-  const modalNextBtn = document.getElementById('modalNextBtn');
-
-  const galleryItems = Array.from(document.querySelectorAll('.timeline-photo-card, .hero-polaroid-frame'));
-  let currentGalleryIndex = 0;
-
-  function openPolaroidModal(index) {
-    if (galleryItems[index]) {
-      const imgEl = galleryItems[index].querySelector('img');
-      const captionEl = galleryItems[index].querySelector('.handwritten-note, .card-desc, .card-title');
-      if (imgEl && polaroidModal) {
-        currentGalleryIndex = index;
-        modalImg.src = imgEl.src;
-        modalCaption.textContent = captionEl ? captionEl.textContent : '';
-        polaroidModal.classList.add('active');
-      }
-    }
-  }
-
-  galleryItems.forEach((item, idx) => {
-    item.style.cursor = 'pointer';
-    item.addEventListener('click', () => openPolaroidModal(idx));
-  });
-
-  if (modalCloseBtn) {
-    modalCloseBtn.addEventListener('click', () => polaroidModal.classList.remove('active'));
-  }
-  if (modalPrevBtn) {
-    modalPrevBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      currentGalleryIndex = (currentGalleryIndex - 1 + galleryItems.length) % galleryItems.length;
-      openPolaroidModal(currentGalleryIndex);
-    });
-  }
-  if (modalNextBtn) {
-    modalNextBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      currentGalleryIndex = (currentGalleryIndex + 1) % galleryItems.length;
-      openPolaroidModal(currentGalleryIndex);
-    });
-  }
-
-  if (polaroidModal) {
-    polaroidModal.addEventListener('click', (e) => {
-      if (e.target === polaroidModal) polaroidModal.classList.remove('active');
-    });
-  }
-
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && polaroidModal) polaroidModal.classList.remove('active');
-  });
-
-</script>
+  <script src="https://unpkg.com/lucide@latest"></script>
   
   <style>
 /* ==========================================================================
@@ -299,13 +21,12 @@
    ========================================================================== */
 
 :root {
-  /* Luminous Sea & Coastal Palette */
   --bg-obsidian: #f0f7ff;
   --bg-card: rgba(255, 255, 255, 0.94);
   --bg-card-hover: #ffffff;
   
-  --text-cream: #0c4a6e;  /* Deep Navy Ocean text */
-  --text-muted: #475569;  /* Slate sea gray */
+  --text-cream: #0c4a6e;
+  --text-muted: #475569;
   --text-dark: #0f172a;
   
   --sea-teal: #0d9488;
@@ -318,7 +39,6 @@
   --gold-gradient: linear-gradient(135deg, #fde68a 0%, #d97706 100%);
   --teal-gradient: linear-gradient(135deg, #38bdf8 0%, #0d9488 100%);
   
-  /* Fonts */
   --font-display: 'Playfair Display', 'Cormorant Garamond', serif;
   --font-heading: 'Cinzel', serif;
   --font-body: 'Outfit', sans-serif;
@@ -326,7 +46,6 @@
   --font-handwritten: 'Alex Brush', cursive;
   --font-note: 'Caveat', cursive;
 
-  /* Spacing & Borders */
   --radius-sm: 8px;
   --radius-md: 16px;
   --radius-lg: 24px;
@@ -339,7 +58,6 @@
   --transition-smooth: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Global Reset */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -357,7 +75,6 @@ html, body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
 }
@@ -369,12 +86,23 @@ html, body {
   border-radius: 4px;
 }
 
+/* SPARKLE CANVAS FOR CURSOR TRAIL */
+#sparkleCanvas {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+}
+
 /* AUDIO CONTROL BAR & FLOATING PLAYER */
 .audio-control-bar {
   position: fixed;
   top: 24px;
   right: 24px;
   z-index: 1000;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
 }
 
 .audio-toggle-btn {
@@ -406,6 +134,15 @@ html, body {
 .audio-toggle-btn.playing {
   border-color: var(--gold-primary);
   box-shadow: 0 0 25px rgba(217, 119, 6, 0.3);
+}
+
+.sea-waves-btn {
+  background: rgba(2, 132, 199, 0.1);
+  border-color: var(--sea-cyan);
+}
+.sea-waves-btn.playing {
+  border-color: var(--sea-teal);
+  box-shadow: 0 0 25px rgba(13, 148, 136, 0.4);
 }
 
 .spin-slow {
@@ -866,133 +603,65 @@ html, body {
   line-height: 1.6;
 }
 
-/* EPILOGUE STORY SECTION */
-.final-story-epilogue {
-  background: linear-gradient(180deg, #e0f2fe 0%, #ffffff 100%);
-  padding: 100px 8%;
-}
-
-.epilogue-box {
-  max-width: 850px;
+/* MUSIC SPOTLIGHT CARD */
+.music-spotlight-card {
+  max-width: 900px;
   margin: 0 auto;
-  text-align: center;
   background: #ffffff;
-  border: 2px solid var(--sea-cyan);
+  border: 2px solid var(--gold-primary);
   border-radius: var(--radius-lg);
-  padding: 60px 40px;
-  box-shadow: var(--shadow-teal);
+  padding: 40px;
+  box-shadow: var(--shadow-gold);
 }
 
-.epilogue-title {
-  font-family: var(--font-display);
-  font-size: clamp(2rem, 4vw, 3rem);
-  color: var(--text-cream);
-  margin-bottom: 30px;
-}
-
-.epilogue-text {
-  font-size: 1.15rem;
-  color: var(--text-muted);
+.music-card-header {
+  text-align: center;
   margin-bottom: 24px;
-  line-height: 1.7;
 }
 
-.secret-box {
-  background: #f0f7ff;
-  border-radius: var(--radius-md);
-  padding: 24px;
-  margin: 30px 0;
-  border: 1px solid #bae6fd;
-}
-
-.secret-box p {
-  font-family: var(--font-heading);
-  font-size: 0.95rem;
-  letter-spacing: 1px;
-  color: var(--text-cream);
-  margin-bottom: 8px;
-}
-
-.secret-box .highlight-secret {
-  font-family: var(--font-handwritten);
-  font-size: 2.2rem;
-  color: var(--gold-primary);
-  margin-top: 12px;
-}
-
-.final-epilogue-quote {
-  font-family: var(--font-handwritten);
-  font-size: clamp(2rem, 3.5vw, 2.8rem);
-  color: var(--sea-cyan);
-  margin-top: 30px;
-  line-height: 1.3;
-}
-
-/* TIMELINE BAR */
-.timeline-bar-section {
-  background: #ffffff;
-  border-top: 1px solid rgba(2, 132, 199, 0.2);
-  border-bottom: 1px solid rgba(217, 119, 6, 0.2);
-  padding: 45px 5%;
-  box-shadow: var(--shadow-soft);
-}
-
-.timeline-title {
-  text-align: center;
-  font-family: var(--font-heading);
-  font-size: 0.9rem;
-  letter-spacing: 4px;
-  color: var(--gold-primary);
-  margin-bottom: 30px;
-  font-weight: 700;
-}
-
-.timeline-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 20px;
-  text-align: center;
-}
-
-.timeline-node {
-  padding: 20px 16px;
-  border-radius: var(--radius-md);
-  background: #f8fafc;
-  border: 1px solid #e2e8f0;
-  transition: var(--transition-smooth);
-}
-
-.timeline-node:hover {
-  background: #f0f9ff;
-  border-color: var(--sea-cyan);
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-teal);
-}
-
-.node-icon {
-  width: 44px;
-  height: 44px;
-  margin: 0 auto 12px;
-  border-radius: 50%;
-  background: rgba(217, 119, 6, 0.1);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--gold-primary);
-}
-
-.timeline-node h4 {
+.music-badge {
   font-family: var(--font-heading);
   font-size: 0.75rem;
-  letter-spacing: 1px;
-  color: var(--text-cream);
-  margin-bottom: 6px;
+  letter-spacing: 3px;
+  color: var(--gold-primary);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
   font-weight: 700;
 }
 
-.timeline-node p {
-  font-size: 0.8rem;
+.music-card-header h3 {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  color: var(--text-cream);
+}
+
+.music-card-header h3 span {
+  color: var(--gold-primary);
+}
+
+.music-card-header p {
   color: var(--text-muted);
+  font-size: 0.95rem;
+  margin-top: 6px;
+}
+
+.embedded-player-container {
+  position: relative;
+  padding-bottom: 56.25%;
+  height: 0;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-polaroid);
+}
+
+.embedded-player-container iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
 }
 
 /* CHRONOLOGICAL GALLERY SECTION */
@@ -1001,11 +670,39 @@ html, body {
   background: linear-gradient(180deg, #f0f7ff 0%, #e0f2fe 100%);
 }
 
+.section-header-centered {
+  text-align: center;
+  max-width: 750px;
+  margin: 0 auto 50px;
+}
+
+.gold-kicker {
+  font-family: var(--font-heading);
+  font-size: 0.75rem;
+  letter-spacing: 3px;
+  color: var(--gold-primary);
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 700;
+}
+
+.display-title {
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 4vw, 3.2rem);
+  color: var(--text-cream);
+}
+
+.section-subtext {
+  font-size: 1rem;
+  color: var(--text-muted);
+  margin-top: 8px;
+}
+
 .timeline-gallery-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 30px;
-  margin-top: 50px;
+  margin-top: 30px;
 }
 
 .timeline-photo-card {
@@ -1016,6 +713,7 @@ html, body {
   border: 1px solid #e2e8f0;
   transition: var(--transition-smooth);
   position: relative;
+  cursor: pointer;
 }
 
 .timeline-photo-card:hover {
@@ -1088,6 +786,7 @@ html, body {
   transition: var(--transition-smooth);
   box-shadow: var(--shadow-polaroid);
   border: 1px solid #e2e8f0;
+  cursor: pointer;
 }
 
 .hero-polaroid-frame.ocean-frame:hover {
@@ -1113,12 +812,6 @@ html, body {
 }
 
 /* PROFILES DIAPTYCH */
-.section-header-centered {
-  text-align: center;
-  max-width: 750px;
-  margin: 0 auto 60px;
-}
-
 .diaptych-connection {
   font-family: var(--font-handwritten);
   font-size: 1.9rem;
@@ -1295,191 +988,6 @@ html, body {
 .book-highlight-content p {
   color: var(--text-muted);
   font-size: 0.95rem;
-}
-
-/* DUAL LISTS SECTION */
-.dual-lists-section {
-  padding: 80px 8%;
-}
-
-.dual-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 40px;
-}
-
-@media (max-width: 850px) {
-  .dual-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-.list-card.ocean-card {
-  background: var(--bg-card);
-  border: 1px solid rgba(2, 132, 199, 0.2);
-  border-radius: var(--radius-lg);
-  padding: 36px;
-  box-shadow: var(--shadow-soft);
-}
-
-.list-header {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 24px;
-  border-bottom: 1px solid rgba(2, 132, 199, 0.2);
-  padding-bottom: 16px;
-}
-
-.list-header i {
-  color: var(--gold-primary);
-}
-
-.list-header h3 {
-  font-family: var(--font-heading);
-  font-size: 0.9rem;
-  letter-spacing: 2px;
-  color: var(--text-cream);
-  font-weight: 700;
-}
-
-.checklist, .heart-list {
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-
-.checklist li {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  font-size: 0.95rem;
-  color: var(--text-cream);
-}
-
-.check-icon {
-  color: var(--sea-cyan);
-  width: 18px;
-  height: 18px;
-}
-
-.heart-list li {
-  font-size: 0.95rem;
-  color: var(--text-muted);
-  line-height: 1.5;
-}
-
-/* HANDWRITTEN LOVE LETTER */
-.letter-section {
-  display: flex;
-  justify-content: center;
-  padding: 120px 20px;
-  background: radial-gradient(circle at center, rgba(2, 132, 199, 0.08) 0%, transparent 70%);
-}
-
-.letter-container {
-  position: relative;
-  max-width: 680px;
-  width: 100%;
-}
-
-.wax-seal-badge.ocean-seal {
-  background: radial-gradient(circle, #0284c7 0%, #0369a1 100%);
-  border: 2px dashed rgba(255, 255, 255, 0.5);
-}
-
-.letter-paper.ocean-paper {
-  background: url('/aniversario//aniversario/assets/images/paper_texture.png'), #fcfaf7;
-  background-size: cover;
-  color: #1c1917;
-  padding: 60px 50px;
-  border-radius: 6px;
-  box-shadow: var(--shadow-polaroid);
-}
-
-.letter-salutation {
-  font-family: var(--font-heading);
-  font-size: 1.1rem;
-  letter-spacing: 3px;
-  color: #0369a1;
-  margin-bottom: 24px;
-}
-
-.handwritten-body {
-  font-family: var(--font-handwritten);
-  font-size: 2.2rem;
-  line-height: 1.5;
-  color: #1c1917;
-  margin-bottom: 40px;
-}
-
-.sig-prefix {
-  display: block;
-  font-family: var(--font-heading);
-  letter-spacing: 2px;
-  font-size: 0.8rem;
-  color: #0369a1;
-}
-
-.sig-name {
-  font-family: var(--font-handwritten);
-  font-size: 3.2rem;
-  color: #0284c7;
-  line-height: 1;
-}
-
-/* QUOTE & FOOTER */
-.quote-footer-section {
-  text-align: center;
-  padding: 100px 20px 40px;
-  background: #ffffff;
-  border-top: 1px solid rgba(2, 132, 199, 0.2);
-}
-
-.gold-quote-icon {
-  font-family: var(--font-display);
-  font-size: 6rem;
-  color: var(--sea-cyan);
-  line-height: 1;
-  opacity: 0.7;
-}
-
-.master-quote {
-  font-family: var(--font-handwritten);
-  font-size: clamp(2.2rem, 4vw, 3.4rem);
-  line-height: 1.3;
-  color: var(--text-cream);
-  margin-bottom: 30px;
-}
-
-.quote-gold-line.ocean-line {
-  width: 100px;
-  height: 3px;
-  background: var(--teal-gradient);
-  margin: 0 auto 24px;
-}
-
-.museum-footer {
-  border-top: 1px solid #e2e8f0;
-  padding-top: 40px;
-  color: var(--text-muted);
-  font-size: 0.8rem;
-}
-
-.footer-logo .dot {
-  color: var(--sea-cyan);
-}
-
-
-/* SEA WAVES TOGGLE BUTTON */
-.sea-waves-btn {
-  background: rgba(2, 132, 199, 0.1);
-  border-color: var(--sea-cyan);
-}
-.sea-waves-btn.playing {
-  border-color: var(--sea-teal);
-  box-shadow: 0 0 25px rgba(13, 148, 136, 0.4);
 }
 
 /* REASONS GENERATOR SECTION */
@@ -1705,20 +1213,125 @@ html, body {
   .countdown-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
-/* SPARKLE CANVAS FOR CURSOR TRAIL */
-#sparkleCanvas {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 9999;
+/* LETTER SECTION & FOOTER */
+.letter-section {
+  display: flex;
+  justify-content: center;
+  padding: 120px 20px;
+  background: radial-gradient(circle at center, rgba(2, 132, 199, 0.08) 0%, transparent 70%);
 }
 
-</style>
+.letter-container {
+  position: relative;
+  max-width: 680px;
+  width: 100%;
+}
+
+.wax-seal-badge.ocean-seal {
+  position: absolute;
+  top: -24px;
+  right: 40px;
+  background: radial-gradient(circle, #0284c7 0%, #0369a1 100%);
+  color: #ffffff;
+  padding: 12px 24px;
+  border-radius: 30px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: var(--shadow-teal);
+  border: 2px dashed rgba(255, 255, 255, 0.5);
+  z-index: 10;
+}
+
+.letter-paper.ocean-paper {
+  background: url('/aniversario/assets/images/paper_texture.png'), #fcfaf7;
+  background-size: cover;
+  color: #1c1917;
+  padding: 60px 50px;
+  border-radius: 6px;
+  box-shadow: var(--shadow-polaroid);
+}
+
+.letter-salutation {
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  letter-spacing: 3px;
+  color: #0369a1;
+  margin-bottom: 24px;
+}
+
+.handwritten-body {
+  font-family: var(--font-handwritten);
+  font-size: 2.2rem;
+  line-height: 1.5;
+  color: #1c1917;
+  margin-bottom: 40px;
+}
+
+.sig-prefix {
+  display: block;
+  font-family: var(--font-heading);
+  letter-spacing: 2px;
+  font-size: 0.8rem;
+  color: #0369a1;
+}
+
+.sig-name {
+  font-family: var(--font-handwritten);
+  font-size: 3.2rem;
+  color: #0284c7;
+  line-height: 1;
+}
+
+.quote-footer-section {
+  text-align: center;
+  padding: 100px 20px 40px;
+  background: #ffffff;
+  border-top: 1px solid rgba(2, 132, 199, 0.2);
+}
+
+.gold-quote-icon {
+  font-family: var(--font-display);
+  font-size: 6rem;
+  color: var(--sea-cyan);
+  line-height: 1;
+  opacity: 0.7;
+}
+
+.master-quote {
+  font-family: var(--font-handwritten);
+  font-size: clamp(2.2rem, 4vw, 3.4rem);
+  line-height: 1.3;
+  color: var(--text-cream);
+  margin-bottom: 30px;
+}
+
+.quote-gold-line.ocean-line {
+  width: 100px;
+  height: 3px;
+  background: var(--teal-gradient);
+  margin: 0 auto 24px;
+}
+
+.museum-footer {
+  border-top: 1px solid #e2e8f0;
+  padding-top: 40px;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+.footer-logo .dot {
+  color: var(--sea-cyan);
+}
+  </style>
 </head>
 <body class="theme-light-sea">
+
+  <!-- SPARKLE CANVAS FOR MOUSE/TOUCH TRAIL -->
   <canvas id="sparkleCanvas"></canvas>
 
-  <!-- OFFICIAL JINJER - PISCES AUDIO PLAYER BAR -->
+  <!-- OFFICIAL AUDIO PLAYER & WAVES BAR -->
   <div class="audio-control-bar" id="audioControlBar">
     <button class="audio-toggle-btn sea-waves-btn" id="wavesToggleBtn" title="Escuchar el mar de Viña del Mar">
       <i data-lucide="waves" class="audio-icon"></i>
@@ -1794,8 +1407,8 @@ html, body {
             <span>Jinjer "Pisces" & Alice in Chains</span>
           </div>
           <div class="meta-item">
-            <i data-lucide="heart"></i>
-            <span>Primer Libro: "Sonó un violín en París" • La Bufanda Tejida a Mano</span>
+            <i data-lucide="gift"></i>
+            <span>El Primer Regalo: "Sonó un violín en París" • La Bufanda Tejida a Mano</span>
           </div>
         </div>
       </div>
@@ -1983,7 +1596,7 @@ html, body {
       <div class="section-header-centered">
         <span class="gold-kicker">NUESTRA CRONOLOGÍA COMPLETA</span>
         <h2 class="display-title">Nuestra Historia en Imágenes</h2>
-        <p class="section-subtext">Desde nuestra primera cita en el café hasta cada concierto y tarde en casa.</p>
+        <p class="section-subtext">Desde nuestra primera cita en el café hasta cada concierto y tarde en casa. Haz clic en cualquiera para verla en detalle.</p>
       </div>
 
       <div class="timeline-gallery-grid">
@@ -2147,7 +1760,7 @@ html, body {
             <div class="tags-container">
               <span class="tag ocean-tag">Docente</span>
               <span class="tag ocean-tag">Arte & Dibujo</span>
-              <span class="tag ocean-tag">Lectura Compartida</span>
+              <span class="tag ocean-tag">Bufanda Tejida a Mano</span>
               <span class="tag ocean-tag">Paz Profunda</span>
             </div>
           </div>
@@ -2158,13 +1771,13 @@ html, body {
     <!-- SPECIAL FEATURE: NUESTROS TESOROS & DETALLES ESPECIALES -->
     <section class="editorial-section book-highlight-section">
       <div class="treasures-grid">
-        <!-- PRIMER LIBRO LEÍDO JUNTOS -->
+        <!-- EL PRIMER REGALO DE AMOR -->
         <div class="book-highlight-card">
-          <div class="book-badge"><i data-lucide="book-open"></i> PRIMER LIBRO LEÍDO JUNTOS</div>
+          <div class="book-badge"><i data-lucide="gift"></i> EL PRIMER REGALO DE AMOR</div>
           <div class="book-highlight-content">
             <h3><span>"Sonó un violín en París"</span></h3>
             <p>
-              El primer libro que leímos y compartimos juntos, disfrutando cada página en nuestras tardes de lectura y alimentando conversaciones que aún conservamos en el corazón.
+              El primer regalo de amor que marcó el inicio de nuestra historia. Un detalle profundo y especial que guardamos con un inmenso significado en el corazón.
             </p>
           </div>
         </div>
@@ -2181,6 +1794,85 @@ html, body {
         </div>
       </div>
     </section>
+
+    <!-- SURPRISE 1: REASONS GENERATOR SECTION -->
+    <section class="editorial-section reasons-generator-section" id="reasonsSection">
+      <div class="reasons-card">
+        <div class="issue-badge gold-ocean-badge">
+          <i data-lucide="sparkles" class="badge-icon"></i>
+          <span>UNA SORPRESA PARA TI</span>
+        </div>
+        <h2 class="chapter-main-title">Razones por las que Te Amo ♡</h2>
+        <p class="story-paragraph" style="margin-bottom: 30px;">
+          Cada día a tu lado descubre un motivo nuevo. Haz clic en el botón para descubrir una razón especial:
+        </p>
+
+        <button class="magic-reason-btn" id="generateReasonBtn">
+          <i data-lucide="sparkles"></i>
+          <span>Descubrir una Razón Especial</span>
+        </button>
+
+        <div class="reason-display-box" id="reasonDisplayBox">
+          <span class="reason-number-badge" id="reasonBadge">RAZÓN #1</span>
+          <p class="reason-text" id="reasonText">"Por la bufanda que tejiste punto a punto con tus propias manos para abrigarme en invierno..."</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SURPRISE 2: TIME CAPSULE & COUNTDOWN -->
+    <section class="editorial-section time-capsule-section" id="timeCapsuleSection">
+      <div class="section-header-centered">
+        <span class="gold-kicker">CÁPSULA DEL TIEMPO</span>
+        <h2 class="display-title">Nuestra Promesa de Futuro</h2>
+        <p class="section-subtext">Contando cada segundo hasta nuestro próximo hito de aniversario.</p>
+      </div>
+
+      <div class="countdown-grid" id="countdownGrid">
+        <div class="count-unit">
+          <div class="count-num" id="countDays">365</div>
+          <div class="count-lbl">DÍAS</div>
+        </div>
+        <div class="count-unit">
+          <div class="count-num" id="countHours">12</div>
+          <div class="count-lbl">HORAS</div>
+        </div>
+        <div class="count-unit">
+          <div class="count-num" id="countMins">45</div>
+          <div class="count-lbl">MINUTOS</div>
+        </div>
+        <div class="count-unit">
+          <div class="count-num" id="countSecs">30</div>
+          <div class="count-lbl">SEGUNDOS</div>
+        </div>
+      </div>
+
+      <div class="envelope-wrapper" id="envelopeWrapper" style="margin-top: 40px;">
+        <div class="envelope-card">
+          <div class="envelope-seal">
+            <i data-lucide="lock"></i>
+          </div>
+          <h3 style="font-family: var(--font-heading); color: var(--gold-primary); font-size: 1.1rem; letter-spacing: 2px;">
+            ABRIR LA PROMESA SECRETA DE ANIVERSARIO ✉️
+          </h3>
+          <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 8px;">
+            (Haz clic aquí para abrir la carta secreta de aniversario)
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- POLAROID LIGHTBOX MODAL -->
+    <div class="polaroid-modal" id="polaroidModal">
+      <button class="modal-nav-btn modal-close" id="modalCloseBtn"><i data-lucide="x"></i></button>
+      <div class="modal-content-wrapper">
+        <button class="modal-nav-btn modal-prev" id="modalPrevBtn"><i data-lucide="chevron-left"></i></button>
+        <button class="modal-nav-btn modal-next" id="modalNextBtn"><i data-lucide="chevron-right"></i></button>
+        <div class="modal-polaroid-frame">
+          <img src="" alt="Polaroid Memory" id="modalImg" class="modal-photo">
+          <p id="modalCaption" class="modal-caption"></p>
+        </div>
+      </div>
+    </div>
 
     <!-- STORY PART 5: EPÍLOGO & LA HISTORIA QUE TODAVÍA SE SIGUE ESCRIBIENDO -->
     <section class="editorial-section final-story-epilogue">
@@ -2210,86 +1902,6 @@ html, body {
         </blockquote>
       </div>
     </section>
-
-    
-    <!-- SURPRISE 1: REASONS GENERATOR SECTION -->
-    <section class="editorial-section reasons-generator-section" id="reasonsSection">
-      <div class="reasons-card">
-        <div class="issue-badge gold-ocean-badge">
-          <i data-lucide="sparkles" class="badge-icon"></i>
-          <span>UNA SORPRESA PARA TI</span>
-        </div>
-        <h2 class="chapter-main-title">Razones por las que Te Amo ♡</h2>
-        <p class="story-paragraph" style="margin-bottom: 30px;">
-          Cada día a tu lado descubre un motivo nuevo. Haz clic abajo para revelar una razón especial:
-        </p>
-
-        <button class="magic-reason-btn" id="generateReasonBtn">
-          <i data-lucide="sparkles"></i>
-          <span>Descubrir una Razón Especial</span>
-        </button>
-
-        <div class="reason-display-box" id="reasonDisplayBox">
-          <span class="reason-number-badge" id="reasonBadge">RAZÓN #1</span>
-          <p class="reason-text" id="reasonText">"Por la bufanda que tejiste punto a punto con tus manos para abrigarme en invierno..."</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- SURPRISE 2: TIME CAPSULE & COUNTDOWN -->
-    <section class="editorial-section time-capsule-section" id="timeCapsuleSection">
-      <div class="section-header-centered">
-        <span class="gold-kicker">CÁPSULA DEL TIEMPO</span>
-        <h2 class="display-title">Nuestra Promesa de Futuro</h2>
-        <p class="section-subtext">Contando cada segundo hasta nuestro próximo aniversario en Agosto.</p>
-      </div>
-
-      <div class="countdown-grid" id="countdownGrid">
-        <div class="count-unit">
-          <div class="count-num" id="countDays">365</div>
-          <div class="count-lbl">DÍAS</div>
-        </div>
-        <div class="count-unit">
-          <div class="count-num" id="countHours">12</div>
-          <div class="count-lbl">HORAS</div>
-        </div>
-        <div class="count-unit">
-          <div class="count-num" id="countMins">45</div>
-          <div class="count-lbl">MINUTOS</div>
-        </div>
-        <div class="count-unit">
-          <div class="count-num" id="countSecs">30</div>
-          <div class="count-lbl">SEGUNDOS</div>
-        </div>
-      </div>
-
-      <div class="envelope-wrapper" id="envelopeWrapper" style="margin-top: 40px;">
-        <div class="envelope-card">
-          <div class="envelope-seal">
-            <i data-lucide="lock"></i>
-          </div>
-          <h3 style="font-family: var(--font-heading); color: var(--gold-primary); font-size: 1.1rem; letter-spacing: 2px;">
-            ABRIR LA PRORESA SECRETA DE ANIVERSARIO ✉️
-          </h3>
-          <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 8px;">
-            (Haz clic aquí para desplegar la promesas para nuestro futuro juntos)
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <!-- POLAROID LIGHTBOX MODAL -->
-    <div class="polaroid-modal" id="polaroidModal">
-      <button class="modal-nav-btn modal-close" id="modalCloseBtn"><i data-lucide="x"></i></button>
-      <div class="modal-content-wrapper">
-        <button class="modal-nav-btn modal-prev" id="modalPrevBtn"><i data-lucide="chevron-left"></i></button>
-        <button class="modal-nav-btn modal-next" id="modalNextBtn"><i data-lucide="chevron-right"></i></button>
-        <div class="modal-polaroid-frame">
-          <img src="" alt="Polaroid Memory" id="modalImg" class="modal-photo">
-          <p id="modalCaption" class="modal-caption"></p>
-        </div>
-      </div>
-    </div>
 
     <!-- LETTER SECTION -->
     <section class="editorial-section letter-section">
@@ -2350,7 +1962,7 @@ html, body {
           <span>ESTILO CLARO DE MAR</span>
         </div>
         <p class="copyright">
-          "Sonó un violín en París" (Leído juntos) • Reproductor Jinjer "Pisces" • Océano Pacífico, Viña del Mar.
+          "Sonó un violín en París" (El Primer Regalo de Amor) • Reproductor Jinjer "Pisces" • Océano Pacífico, Viña del Mar.
         </p>
       </footer>
     </section>
@@ -2359,15 +1971,16 @@ html, body {
 
   <script>
 /* ==========================================================================
-   RODRIGO & CARMEN GLORIA — UNIFIED NARRATIVE ENGINE
+   RODRIGO & CARMEN GLORIA — UNIFIED INTERACTIVE ENGINE
    ========================================================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
+  // Initialize Lucide Icons
   if (window.lucide) {
     lucide.createIcons();
   }
 
-  // JINJER PISCES PLAYER POPUP TOGGLE
+  // 1. JINJER PISCES PLAYER POPUP TOGGLE
   const audioToggleBtn = document.getElementById('audioToggleBtn');
   const jinjerPlayerPopup = document.getElementById('jinjerPlayerPopup');
   const closePlayerBtn = document.getElementById('closePlayerBtn');
@@ -2393,9 +2006,286 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  console.log('Rodrigo & Carmen Gloria Story Narrative Engine ready.');
-});
+  // 2. SPARKLE CURSOR & TOUCH PARTICLES SYSTEM
+  const canvas = document.getElementById('sparkleCanvas');
+  const ctx = canvas ? canvas.getContext('2d') : null;
+  let particles = [];
 
+  function resizeCanvas() {
+    if (canvas) {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+  }
+  window.addEventListener('resize', resizeCanvas);
+  resizeCanvas();
+
+  class Sparkle {
+    constructor(x, y) {
+      this.x = x;
+      this.y = y;
+      this.size = Math.random() * 5 + 2;
+      this.speedX = (Math.random() - 0.5) * 1.5;
+      this.speedY = (Math.random() - 0.5) * 1.5 - 0.5;
+      this.color = Math.random() > 0.4 ? '#d97706' : '#0284c7';
+      this.opacity = 1;
+    }
+    update() {
+      this.x += this.speedX;
+      this.y += this.speedY;
+      this.opacity -= 0.02;
+      if (this.size > 0.2) this.size -= 0.05;
+    }
+    draw() {
+      if (!ctx) return;
+      ctx.save();
+      ctx.globalAlpha = this.opacity;
+      ctx.fillStyle = this.color;
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+  }
+
+  function addParticles(e) {
+    const x = e.clientX || (e.touches && e.touches[0].clientX);
+    const y = e.clientY || (e.touches && e.touches[0].clientY);
+    if (x && y) {
+      for (let i = 0; i < 2; i++) {
+        particles.push(new Sparkle(x, y));
+      }
+    }
+  }
+
+  window.addEventListener('pointermove', addParticles);
+
+  function animateSparkles() {
+    if (ctx) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (let i = 0; i < particles.length; i++) {
+        particles[i].update();
+        particles[i].draw();
+        if (particles[i].opacity <= 0) {
+          particles.splice(i, 1);
+          i--;
+        }
+      }
+    }
+    requestAnimationFrame(animateSparkles);
+  }
+  animateSparkles();
+
+  // 3. OCEAN WAVES AUDIO SYNTHESIZER (WEB AUDIO API)
+  let wavesAudioCtx = null;
+  let wavesGainNode = null;
+  let isWavesPlaying = false;
+  const wavesToggleBtn = document.getElementById('wavesToggleBtn');
+
+  function initWavesAudio() {
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    wavesAudioCtx = new AudioCtx();
+    
+    const bufferSize = wavesAudioCtx.sampleRate * 4;
+    const noiseBuffer = wavesAudioCtx.createBuffer(1, bufferSize, wavesAudioCtx.sampleRate);
+    const output = noiseBuffer.getChannelData(0);
+    let b0 = 0, b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0;
+
+    for (let i = 0; i < bufferSize; i++) {
+      let white = Math.random() * 2 - 1;
+      b0 = 0.99886 * b0 + white * 0.0555179;
+      b1 = 0.99332 * b1 + white * 0.0750759;
+      b2 = 0.96900 * b2 + white * 0.1538520;
+      b3 = 0.86650 * b3 + white * 0.3104856;
+      b4 = 0.55000 * b4 + white * 0.5329522;
+      b5 = -0.7616 * b5 - white * 0.0168980;
+      output[i] = b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362;
+      output[i] *= 0.11;
+      b6 = white * 0.115926;
+    }
+
+    const whiteNoise = wavesAudioCtx.createBufferSource();
+    whiteNoise.buffer = noiseBuffer;
+    whiteNoise.loop = true;
+
+    const filter = wavesAudioCtx.createBiquadFilter();
+    filter.type = 'lowpass';
+    filter.frequency.value = 400;
+
+    wavesGainNode = wavesAudioCtx.createGain();
+    wavesGainNode.gain.setValueAtTime(0.01, wavesAudioCtx.currentTime);
+
+    whiteNoise.connect(filter);
+    filter.connect(wavesGainNode);
+    wavesGainNode.connect(wavesAudioCtx.destination);
+    whiteNoise.start();
+
+    let waveCycle = 0;
+    setInterval(() => {
+      if (isWavesPlaying && wavesGainNode) {
+        waveCycle += 0.05;
+        const waveVolume = 0.05 + Math.sin(waveCycle) * 0.04;
+        filter.frequency.setValueAtTime(300 + Math.sin(waveCycle) * 250, wavesAudioCtx.currentTime);
+        wavesGainNode.gain.setValueAtTime(waveVolume, wavesAudioCtx.currentTime);
+      }
+    }, 100);
+  }
+
+  if (wavesToggleBtn) {
+    wavesToggleBtn.addEventListener('click', () => {
+      if (!wavesAudioCtx) initWavesAudio();
+      if (wavesAudioCtx.state === 'suspended') wavesAudioCtx.resume();
+
+      isWavesPlaying = !isWavesPlaying;
+      if (isWavesPlaying) {
+        wavesToggleBtn.classList.add('playing');
+        wavesToggleBtn.querySelector('.waves-text').textContent = 'Olas de Viña (Sonando 🌊)';
+      } else {
+        wavesToggleBtn.classList.remove('playing');
+        wavesToggleBtn.querySelector('.waves-text').textContent = 'Mar de Viña del Mar';
+        if (wavesGainNode) wavesGainNode.gain.setValueAtTime(0.001, wavesAudioCtx.currentTime);
+      }
+    });
+  }
+
+  // 4. REASONS GENERATOR (15 PERSONALIZED ROMANTIC REASONS)
+  const reasonsList = [
+    "Por la bufanda que tejiste punto a punto con tus propias manos para abrigarme en invierno.",
+    "Por transformar cada 'No puedo' en un 'Inténtalo una vez más' con tu paciencia infinita.",
+    "Por nuestras tardes de café frente al Pacífico en Viña del Mar compartiendo torta y sonrisas.",
+    "Por 'Sonó un violín en París', el primer regalo de amor que marcó el inicio de nuestra historia.",
+    "Por cómo escuchas atenta antes de cantar cuando tomo la Gibson Les Paul.",
+    "Por las tardes en el sillón de casa escuchando vinilos mientras la lluvia cae afuera.",
+    "Por tus notas de buenos días y tu risa que ilumina cualquier día gris.",
+    "Porque uno construía sistemas y la otra construía personas, y juntos aprendimos el mismo lenguaje de amor.",
+    "Por ir a conciertos de rock con poleras de Alice in Chains y brindar por nuestro futuro.",
+    "Por elegir caminatas junto al mar de Viña del Mar y regresar siempre a la orilla.",
+    "Por tu paciencia, tu ternura y tu fuerza inquebrantable.",
+    "Por hacer de lo cotidiano y ordinario algo profundamente mágico.",
+    "Por creer en mí incluso cuando yo dudaba de mí mismo.",
+    "Por cada mirada cómplice en medio de un show en vivo.",
+    "Porque tu amor es silencioso, inevitable y capaz de cambiar el paisaje sin pedir permiso."
+  ];
+
+  let currentReasonIndex = 0;
+  const generateReasonBtn = document.getElementById('generateReasonBtn');
+  const reasonBadge = document.getElementById('reasonBadge');
+  const reasonText = document.getElementById('reasonText');
+  const reasonDisplayBox = document.getElementById('reasonDisplayBox');
+
+  if (generateReasonBtn) {
+    generateReasonBtn.addEventListener('click', () => {
+      reasonDisplayBox.style.opacity = '0';
+      reasonDisplayBox.style.transform = 'scale(0.95)';
+      
+      setTimeout(() => {
+        currentReasonIndex = (currentReasonIndex + 1) % reasonsList.length;
+        reasonBadge.textContent = `RAZÓN #${currentReasonIndex + 1} DE ${reasonsList.length}`;
+        reasonText.textContent = `"${reasonsList[currentReasonIndex]}"`;
+        reasonDisplayBox.style.opacity = '1';
+        reasonDisplayBox.style.transform = 'scale(1)';
+        
+        // Spawn heart burst particles
+        const rect = generateReasonBtn.getBoundingClientRect();
+        for (let i = 0; i < 15; i++) {
+          particles.push(new Sparkle(rect.left + rect.width / 2, rect.top));
+        }
+      }, 250);
+    });
+  }
+
+  // 5. COUNTDOWN TIMER TO NEXT ANNIVERSARY (AUGUST 2026)
+  function updateCountdown() {
+    const nextAnniversary = new Date('2026-08-01T00:00:00');
+    const now = new Date();
+    const diff = nextAnniversary - now;
+
+    if (diff > 0) {
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const mins = Math.floor((diff / 1000 / 60) % 60);
+      const secs = Math.floor((diff / 1000) % 60);
+
+      const dEl = document.getElementById('countDays');
+      const hEl = document.getElementById('countHours');
+      const mEl = document.getElementById('countMins');
+      const sEl = document.getElementById('countSecs');
+
+      if (dEl) dEl.textContent = days;
+      if (hEl) hEl.textContent = hours < 10 ? '0' + hours : hours;
+      if (mEl) mEl.textContent = mins < 10 ? '0' + mins : mins;
+      if (sEl) sEl.textContent = secs < 10 ? '0' + secs : secs;
+    }
+  }
+  setInterval(updateCountdown, 1000);
+  updateCountdown();
+
+  // 6. SECRET ENVELOPE MODAL / UNLOCK
+  const envelopeWrapper = document.getElementById('envelopeWrapper');
+  if (envelopeWrapper) {
+    envelopeWrapper.addEventListener('click', () => {
+      alert("♡ PROMESA SECRETA DESBLOQUEADA ♡\n\nPara Carmen Gloria:\n\nGracias por caminar conmigo en esta historia que aún se sigue escribiendo. Prometo seguir aprendiendo tus canciones, preparando las notas de buenos días, cuidando nuestra bufanda tejida a mano y caminando a tu lado en cada playa y concierto.\n\n¡Te amo hoy, mañana y siempre!\n- Rodrigo");
+    });
+  }
+
+  // 7. POLAROID LIGHTBOX MODAL NAVIGATION
+  const polaroidModal = document.getElementById('polaroidModal');
+  const modalImg = document.getElementById('modalImg');
+  const modalCaption = document.getElementById('modalCaption');
+  const modalCloseBtn = document.getElementById('modalCloseBtn');
+  const modalPrevBtn = document.getElementById('modalPrevBtn');
+  const modalNextBtn = document.getElementById('modalNextBtn');
+
+  const galleryItems = Array.from(document.querySelectorAll('.timeline-photo-card, .hero-polaroid-frame'));
+  let currentGalleryIndex = 0;
+
+  function openPolaroidModal(index) {
+    if (galleryItems[index]) {
+      const imgEl = galleryItems[index].querySelector('img');
+      const captionEl = galleryItems[index].querySelector('.handwritten-note, .card-desc, .card-title');
+      if (imgEl && polaroidModal) {
+        currentGalleryIndex = index;
+        modalImg.src = imgEl.src;
+        modalCaption.textContent = captionEl ? captionEl.textContent : '';
+        polaroidModal.classList.add('active');
+      }
+    }
+  }
+
+  galleryItems.forEach((item, idx) => {
+    item.addEventListener('click', () => openPolaroidModal(idx));
+  });
+
+  if (modalCloseBtn) {
+    modalCloseBtn.addEventListener('click', () => polaroidModal.classList.remove('active'));
+  }
+  if (modalPrevBtn) {
+    modalPrevBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      currentGalleryIndex = (currentGalleryIndex - 1 + galleryItems.length) % galleryItems.length;
+      openPolaroidModal(currentGalleryIndex);
+    });
+  }
+  if (modalNextBtn) {
+    modalNextBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      currentGalleryIndex = (currentGalleryIndex + 1) % galleryItems.length;
+      openPolaroidModal(currentGalleryIndex);
+    });
+  }
+
+  if (polaroidModal) {
+    polaroidModal.addEventListener('click', (e) => {
+      if (e.target === polaroidModal) polaroidModal.classList.remove('active');
+    });
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && polaroidModal) polaroidModal.classList.remove('active');
+  });
+
+  console.log('Rodrigo & Carmen Gloria Story Interactive Engine fully active.');
+});
 </script>
 </body>
 </html>

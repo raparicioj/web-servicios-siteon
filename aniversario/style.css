@@ -1066,7 +1066,7 @@ html, body {
 }
 
 .letter-paper.ocean-paper {
-  background: url('assets/images/paper_texture.png'), #fcfaf7;
+  background: url('/aniversario/assets/images/paper_texture.png'), #fcfaf7;
   background-size: cover;
   color: #1c1917;
   padding: 60px 50px;

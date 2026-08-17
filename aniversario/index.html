@@ -1132,6 +1132,43 @@ html, body {
   color: var(--text-muted);
 }
 
+/* MODAL CAPTION BOX & STYLING */
+.modal-caption-box {
+  margin-top: 18px;
+  text-align: center;
+  padding: 0 10px;
+}
+
+.modal-date-badge {
+  display: inline-block;
+  background: var(--gold-gradient);
+  color: #ffffff;
+  font-family: var(--font-heading);
+  font-size: 0.75rem;
+  letter-spacing: 2px;
+  padding: 4px 14px;
+  border-radius: 20px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  box-shadow: 0 4px 12px rgba(217, 119, 6, 0.25);
+}
+
+.modal-title {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  letter-spacing: 1.5px;
+  color: var(--text-cream);
+  margin-bottom: 8px;
+  font-weight: 700;
+}
+
+.modal-caption {
+  font-family: var(--font-note);
+  font-size: 1.7rem;
+  line-height: 1.4;
+  color: var(--text-dark);
+}
+
 /* POLAROID LIGHTBOX MODAL */
 .polaroid-modal {
   position: fixed;
@@ -1793,650 +1830,375 @@ html, body {
       </div>
     </section>
 
-        <!-- FULL CHRONOLOGICAL GALLERY (58 FOTOS) -->
-    <section class="chronological-gallery-section">
+                <!-- FULL CHRONOLOGICAL GALLERY (33 FOTOS CURADAS) -->
+    <section class="chronological-gallery-section" id="galeria">
       <div class="section-header-centered">
         <span class="gold-kicker">NUESTRA CRONOLOGÍA COMPLETA</span>
-        <h2 class="display-title">Nuestra Historia en Imágenes (58 Recuerdos)</h2>
-        <p class="section-subtext">Desde nuestros primeros encuentros en mayo hasta nuestro aniversario en agosto. Ordenadas cronológicamente por fecha. Haz clic en cualquiera para verla en detalle.</p>
+        <h2 class="display-title">Nuestra Historia en Imágenes (33 Momentos Inolvidables)</h2>
+        <p class="section-subtext">Desde nuestros primeros encuentros frente al mar en mayo hasta la celebración de nuestro aniversario. Cada fotografía captura un momento único, la luz, el ambiente y la magia de nuestro viaje juntos. Haz clic en cualquiera para abrirla en detalle.</p>
       </div>
 
       <div class="timeline-gallery-grid">
         <article class="timeline-photo-card">
           <div class="card-date-badge">1. 2 DE MAYO 2026</div>
           <div class="card-photo-wrapper">
-            <img src="./assets/images/IMG_3872.jpg" alt="Noche de Encuentro">
+            <img src="./assets/images/IMG_3878.jpg" alt="EL INICIO JUNTO AL FUEGO" loading="lazy">
           </div>
           <div class="card-info">
-            <h3 class="card-title">NOCHE DE ENCUENTRO</h3>
-            <p class="card-desc">"Miradas cómplices y conversaciones largas en el inicio de nuestro camino."</p>
+            <h3 class="card-title">EL INICIO JUNTO AL FUEGO</h3>
+            <p class="card-desc">"Cobijados bajo una manta frente al fogón, el sonido de la brisa marina y las risas que sellaron nuestra primera gran noche juntos."</p>
           </div>
         </article>
 
         <article class="timeline-photo-card">
-          <div class="card-date-badge">2. 2 DE MAYO 2026</div>
+          <div class="card-date-badge">2. 15 DE MAYO 2026</div>
           <div class="card-photo-wrapper">
-            <img src="./assets/images/IMG_3873.jpg" alt="Sonrisas Compartidas">
+            <img src="./assets/images/IMG_3988.jpg" alt="TARDE DORADA DE OTOÑO" loading="lazy">
           </div>
           <div class="card-info">
-            <h3 class="card-title">SONRISAS COMPARTIDAS</h3>
-            <p class="card-desc">"Cuando el tiempo pasaba volando sin darnos cuenta."</p>
+            <h3 class="card-title">TARDE DORADA DE OTOÑO</h3>
+            <p class="card-desc">"La luz suave de mayo y la tranquilidad de sabernos en el camino correcto, transformando una simple tarde en un recuerdo imborrable."</p>
           </div>
         </article>
 
         <article class="timeline-photo-card">
-          <div class="card-date-badge">3. 2 DE MAYO 2026</div>
+          <div class="card-date-badge">3. 25 DE MAYO 2026</div>
           <div class="card-photo-wrapper">
-            <img src="./assets/images/IMG_3877.jpg" alt="Detalles que Enamoran">
+            <img src="./assets/images/IMG_4065.jpg" alt="ENCUENTRO & COPA DE VINO" loading="lazy">
           </div>
           <div class="card-info">
-            <h3 class="card-title">DETALLES QUE ENAMORAN</h3>
-            <p class="card-desc">"Descubriendo los gustos del otro entre risas."</p>
+            <h3 class="card-title">ENCUENTRO & COPA DE VINO</h3>
+            <p class="card-desc">"Compartiendo risas sinceras, copas de vino y la alegría de integrar nuestros mundos en un ambiente cálido y distendido."</p>
           </div>
         </article>
 
         <article class="timeline-photo-card">
-          <div class="card-date-badge">4. 2 DE MAYO 2026</div>
+          <div class="card-date-badge">4. 31 DE MAYO 2026</div>
           <div class="card-photo-wrapper">
-            <img src="./assets/images/IMG_3878.jpg" alt="Cerca del Mar">
+            <img src="./assets/images/IMG_4086.jpg" alt="PASEO DE OTOÑO EN VIÑA" loading="lazy">
           </div>
           <div class="card-info">
-            <h3 class="card-title">CERCA DEL MAR</h3>
-            <p class="card-desc">"Primeros paseos nocturnos sintiendo la brisa de la costa."</p>
+            <h3 class="card-title">PASEO DE OTOÑO EN VIÑA</h3>
+            <p class="card-desc">"Caminando bajo el cielo azul de la Ciudad Jardín, sincronizando nuestros pasos y despidiendo un mayo inolvidable."</p>
           </div>
         </article>
 
         <article class="timeline-photo-card">
-          <div class="card-date-badge">5. 23 DE MAYO 2026</div>
+          <div class="card-date-badge">5. 31 DE MAYO 2026</div>
           <div class="card-photo-wrapper">
-            <img src="./assets/images/IMG_3988.jpg" alt="Tarde de Sol">
+            <img src="./assets/images/IMG_4106.jpg" alt="LUZ Y DULZURA NATURAL" loading="lazy">
           </div>
           <div class="card-info">
-            <h3 class="card-title">TARDE DE SOL</h3>
-            <p class="card-desc">"Caminando juntos bajo el sol de otoño."</p>
+            <h3 class="card-title">LUZ Y DULZURA NATURAL</h3>
+            <p class="card-desc">"El sol filtrándose entre los árboles para iluminar la sonrisa espontánea que alegra cada uno de mis días."</p>
           </div>
         </article>
 
         <article class="timeline-photo-card">
-          <div class="card-date-badge">6. 31 DE MAYO 2026</div>
+          <div class="card-date-badge">6. 5 DE JUNIO 2026</div>
           <div class="card-photo-wrapper">
-            <img src="./assets/images/IMG_4062.jpg" alt="Cita Nocturna">
+            <img src="./assets/images/IMG_4193.jpg" alt="REFUGIO EN LAS NOCHES DE JUNIO" loading="lazy">
           </div>
           <div class="card-info">
-            <h3 class="card-title">CITA NOCTURNA</h3>
-            <p class="card-desc">"Conversaciones profundas y la serenidad de estar juntos."</p>
+            <h3 class="card-title">REFUGIO EN LAS NOCHES DE JUNIO</h3>
+            <p class="card-desc">"Cuando afuera el invierno costero arrecia, adentro una taza caliente y nuestras conversaciones crean el hogar perfecto."</p>
           </div>
         </article>
 
         <article class="timeline-photo-card">
-          <div class="card-date-badge">7. 31 DE MAYO 2026</div>
+          <div class="card-date-badge">7. 20 DE JUNIO 2026</div>
           <div class="card-photo-wrapper">
-            <img src="./assets/images/IMG_4065.jpg" alt="Nuestra Esencia">
+            <img src="./assets/images/IMG_4293.jpg" alt="TARDE DE MÚSICA & VINILOS" loading="lazy">
           </div>
           <div class="card-info">
-            <h3 class="card-title">NUESTRA ESENCIA</h3>
-            <p class="card-desc">"Un momento simple pero perfecto que guardamos en la memoria."</p>
+            <h3 class="card-title">TARDE DE MÚSICA & VINILOS</h3>
+            <p class="card-desc">"El tocadiscos girando con clásicos del rock, llenando la tarde de armonía, paz y complicidad absoluta en casa."</p>
           </div>
         </article>
 
         <article class="timeline-photo-card">
-          <div class="card-date-badge">8. 31 DE MAYO 2026</div>
+          <div class="card-date-badge">8. 22 DE JUNIO 2026</div>
           <div class="card-photo-wrapper">
-            <img src="./assets/images/IMG_4067.jpg" alt="Magia en la Mirada">
+            <img src="./assets/images/IMG_4313.jpg" alt="CÓMPLICES DE SUEÑOS" loading="lazy">
           </div>
           <div class="card-info">
-            <h3 class="card-title">MAGIA EN LA MIRADA</h3>
-            <p class="card-desc">"Donde no hacían falta palabras para entendernos."</p>
+            <h3 class="card-title">CÓMPLICES DE SUEÑOS</h3>
+            <p class="card-desc">"Proyectando el futuro juntos con ilusión, apoyándonos mutuamente en cada desafío y celebrando cada logro."</p>
           </div>
         </article>
 
         <article class="timeline-photo-card">
-          <div class="card-date-badge">9. 31 DE MAYO 2026</div>
+          <div class="card-date-badge">9. 24 DE JUNIO 2026</div>
           <div class="card-photo-wrapper">
-            <img src="./assets/images/IMG_4086.jpg" alt="Paseo al Aire Libre">
+            <img src="./assets/images/IMG_4326.jpg" alt="ABRAZO SINCERO DE INVIERNO" loading="lazy">
           </div>
           <div class="card-info">
-            <h3 class="card-title">PASEO AL AIRE LIBRE</h3>
-            <p class="card-desc">"Disfrutando del paisaje y de la mejor compañía."</p>
+            <h3 class="card-title">ABRAZO SINCERO DE INVIERNO</h3>
+            <p class="card-desc">"Un instante de pausa en la rutina para refugiarnos en el abrazo más transparente, cálido y reconfortante."</p>
           </div>
         </article>
 
         <article class="timeline-photo-card">
-          <div class="card-date-badge">10. 31 DE MAYO 2026</div>
+          <div class="card-date-badge">10. 24 DE JUNIO 2026</div>
           <div class="card-photo-wrapper">
-            <img src="./assets/images/IMG_4106.jpg" alt="Luz de Otoño">
+            <img src="./assets/images/IMG_4332.jpg" alt="ATARDECER FRENTE AL PACÍFICO" loading="lazy">
           </div>
           <div class="card-info">
-            <h3 class="card-title">LUZ DE OTOÑO</h3>
-            <p class="card-desc">"Capturando la calidez de un día inolvidable."</p>
+            <h3 class="card-title">ATARDECER FRENTE AL PACÍFICO</h3>
+            <p class="card-desc">"El mar bravío de Viña del Mar y el viento helado desvaneciéndose ante el calor incondicional de estar juntos."</p>
           </div>
         </article>
 
         <article class="timeline-photo-card">
-          <div class="card-date-badge">11. 31 DE MAYO 2026</div>
+          <div class="card-date-badge">11. 4 DE JULIO 2026</div>
           <div class="card-photo-wrapper">
-            <img src="./assets/images/IMG_4132.jpg" alt="Risas de Fin de Mes">
+            <img src="./assets/images/IMG_4373.jpg" alt="BRINDIS POR EL ROCK EN VIVO" loading="lazy">
           </div>
           <div class="card-info">
-            <h3 class="card-title">RISAS DE FIN DE MES</h3>
-            <p class="card-desc">"Terminando mayo con la certeza de que esto recién comenzaba."</p>
+            <h3 class="card-title">BRINDIS POR EL ROCK EN VIVO</h3>
+            <p class="card-desc">"Cervezas alzadas al ritmo de los acordes en vivo, coreando canciones que marcan la banda sonora de nuestra historia."</p>
           </div>
         </article>
 
         <article class="timeline-photo-card">
-          <div class="card-date-badge">12. 5 DE JUNIO 2026</div>
+          <div class="card-date-badge">12. 4 DE JULIO 2026</div>
           <div class="card-photo-wrapper">
-            <img src="./assets/images/IMG_4193.jpg" alt="Noches Acogedoras">
+            <img src="./assets/images/IMG_4377.jpg" alt="EUFORIA Y COMPLICIDAD EN EL SHOW" loading="lazy">
           </div>
           <div class="card-info">
-            <h3 class="card-title">NOCHES ACOGEDORAS</h3>
-            <p class="card-desc">"Bienvenido junio: refugio, té caliente y risas."</p>
+            <h3 class="card-title">EUFORIA Y COMPLICIDAD EN EL SHOW</h3>
+            <p class="card-desc">"Luces de escenario, adrenalina pura y la alegría compartida de vibrar con la misma música en una noche inolvidable."</p>
           </div>
         </article>
 
         <article class="timeline-photo-card">
-          <div class="card-date-badge">13. 20 DE JUNIO 2026</div>
+          <div class="card-date-badge">13. 6 DE JULIO 2026</div>
           <div class="card-photo-wrapper">
-            <img src="./assets/images/IMG_4289.jpg" alt="Invierno en Casa">
+            <img src="./assets/images/IMG_4388.jpg" alt="CAMINATA INVERNAL POR LA COSTA" loading="lazy">
           </div>
           <div class="card-info">
-            <h3 class="card-title">INVIERNO EN CASA</h3>
-            <p class="card-desc">"El sillón, la música suave y la paz de abrazarnos."</p>
+            <h3 class="card-title">CAMINATA INVERNAL POR LA COSTA</h3>
+            <p class="card-desc">"Abrigados contra la brisa de julio, disfrutando de la inmensidad del océano y la serenidad de ir tomados de la mano."</p>
           </div>
         </article>
 
         <article class="timeline-photo-card">
-          <div class="card-date-badge">14. 20 DE JUNIO 2026</div>
+          <div class="card-date-badge">14. 8 DE JULIO 2026</div>
           <div class="card-photo-wrapper">
-            <img src="./assets/images/IMG_4293.jpg" alt="Tarde de Vinilos">
+            <img src="./assets/images/IMG_4400.jpg" alt="CAFÉ MATINAL FRENTE AL MAR" loading="lazy">
           </div>
           <div class="card-info">
-            <h3 class="card-title">TARDE DE VINILOS</h3>
-            <p class="card-desc">"Canciones clásicas sonando de fondo en casa."</p>
+            <h3 class="card-title">CAFÉ MATINAL FRENTE AL MAR</h3>
+            <p class="card-desc">"El aroma a café recién tostado, el horizonte azul frente a nosotros y la mejor forma de comenzar una nueva jornada."</p>
           </div>
         </article>
 
         <article class="timeline-photo-card">
-          <div class="card-date-badge">15. 20 DE JUNIO 2026</div>
+          <div class="card-date-badge">15. 8 DE JULIO 2026</div>
           <div class="card-photo-wrapper">
-            <img src="./assets/images/IMG_4299.jpg" alt="Calidez Humana">
+            <img src="./assets/images/IMG_4418.jpg" alt="LUCES NOCTURNAS SOBRE LA BAHÍA" loading="lazy">
           </div>
           <div class="card-info">
-            <h3 class="card-title">CALIDEZ HUMANA</h3>
-            <p class="card-desc">"Cuando afuera hacía frío pero adentro todo era tibieza."</p>
+            <h3 class="card-title">LUCES NOCTURNAS SOBRE LA BAHÍA</h3>
+            <p class="card-desc">"El resplandor de la costa de Viña reflejándose en las olas oscuras, con el mar como eterno testigo de nuestro amor."</p>
           </div>
         </article>
 
         <article class="timeline-photo-card">
-          <div class="card-date-badge">16. 22 DE JUNIO 2026</div>
+          <div class="card-date-badge">16. 11 DE JULIO 2026</div>
           <div class="card-photo-wrapper">
-            <img src="./assets/images/IMG_4313.jpg" alt="Cómplices del Invierno">
+            <img src="./assets/images/IMG_4448.jpg" alt="MANOS ARTISTAS & CREATIVIDAD" loading="lazy">
           </div>
           <div class="card-info">
-            <h3 class="card-title">CÓMPLICES DEL INVIERNO</h3>
-            <p class="card-desc">"Compartiendo secretos y proyectos para el futuro."</p>
+            <h3 class="card-title">MANOS ARTISTAS & CREATIVIDAD</h3>
+            <p class="card-desc">"Admirando la paciencia, el talento y la delicadeza con que Carmen Gloria transforma cada material en arte lleno de vida."</p>
           </div>
         </article>
 
         <article class="timeline-photo-card">
-          <div class="card-date-badge">17. 24 DE JUNIO 2026</div>
+          <div class="card-date-badge">17. 11 DE JULIO 2026</div>
           <div class="card-photo-wrapper">
-            <img src="./assets/images/IMG_4326.jpg" alt="Tardes de Relajación">
+            <img src="./assets/images/IMG_4449.jpg" alt="LA BUFANDA TEJIDA A MANO" loading="lazy">
           </div>
           <div class="card-info">
-            <h3 class="card-title">TARDES DE RELAJACIÓN</h3>
-            <p class="card-desc">"Pausa en la rutina diaria para reconectar."</p>
+            <h3 class="card-title">LA BUFANDA TEJIDA A MANO</h3>
+            <p class="card-desc">"Cada punto y vuelta de lana tejido con paciencia y amor infinito, convirtiendo un regalo en un abrazo eterno para los días fríos."</p>
           </div>
         </article>
 
         <article class="timeline-photo-card">
-          <div class="card-date-badge">18. 24 DE JUNIO 2026</div>
+          <div class="card-date-badge">18. 17 DE JULIO 2026</div>
           <div class="card-photo-wrapper">
-            <img src="./assets/images/IMG_4327.jpg" alt="Instantes Únicos">
+            <img src="./assets/images/IMG_4515.jpg" alt="PAUSA DULCE DE MEDIA TARDE" loading="lazy">
           </div>
           <div class="card-info">
-            <h3 class="card-title">INSTANTES ÚNICOS</h3>
-            <p class="card-desc">"La felicidad de los detalles sencillos."</p>
+            <h3 class="card-title">PAUSA DULCE DE MEDIA TARDE</h3>
+            <p class="card-desc">"Un recreo para conversar, sonreír y recordarnos que la felicidad habita en los momentos más simples y cotidianos."</p>
           </div>
         </article>
 
         <article class="timeline-photo-card">
-          <div class="card-date-badge">19. 24 DE JUNIO 2026</div>
+          <div class="card-date-badge">19. 24 DE JULIO 2026</div>
           <div class="card-photo-wrapper">
-            <img src="./assets/images/IMG_4329.jpg" alt="Abrazos de Invierno">
+            <img src="./assets/images/IMG_4584.jpg" alt="ATARDECER MALVA EN LA COSTA" loading="lazy">
           </div>
           <div class="card-info">
-            <h3 class="card-title">ABRAZOS DE INVIERNO</h3>
-            <p class="card-desc">"Sintiéndonos en casa en cualquier lugar."</p>
+            <h3 class="card-title">ATARDECER MALVA EN LA COSTA</h3>
+            <p class="card-desc">"El cielo de invierno teñido de tonos violetas y dorados sobre el mar, regalándonos una de las postales más hermosas de julio."</p>
           </div>
         </article>
 
         <article class="timeline-photo-card">
-          <div class="card-date-badge">20. 24 DE JUNIO 2026</div>
+          <div class="card-date-badge">20. 2 DE AGOSTO 2026</div>
           <div class="card-photo-wrapper">
-            <img src="./assets/images/IMG_4330.jpg" alt="Miradas Sinceras">
+            <img src="./assets/images/IMG_4655.jpg" alt="PASEO POR EL MUELLE VERGARA" loading="lazy">
           </div>
           <div class="card-info">
-            <h3 class="card-title">MIRADAS SINCERAS</h3>
-            <p class="card-desc">"Amor genuino que trasciende la rutina."</p>
+            <h3 class="card-title">PASEO POR EL MUELLE VERGARA</h3>
+            <p class="card-desc">"Maderas centenarias bajo nuestros pasos, gaviotas al vuelo y la emoción palpitante de dar inicio al mes de nuestro aniversario."</p>
           </div>
         </article>
 
         <article class="timeline-photo-card">
-          <div class="card-date-badge">21. 24 DE JUNIO 2026</div>
+          <div class="card-date-badge">21. 2 DE AGOSTO 2026</div>
           <div class="card-photo-wrapper">
-            <img src="./assets/images/IMG_4332.jpg" alt="Atardecer Helado">
+            <img src="./assets/images/IMG_4665.jpg" alt="NOCHE MÁGICA EN EL MUELLE" loading="lazy">
           </div>
           <div class="card-info">
-            <h3 class="card-title">ATARDECER HELADO</h3>
-            <p class="card-desc">"Mirando el mar mientras el sol bajaba en Viña."</p>
+            <h3 class="card-title">NOCHE MÁGICA EN EL MUELLE</h3>
+            <p class="card-desc">"Farolas encendidas sobre el agua profunda y la paz inmensa de contemplar la ciudad iluminada desde el mar."</p>
           </div>
         </article>
 
         <article class="timeline-photo-card">
-          <div class="card-date-badge">22. 4 DE JULIO 2026</div>
+          <div class="card-date-badge">22. 2 DE AGOSTO 2026</div>
           <div class="card-photo-wrapper">
-            <img src="./assets/images/IMG_4372.jpg" alt="Noche de Recital">
+            <img src="./assets/images/IMG_4668.jpg" alt="ABRIGO & MIRADA AL PACÍFICO" loading="lazy">
           </div>
           <div class="card-info">
-            <h3 class="card-title">NOCHE DE RECITAL</h3>
-            <p class="card-desc">"Música en vivo, t-shirts de rock y adrenalina pura."</p>
+            <h3 class="card-title">ABRIGO & MIRADA AL PACÍFICO</h3>
+            <p class="card-desc">"Protegidos con la bufanda tejida a mano, contemplando juntos el horizonte donde el mar aprendió nuestros nombres."</p>
           </div>
         </article>
 
         <article class="timeline-photo-card">
-          <div class="card-date-badge">23. 4 DE JULIO 2026</div>
+          <div class="card-date-badge">23. 2 DE AGOSTO 2026</div>
           <div class="card-photo-wrapper">
-            <img src="./assets/images/IMG_4373.jpg" alt="Brindis por la Música">
+            <img src="./assets/images/IMG_4671.jpg" alt="LA SERENIDAD DEL OCÉANO" loading="lazy">
           </div>
           <div class="card-info">
-            <h3 class="card-title">BRINDIS POR LA MÚSICA</h3>
-            <p class="card-desc">"Cerveza helada y canciones que marcan nuestra historia."</p>
+            <h3 class="card-title">LA SERENIDAD DEL OCÉANO</h3>
+            <p class="card-desc">"La inmensidad azul extendiéndose sin límites, reflejo de la solidez, la calma y el amor que hemos cultivado."</p>
           </div>
         </article>
 
         <article class="timeline-photo-card">
-          <div class="card-date-badge">24. 4 DE JULIO 2026</div>
+          <div class="card-date-badge">24. 10 DE AGOSTO 2026</div>
           <div class="card-photo-wrapper">
-            <img src="./assets/images/IMG_4374.jpg" alt="Euforia en el Show">
+            <img src="./assets/images/IMG_4710.jpg" alt="VÍSPERA ILUMINADA DE ANIVERSARIO" loading="lazy">
           </div>
           <div class="card-info">
-            <h3 class="card-title">EUFORIA EN EL SHOW</h3>
-            <p class="card-desc">"Gritando nuestras canciones favoritas juntos."</p>
+            <h3 class="card-title">VÍSPERA ILUMINADA DE ANIVERSARIO</h3>
+            <p class="card-desc">"Flores, detalles y la emoción a flor de piel preparando cada rincón para conmemorar nuestro primer año de amor."</p>
           </div>
         </article>
 
         <article class="timeline-photo-card">
-          <div class="card-date-badge">25. 4 DE JULIO 2026</div>
+          <div class="card-date-badge">25. 10 DE AGOSTO 2026</div>
           <div class="card-photo-wrapper">
-            <img src="./assets/images/IMG_4375.jpg" alt="Luces del Escenario">
+            <img src="./assets/images/IMG_4718.jpg" alt="BRINDIS CON COPAS DORADAS" loading="lazy">
           </div>
           <div class="card-info">
-            <h3 class="card-title">LUCES DEL ESCENARIO</h3>
-            <p class="card-desc">"La magia de compartir pasiones musicales."</p>
+            <h3 class="card-title">BRINDIS CON COPAS DORADAS</h3>
+            <p class="card-desc">"Alzando las copas por cada sonrisa compartida, por los aprendizajes superados y por el amor que no para de florecer."</p>
           </div>
         </article>
 
         <article class="timeline-photo-card">
-          <div class="card-date-badge">26. 4 DE JULIO 2026</div>
+          <div class="card-date-badge">26. 10 DE AGOSTO 2026</div>
           <div class="card-photo-wrapper">
-            <img src="./assets/images/IMG_4376.jpg" alt="Recuerdo Imborrable">
+            <img src="./assets/images/IMG_4720.jpg" alt="RISAS ESPONTÁNEAS EN CASA" loading="lazy">
           </div>
           <div class="card-info">
-            <h3 class="card-title">RECUERDO IMBORRABLE</h3>
-            <p class="card-desc">"Foto polaroid en pleno concierto."</p>
+            <h3 class="card-title">RISAS ESPONTÁNEAS EN CASA</h3>
+            <p class="card-desc">"Sin poses ni filtros: la alegría genuina de dos personas que encontraron en el otro su mejor versión y su refugio."</p>
           </div>
         </article>
 
         <article class="timeline-photo-card">
-          <div class="card-date-badge">27. 4 DE JULIO 2026</div>
+          <div class="card-date-badge">27. 10 DE AGOSTO 2026</div>
           <div class="card-photo-wrapper">
-            <img src="./assets/images/IMG_4377.jpg" alt="Abrazados en el Teatro">
+            <img src="./assets/images/IMG_4724.jpg" alt="CENA ROMÁNTICA DE CELEBRACIÓN" loading="lazy">
           </div>
           <div class="card-info">
-            <h3 class="card-title">ABRAZADOS EN EL TEATRO</h3>
-            <p class="card-desc">"Celebrando la noche con sonrisas radiantes."</p>
+            <h3 class="card-title">CENA ROMÁNTICA DE CELEBRACIÓN</h3>
+            <p class="card-desc">"Una atmósfera de ensueño a la luz de las velas, celebrando el inmenso regalo de caminar juntos en esta vida."</p>
           </div>
         </article>
 
         <article class="timeline-photo-card">
-          <div class="card-date-badge">28. 6 DE JULIO 2026</div>
+          <div class="card-date-badge">28. 10 DE AGOSTO 2026</div>
           <div class="card-photo-wrapper">
-            <img src="./assets/images/IMG_4388.jpg" alt="Paseo de Invierno">
+            <img src="./assets/images/IMG_4726.jpg" alt="NOCHE DORADA & VINO TINTO" loading="lazy">
           </div>
           <div class="card-info">
-            <h3 class="card-title">PASEO DE INVIERNO</h3>
-            <p class="card-desc">"Caminando por la avenida frente al mar."</p>
+            <h3 class="card-title">NOCHE DORADA & VINO TINTO</h3>
+            <p class="card-desc">"Elegancia, aromas exquisitos y la certeza reconfortante de que no existe mejor lugar en el mundo que a tu lado."</p>
           </div>
         </article>
 
         <article class="timeline-photo-card">
-          <div class="card-date-badge">29. 8 DE JULIO 2026</div>
+          <div class="card-date-badge">29. 10 DE AGOSTO 2026</div>
           <div class="card-photo-wrapper">
-            <img src="./assets/images/IMG_4400.jpg" alt="Mañanas de Café">
+            <img src="./assets/images/IMG_4728.jpg" alt="AMOR INFINITO EN LA MIRADA" loading="lazy">
           </div>
           <div class="card-info">
-            <h3 class="card-title">MAÑANAS DE CAFÉ</h3>
-            <p class="card-desc">"Empezando el día con la energía del Pacífico."</p>
+            <h3 class="card-title">AMOR INFINITO EN LA MIRADA</h3>
+            <p class="card-desc">"En la penumbra cálida de la noche, una mirada serena que resume doce meses de lealtad, ternura y devoción."</p>
           </div>
         </article>
 
         <article class="timeline-photo-card">
-          <div class="card-date-badge">30. 8 DE JULIO 2026</div>
+          <div class="card-date-badge">30. 10 DE AGOSTO 2026</div>
           <div class="card-photo-wrapper">
-            <img src="./assets/images/IMG_4418.jpg" alt="Noche Costera">
+            <img src="./assets/images/IMG_4731.jpg" alt="FELICIDAD RADIANTE AL OCASO" loading="lazy">
           </div>
           <div class="card-info">
-            <h3 class="card-title">NOCHE COSTERA</h3>
-            <p class="card-desc">"El sonido de las olas de fondo y las luces de la ciudad."</p>
+            <h3 class="card-title">FELICIDAD RADIANTE AL OCASO</h3>
+            <p class="card-desc">"Los últimos rayos dorados del sol acariciando dos rostros plenos de dicha, agradecimiento y amor sincero."</p>
           </div>
         </article>
 
         <article class="timeline-photo-card">
-          <div class="card-date-badge">31. 11 DE JULIO 2026</div>
+          <div class="card-date-badge">31. 10 DE AGOSTO 2026</div>
           <div class="card-photo-wrapper">
-            <img src="./assets/images/IMG_4448.jpg" alt="Tarde de Arte & Creación">
+            <img src="./assets/images/IMG_4733.jpg" alt="NUESTRA HISTORIA GRABADA EN EL MAR" loading="lazy">
           </div>
           <div class="card-info">
-            <h3 class="card-title">TARDE DE ARTE & CREACIÓN</h3>
-            <p class="card-desc">"Acompañando la creatividad y el talento de Carmen Gloria."</p>
+            <h3 class="card-title">NUESTRA HISTORIA GRABADA EN EL MAR</h3>
+            <p class="card-desc">"El crepúsculo de Viña pintando de tonos dorados y escarlatas las aguas del Pacífico al caer la tarde."</p>
           </div>
         </article>
 
         <article class="timeline-photo-card">
-          <div class="card-date-badge">32. 11 DE JULIO 2026</div>
+          <div class="card-date-badge">32. 11 DE AGOSTO 2026</div>
           <div class="card-photo-wrapper">
-            <img src="./assets/images/IMG_4449.jpg" alt="Detalles Tejidos">
+            <img src="./assets/images/temp_image_6123A458-A0BC-49B7-99AE-D00562023181.jpg" alt="HORAS PREVIAS AL GRAN HITO" loading="lazy">
           </div>
           <div class="card-info">
-            <h3 class="card-title">DETALLES TEJIDOS</h3>
-            <p class="card-desc">"El valor incalculable de lo hecho a mano."</p>
+            <h3 class="card-title">HORAS PREVIAS AL GRAN HITO</h3>
+            <p class="card-desc">"La dulce expectación y el corazón latiendo al compás de la cuenta regresiva que nos llevó al aniversario oficial."</p>
           </div>
         </article>
 
         <article class="timeline-photo-card">
-          <div class="card-date-badge">33. 17 DE JULIO 2026</div>
+          <div class="card-date-badge">33. 12 DE AGOSTO 2026</div>
           <div class="card-photo-wrapper">
-            <img src="./assets/images/IMG_4515.jpg" alt="Media Tarde en Pareja">
+            <img src="./assets/images/48bae74a-16eb-4f84-835d-92f848dfe8fa.jpg" alt="¡FELIZ PRIMER ANIVERSARIO, MI AMOR! ♡" loading="lazy">
           </div>
           <div class="card-info">
-            <h3 class="card-title">MEDIA TARDE EN PAREJA</h3>
-            <p class="card-desc">"Un alto para disfrutar un café juntas/os."</p>
-          </div>
-        </article>
-
-        <article class="timeline-photo-card">
-          <div class="card-date-badge">34. 24 DE JULIO 2026</div>
-          <div class="card-photo-wrapper">
-            <img src="./assets/images/IMG_4584.jpg" alt="Atardecer de Julio">
-          </div>
-          <div class="card-info">
-            <h3 class="card-title">ATARDECER DE JULIO</h3>
-            <p class="card-desc">"Tonos morados y dorados sobre el mar."</p>
-          </div>
-        </article>
-
-        <article class="timeline-photo-card">
-          <div class="card-date-badge">35. 2 DE AGOSTO 2026</div>
-          <div class="card-photo-wrapper">
-            <img src="./assets/images/IMG_4651.jpg" alt="Inicio del Mes Aniversario">
-          </div>
-          <div class="card-info">
-            <h3 class="card-title">INICIO DEL MES ANIVERSARIO</h3>
-            <p class="card-desc">"Dándole la bienvenida al mes donde todo se celebra."</p>
-          </div>
-        </article>
-
-        <article class="timeline-photo-card">
-          <div class="card-date-badge">36. 2 DE AGOSTO 2026</div>
-          <div class="card-photo-wrapper">
-            <img src="./assets/images/IMG_4655.jpg" alt="Caminata por el Muelle">
-          </div>
-          <div class="card-info">
-            <h3 class="card-title">CAMINATA POR EL MUELLE</h3>
-            <p class="card-desc">"Brisa marina fresca y manos entrelazadas."</p>
-          </div>
-        </article>
-
-        <article class="timeline-photo-card">
-          <div class="card-date-badge">37. 2 DE AGOSTO 2026</div>
-          <div class="card-photo-wrapper">
-            <img src="./assets/images/IMG_4656.jpg" alt="Sonrisa Costera">
-          </div>
-          <div class="card-info">
-            <h3 class="card-title">SONRISA COSTERA</h3>
-            <p class="card-desc">"La serenidad del Pacífico reflejada en el rostro."</p>
-          </div>
-        </article>
-
-        <article class="timeline-photo-card">
-          <div class="card-date-badge">38. 2 DE AGOSTO 2026</div>
-          <div class="card-photo-wrapper">
-            <img src="./assets/images/IMG_4665.jpg" alt="Noche de Muelle">
-          </div>
-          <div class="card-info">
-            <h3 class="card-title">NOCHE DE MUELLE</h3>
-            <p class="card-desc">"Luces de barcos a lo lejos y el mar iluminado."</p>
-          </div>
-        </article>
-
-        <article class="timeline-photo-card">
-          <div class="card-date-badge">39. 2 DE AGOSTO 2026</div>
-          <div class="card-photo-wrapper">
-            <img src="./assets/images/IMG_4667.jpg" alt="Abrigo & Ternura">
-          </div>
-          <div class="card-info">
-            <h3 class="card-title">ABRIGO & TERNURA</h3>
-            <p class="card-desc">"Protegidos del viento costero con amor."</p>
-          </div>
-        </article>
-
-        <article class="timeline-photo-card">
-          <div class="card-date-badge">40. 2 DE AGOSTO 2026</div>
-          <div class="card-photo-wrapper">
-            <img src="./assets/images/IMG_4668.jpg" alt="Fotografía para la Historia">
-          </div>
-          <div class="card-info">
-            <h3 class="card-title">FOTOGRAFÍA PARA LA HISTORIA</h3>
-            <p class="card-desc">"Un encuadre perfecto del mes más especial."</p>
-          </div>
-        </article>
-
-        <article class="timeline-photo-card">
-          <div class="card-date-badge">41. 2 DE AGOSTO 2026</div>
-          <div class="card-photo-wrapper">
-            <img src="./assets/images/IMG_4669.jpg" alt="Mirada al Mar">
-          </div>
-          <div class="card-info">
-            <h3 class="card-title">MIRADA AL MAR</h3>
-            <p class="card-desc">"Contemplando el horizonte que hemos construido."</p>
-          </div>
-        </article>
-
-        <article class="timeline-photo-card">
-          <div class="card-date-badge">42. 2 DE AGOSTO 2026</div>
-          <div class="card-photo-wrapper">
-            <img src="./assets/images/IMG_4671.jpg" alt="Paz Costera">
-          </div>
-          <div class="card-info">
-            <h3 class="card-title">PAZ COSTERA</h3>
-            <p class="card-desc">"La inmensidad del océano y nosotros dos."</p>
-          </div>
-        </article>
-
-        <article class="timeline-photo-card">
-          <div class="card-date-badge">43. 10 DE AGOSTO 2026</div>
-          <div class="card-photo-wrapper">
-            <img src="./assets/images/IMG_4710.jpg" alt="Víspera de Aniversario">
-          </div>
-          <div class="card-info">
-            <h3 class="card-title">VÍSPERA DE ANIVERSARIO</h3>
-            <p class="card-desc">"Los días previos llenos de emoción y sorpresas."</p>
-          </div>
-        </article>
-
-        <article class="timeline-photo-card">
-          <div class="card-date-badge">44. 10 DE AGOSTO 2026</div>
-          <div class="card-photo-wrapper">
-            <img src="./assets/images/IMG_4717.jpg" alt="Brindis Dorado">
-          </div>
-          <div class="card-info">
-            <h3 class="card-title">BRINDIS DORADO</h3>
-            <p class="card-desc">"Alzando las copas por lo vivido y por lo que vendrá."</p>
-          </div>
-        </article>
-
-        <article class="timeline-photo-card">
-          <div class="card-date-badge">45. 10 DE AGOSTO 2026</div>
-          <div class="card-photo-wrapper">
-            <img src="./assets/images/IMG_4718.jpg" alt="Complicidad Total">
-          </div>
-          <div class="card-info">
-            <h3 class="card-title">COMPLICIDAD TOTAL</h3>
-            <p class="card-desc">"La alegría desbordante de saber que estamos juntos."</p>
-          </div>
-        </article>
-
-        <article class="timeline-photo-card">
-          <div class="card-date-badge">46. 10 DE AGOSTO 2026</div>
-          <div class="card-photo-wrapper">
-            <img src="./assets/images/IMG_4720.jpg" alt="Risas Inolvidables">
-          </div>
-          <div class="card-info">
-            <h3 class="card-title">RISAS INOLVIDABLES</h3>
-            <p class="card-desc">"Momentos donde la felicidad es espontánea."</p>
-          </div>
-        </article>
-
-        <article class="timeline-photo-card">
-          <div class="card-date-badge">47. 10 DE AGOSTO 2026</div>
-          <div class="card-photo-wrapper">
-            <img src="./assets/images/IMG_4721.jpg" alt="Detalles Especiales">
-          </div>
-          <div class="card-info">
-            <h3 class="card-title">DETALLES ESPECIALES</h3>
-            <p class="card-desc">"Preparando cada rincón para nuestro gran día."</p>
-          </div>
-        </article>
-
-        <article class="timeline-photo-card">
-          <div class="card-date-badge">48. 10 DE AGOSTO 2026</div>
-          <div class="card-photo-wrapper">
-            <img src="./assets/images/IMG_4722.jpg" alt="Luz y Calidez">
-          </div>
-          <div class="card-info">
-            <h3 class="card-title">LUZ Y CALIDEZ</h3>
-            <p class="card-desc">"Ambiente acogedor en casa."</p>
-          </div>
-        </article>
-
-        <article class="timeline-photo-card">
-          <div class="card-date-badge">49. 10 DE AGOSTO 2026</div>
-          <div class="card-photo-wrapper">
-            <img src="./assets/images/IMG_4724.jpg" alt="Encuentro Romántico">
-          </div>
-          <div class="card-info">
-            <h3 class="card-title">ENCUENTRO ROMÁNTICO</h3>
-            <p class="card-desc">"Celebrando el camino recorrido."</p>
-          </div>
-        </article>
-
-        <article class="timeline-photo-card">
-          <div class="card-date-badge">50. 10 DE AGOSTO 2026</div>
-          <div class="card-photo-wrapper">
-            <img src="./assets/images/IMG_4726.jpg" alt="Noche Dorada">
-          </div>
-          <div class="card-info">
-            <h3 class="card-title">NOCHE DORADA</h3>
-            <p class="card-desc">"La calidez de la cena y el vino."</p>
-          </div>
-        </article>
-
-        <article class="timeline-photo-card">
-          <div class="card-date-badge">51. 10 DE AGOSTO 2026</div>
-          <div class="card-photo-wrapper">
-            <img src="./assets/images/IMG_4727.jpg" alt="El Regalo de Estar">
-          </div>
-          <div class="card-info">
-            <h3 class="card-title">EL REGALO DE ESTAR</h3>
-            <p class="card-desc">"Estar presentes el uno para el otro."</p>
-          </div>
-        </article>
-
-        <article class="timeline-photo-card">
-          <div class="card-date-badge">52. 10 DE AGOSTO 2026</div>
-          <div class="card-photo-wrapper">
-            <img src="./assets/images/IMG_4728.jpg" alt="Amor Infinito">
-          </div>
-          <div class="card-info">
-            <h3 class="card-title">AMOR INFINITO</h3>
-            <p class="card-desc">"Una imagen que lo resume todo."</p>
-          </div>
-        </article>
-
-        <article class="timeline-photo-card">
-          <div class="card-date-badge">53. 10 DE AGOSTO 2026</div>
-          <div class="card-photo-wrapper">
-            <img src="./assets/images/IMG_4730.jpg" alt="Promesa Secreta">
-          </div>
-          <div class="card-info">
-            <h3 class="card-title">PROMESA SECRETA</h3>
-            <p class="card-desc">"Un pacto silencioso de seguir cuidándonos."</p>
-          </div>
-        </article>
-
-        <article class="timeline-photo-card">
-          <div class="card-date-badge">54. 10 DE AGOSTO 2026</div>
-          <div class="card-photo-wrapper">
-            <img src="./assets/images/IMG_4731.jpg" alt="Felicidad Absoluta">
-          </div>
-          <div class="card-info">
-            <h3 class="card-title">FELICIDAD ABSOLUTA</h3>
-            <p class="card-desc">"Sonrisas genuinas de una noche mágica."</p>
-          </div>
-        </article>
-
-        <article class="timeline-photo-card">
-          <div class="card-date-badge">55. 10 DE AGOSTO 2026</div>
-          <div class="card-photo-wrapper">
-            <img src="./assets/images/IMG_4732.jpg" alt="Últimos Rayos de Sol">
-          </div>
-          <div class="card-info">
-            <h3 class="card-title">ÚLTIMOS RAYOS DE SOL</h3>
-            <p class="card-desc">"El atardecer perfecto sobre Viña."</p>
-          </div>
-        </article>
-
-        <article class="timeline-photo-card">
-          <div class="card-date-badge">56. 10 DE AGOSTO 2026</div>
-          <div class="card-photo-wrapper">
-            <img src="./assets/images/IMG_4733.jpg" alt="Nuestra Historia">
-          </div>
-          <div class="card-info">
-            <h3 class="card-title">NUESTRA HISTORIA</h3>
-            <p class="card-desc">"Una foto que se queda guardada en el alma."</p>
-          </div>
-        </article>
-
-        <article class="timeline-photo-card">
-          <div class="card-date-badge">57. 11 DE AGOSTO 2026</div>
-          <div class="card-photo-wrapper">
-            <img src="./assets/images/temp_image_6123A458-A0BC-49B7-99AE-D00562023181.jpg" alt="Cuenta Regresiva">
-          </div>
-          <div class="card-info">
-            <h3 class="card-title">CUENTA REGRESIVA</h3>
-            <p class="card-desc">"Horas previas al aniversario oficial."</p>
-          </div>
-        </article>
-
-        <article class="timeline-photo-card">
-          <div class="card-date-badge">58. 12 DE AGOSTO 2026</div>
-          <div class="card-photo-wrapper">
-            <img src="./assets/images/48bae74a-16eb-4f84-835d-92f848dfe8fa.jpg" alt="Nuestro Aniversario ♡">
-          </div>
-          <div class="card-info">
-            <h3 class="card-title">NUESTRO ANIVERSARIO ♡</h3>
-            <p class="card-desc">"Un año de amor, complicidad y recuerdos inolvidables."</p>
+            <h3 class="card-title">¡FELIZ PRIMER ANIVERSARIO, MI AMOR! ♡</h3>
+            <p class="card-desc">"Un año entero de complicidad inquebrantable, ternura y sueños compartidos. Por una vida entera juntos, Rodrigo & Carmen Gloria."</p>
           </div>
         </article>
       </div>
@@ -2576,7 +2338,7 @@ html, body {
       <div class="section-header-centered">
         <span class="gold-kicker">CÁPSULA DEL TIEMPO</span>
         <h2 class="display-title">Nuestra Promesa de Futuro</h2>
-        <p class="section-subtext">Contando cada segundo hasta nuestro hito de aniversario: <strong>16 de Agosto a las 17:23 hrs</strong> ♡</p>
+        <p class="section-subtext">Contando cada segundo de amor hacia nuestro próximo hito de aniversario: <strong>16 de Agosto a las 17:23 hrs</strong> ♡</p>
       </div>
 
       <div class="countdown-grid" id="countdownGrid">
@@ -2615,18 +2377,21 @@ html, body {
 
     <!-- POLAROID LIGHTBOX MODAL -->
     <div class="polaroid-modal" id="polaroidModal">
-      <button class="modal-nav-btn modal-close" id="modalCloseBtn"><i data-lucide="x"></i></button>
+      <button class="modal-nav-btn modal-close" id="modalCloseBtn" aria-label="Cerrar"><i data-lucide="x"></i></button>
       <div class="modal-content-wrapper">
-        <button class="modal-nav-btn modal-prev" id="modalPrevBtn"><i data-lucide="chevron-left"></i></button>
-        <button class="modal-nav-btn modal-next" id="modalNextBtn"><i data-lucide="chevron-right"></i></button>
+        <button class="modal-nav-btn modal-prev" id="modalPrevBtn" aria-label="Foto anterior"><i data-lucide="chevron-left"></i></button>
+        <button class="modal-nav-btn modal-next" id="modalNextBtn" aria-label="Foto siguiente"><i data-lucide="chevron-right"></i></button>
         <div class="modal-polaroid-frame">
-          <img src="" alt="Polaroid Memory" id="modalImg" class="modal-photo">
-          <p id="modalCaption" class="modal-caption"></p>
+          <img src="" alt="Recuerdo de Aniversario" id="modalImg" class="modal-photo">
+          <div class="modal-caption-box">
+            <span id="modalDateBadge" class="modal-date-badge"></span>
+            <h3 id="modalTitle" class="modal-title"></h3>
+            <p id="modalCaption" class="modal-caption"></p>
+          </div>
         </div>
       </div>
     </div>
 
-    
     <!-- SECRET PROMISE MODAL OVERLAY -->
     <div class="secret-promise-modal" id="secretPromiseModal">
       <div class="secret-promise-card">
@@ -3014,28 +2779,34 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 5. COUNTDOWN TIMER TO NEXT ANNIVERSARY (AUGUST 2026)
+  // 5. COUNTDOWN TIMER TO NEXT ANNIVERSARY (LIVE & CONTINUOUS)
   function updateCountdown() {
-    const nextAnniversary = new Date('2026-08-16T17:23:00');
     const now = new Date();
-    const diff = nextAnniversary - now;
+    let targetYear = now.getFullYear();
+    let nextAnniversary = new Date(`${targetYear}-08-16T17:23:00`);
 
-    if (diff > 0) {
-      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-      const mins = Math.floor((diff / 1000 / 60) % 60);
-      const secs = Math.floor((diff / 1000) % 60);
-
-      const dEl = document.getElementById('countDays');
-      const hEl = document.getElementById('countHours');
-      const mEl = document.getElementById('countMins');
-      const sEl = document.getElementById('countSecs');
-
-      if (dEl) dEl.textContent = days;
-      if (hEl) hEl.textContent = hours < 10 ? '0' + hours : hours;
-      if (mEl) mEl.textContent = mins < 10 ? '0' + mins : mins;
-      if (sEl) sEl.textContent = secs < 10 ? '0' + secs : secs;
+    // If current anniversary time has passed, target next year's anniversary
+    if (now >= nextAnniversary) {
+      targetYear++;
+      nextAnniversary = new Date(`${targetYear}-08-16T17:23:00`);
     }
+
+    const diff = Math.max(0, nextAnniversary - now);
+
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+    const mins = Math.floor((diff / 1000 / 60) % 60);
+    const secs = Math.floor((diff / 1000) % 60);
+
+    const dEl = document.getElementById('countDays');
+    const hEl = document.getElementById('countHours');
+    const mEl = document.getElementById('countMins');
+    const sEl = document.getElementById('countSecs');
+
+    if (dEl) dEl.textContent = days;
+    if (hEl) hEl.textContent = hours < 10 ? '0' + hours : hours;
+    if (mEl) mEl.textContent = mins < 10 ? '0' + mins : mins;
+    if (sEl) sEl.textContent = secs < 10 ? '0' + secs : secs;
   }
   setInterval(updateCountdown, 1000);
   updateCountdown();
@@ -3076,7 +2847,9 @@ document.addEventListener('DOMContentLoaded', () => {
   // 7. POLAROID LIGHTBOX MODAL NAVIGATION
   const polaroidModal = document.getElementById('polaroidModal');
   const modalImg = document.getElementById('modalImg');
+  const modalTitle = document.getElementById('modalTitle');
   const modalCaption = document.getElementById('modalCaption');
+  const modalDateBadge = document.getElementById('modalDateBadge');
   const modalCloseBtn = document.getElementById('modalCloseBtn');
   const modalPrevBtn = document.getElementById('modalPrevBtn');
   const modalNextBtn = document.getElementById('modalNextBtn');
@@ -3087,11 +2860,19 @@ document.addEventListener('DOMContentLoaded', () => {
   function openPolaroidModal(index) {
     if (galleryItems[index]) {
       const imgEl = galleryItems[index].querySelector('img');
-      const captionEl = galleryItems[index].querySelector('.handwritten-note, .card-desc, .card-title');
+      const titleEl = galleryItems[index].querySelector('.card-title');
+      const captionEl = galleryItems[index].querySelector('.card-desc, .handwritten-note');
+      const badgeEl = galleryItems[index].querySelector('.card-date-badge');
+
       if (imgEl && polaroidModal) {
         currentGalleryIndex = index;
         modalImg.src = imgEl.src;
-        modalCaption.textContent = captionEl ? captionEl.textContent : '';
+        if (modalTitle) modalTitle.textContent = titleEl ? titleEl.textContent : '';
+        if (modalCaption) modalCaption.textContent = captionEl ? captionEl.textContent : '';
+        if (modalDateBadge) {
+          modalDateBadge.textContent = badgeEl ? badgeEl.textContent : 'RECUERDO';
+          modalDateBadge.style.display = badgeEl ? 'inline-block' : 'none';
+        }
         polaroidModal.classList.add('active');
       }
     }
@@ -3127,6 +2908,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && polaroidModal) polaroidModal.classList.remove('active');
+    if (polaroidModal && polaroidModal.classList.contains('active')) {
+      if (e.key === 'ArrowLeft' && modalPrevBtn) modalPrevBtn.click();
+      if (e.key === 'ArrowRight' && modalNextBtn) modalNextBtn.click();
+    }
   });
 
   console.log('Rodrigo & Carmen Gloria Story Interactive Engine fully active.');

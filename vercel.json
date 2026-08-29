@@ -1,3 +1,15 @@
 {
-  "cleanUrls": true
+  "cleanUrls": true,
+  "redirects": [
+    {
+      "source": "/aniversario",
+      "destination": "/",
+      "permanent": false
+    },
+    {
+      "source": "/aniversario/(.*)",
+      "destination": "/",
+      "permanent": false
+    }
+  ]
 }

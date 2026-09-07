@@ -1,3 +1,7 @@
 {
-  "cleanUrls": true
+  "cleanUrls": true,
+  "rewrites": [
+    { "source": "/calendario", "destination": "/calendario/index.html" },
+    { "source": "/calendario/:path*", "destination": "/calendario/index.html" }
+  ]
 }

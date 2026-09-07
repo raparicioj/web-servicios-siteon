@@ -12,8 +12,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Caveat:wght@400;600&family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Outfit:wght@200;300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
   
-  <!-- Lucide Icons -->
+  <!-- Lucide Icons & Confetti -->
   <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
   
   <style>
 /* ==========================================================================
@@ -1564,9 +1565,250 @@ html, body {
   margin-top: 8px;
 }
 
+/* ==========================================================================
+   ANIVERSARIO AUTH GATE (CARMEN & RODRIGO - CLAVE: COSITOS)
+   ========================================================================== */
+.aniversario-auth-gate {
+  position: fixed;
+  inset: 0;
+  z-index: 999999;
+  background: radial-gradient(circle at center, rgba(240, 247, 255, 0.98) 0%, rgba(224, 242, 254, 0.98) 100%);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.5s;
+}
+
+.aniversario-auth-gate.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.aniversario-auth-card {
+  background: rgba(255, 255, 255, 0.96);
+  border: 2px solid #d97706;
+  border-radius: 28px;
+  padding: 40px 32px;
+  max-width: 440px;
+  width: 100%;
+  box-shadow: 0 20px 60px rgba(12, 74, 110, 0.18), 0 0 40px rgba(217, 119, 6, 0.15);
+  text-align: center;
+  position: relative;
+  animation: authScaleUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes authScaleUp {
+  from { opacity: 0; transform: scale(0.92); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.auth-heart-icon {
+  width: 68px;
+  height: 68px;
+  margin: 0 auto 16px auto;
+  border-radius: 22px;
+  background: linear-gradient(135deg, #fb7185 0%, #e11d48 50%, #be123c 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 34px;
+  color: white;
+  box-shadow: 0 10px 25px rgba(225, 29, 72, 0.35);
+}
+
+.auth-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 26px;
+  color: #0c4a6e;
+  margin-bottom: 4px;
+  font-weight: 700;
+}
+
+.auth-subtitle {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 16px;
+  font-style: italic;
+  color: #d97706;
+  margin-bottom: 24px;
+}
+
+.auth-form {
+  text-align: left;
+}
+
+.auth-label {
+  display: block;
+  font-family: 'Outfit', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: #334155;
+  margin-bottom: 6px;
+}
+
+.auth-select, .auth-input {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 16px;
+  border: 1.5px solid #cbd5e1;
+  background: #f8fafc;
+  font-family: 'Outfit', sans-serif;
+  font-size: 14px;
+  color: #0f172a;
+  outline: none;
+  transition: all 0.2s;
+  box-sizing: border-box;
+}
+
+.auth-select:focus, .auth-input:focus {
+  border-color: #d97706;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.15);
+}
+
+.auth-input-wrapper {
+  position: relative;
+  margin-bottom: 16px;
+}
+
+.auth-eye-btn {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #64748b;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.auth-error-msg {
+  background: #fff1f2;
+  border: 1px solid #fecdd3;
+  color: #be123c;
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-size: 12px;
+  margin-bottom: 14px;
+  text-align: center;
+  display: none;
+  animation: authShake 0.3s ease-in-out;
+}
+
+@keyframes authShake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
+}
+
+.auth-submit-btn {
+  width: 100%;
+  padding: 14px 20px;
+  border-radius: 50px;
+  border: none;
+  background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+  color: #ffffff;
+  font-family: 'Cinzel', serif;
+  font-size: 13px;
+  letter-spacing: 1.5px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 10px 25px rgba(217, 119, 6, 0.35);
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.auth-submit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 30px rgba(217, 119, 6, 0.45);
+}
+
+.auth-lock-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #f1f5f9;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  color: #64748b;
+  margin-top: 18px;
+  border: 1px solid #e2e8f0;
+}
+
+.header-logout-btn {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(217, 119, 6, 0.4);
+  color: #b45309;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-family: var(--font-heading);
+  font-size: 0.75rem;
+  letter-spacing: 1px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: var(--transition-smooth);
+}
+.header-logout-btn:hover {
+  background: #b45309;
+  color: white;
+}
+
 </style>
 </head>
 <body class="theme-light-sea">
+
+  <!-- ANIVERSARIO AUTH GATE (LOGIN) -->
+  <div class="aniversario-auth-gate" id="aniversarioAuthGate">
+    <div class="aniversario-auth-card">
+      <div class="auth-heart-icon">💕</div>
+      <h2 class="auth-title">Nuestra Historia</h2>
+      <div class="auth-subtitle">"Cuando el mar aprendió nuestros nombres"</div>
+
+      <form class="auth-form" id="aniversarioAuthForm">
+        <label class="auth-label" for="aniversarioUserSelect">¿Quién está ingresando?</label>
+        <div style="margin-bottom: 14px;">
+          <select id="aniversarioUserSelect" class="auth-select">
+            <option value="Carmen Gloria">👩 Carmen Gloria</option>
+            <option value="Rodrigo">👨 Rodrigo</option>
+          </select>
+        </div>
+
+        <label class="auth-label" for="aniversarioPasswordInput">Clave de acceso:</label>
+        <div class="auth-input-wrapper">
+          <input type="password" id="aniversarioPasswordInput" class="auth-input" placeholder="Ingresa la clave..." required />
+          <button type="button" id="aniversarioEyeBtn" class="auth-eye-btn" title="Ver / Ocultar clave">
+            <i data-lucide="eye" id="aniversarioEyeIcon" style="width: 16px; height: 16px;"></i>
+          </button>
+        </div>
+
+        <div class="auth-error-msg" id="aniversarioAuthError">
+          Clave incorrecta 💕 Pista: es nuestra palabra especial de pareja.
+        </div>
+
+        <button type="submit" class="auth-submit-btn" id="aniversarioSubmitBtn">
+          <span>Entrar a Nuestra Historia 💕</span>
+        </button>
+      </form>
+
+      <div class="auth-lock-badge">
+        <i data-lucide="lock" style="width: 12px; height: 12px;"></i>
+        <span>Acceso Privado · Carmen Gloria & Rodrigo</span>
+      </div>
+    </div>
+  </div>
 
   <!-- SPARKLE CANVAS FOR MOUSE/TOUCH TRAIL -->
   <canvas id="sparkleCanvas"></canvas>
@@ -1608,8 +1850,14 @@ html, body {
       <span class="gold-dot"></span>
       <span class="sub-tag">VIÑA DEL MAR</span>
     </div>
-    <div class="header-edition-label">
-      <span>NUESTRA HISTORIA</span>
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <div class="header-edition-label">
+        <span>NUESTRA HISTORIA</span>
+      </div>
+      <button class="header-logout-btn" id="aniversarioLogoutBtn" title="Bloquear / Cerrar Sesión">
+        <i data-lucide="lock" style="width: 13px; height: 13px;"></i>
+        <span>Bloquear</span>
+      </button>
     </div>
   </header>
 
@@ -3031,6 +3279,92 @@ document.addEventListener('DOMContentLoaded', () => {
       if (e.key === 'ArrowRight' && modalNextBtn) modalNextBtn.click();
     }
   });
+
+  // ==========================================================================
+  // ANIVERSARIO AUTH GATE LOGIC (CARMEN & RODRIGO - CLAVE: COSITOS)
+  // ==========================================================================
+  const authGate = document.getElementById('aniversarioAuthGate');
+  const authForm = document.getElementById('aniversarioAuthForm');
+  const userSelect = document.getElementById('aniversarioUserSelect');
+  const passwordInput = document.getElementById('aniversarioPasswordInput');
+  const eyeBtn = document.getElementById('aniversarioEyeBtn');
+  const eyeIcon = document.getElementById('aniversarioEyeIcon');
+  const authError = document.getElementById('aniversarioAuthError');
+  const logoutBtn = document.getElementById('aniversarioLogoutBtn');
+
+  // Check saved session
+  const isAuth = localStorage.getItem('aniversario_auth_session') === 'true';
+  const savedUser = localStorage.getItem('aniversario_active_user');
+
+  if (savedUser && userSelect) {
+    userSelect.value = savedUser;
+  }
+
+  if (isAuth && authGate) {
+    authGate.classList.add('hidden');
+  }
+
+  // Toggle eye password visibility
+  if (eyeBtn && passwordInput) {
+    eyeBtn.addEventListener('click', () => {
+      const isPass = passwordInput.type === 'password';
+      passwordInput.type = isPass ? 'text' : 'password';
+      if (eyeIcon) {
+        eyeIcon.setAttribute('data-lucide', isPass ? 'eye-off' : 'eye');
+        if (window.lucide) lucide.createIcons();
+      }
+    });
+  }
+
+  // Handle submit
+  if (authForm) {
+    authForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (authError) authError.style.display = 'none';
+
+      const passVal = passwordInput ? passwordInput.value.trim().toLowerCase() : '';
+      if (passVal === 'cositos') {
+        localStorage.setItem('aniversario_auth_session', 'true');
+        if (userSelect) {
+          localStorage.setItem('aniversario_active_user', userSelect.value);
+        }
+
+        // Confetti celebration
+        if (typeof confetti === 'function') {
+          confetti({
+            particleCount: 110,
+            spread: 90,
+            origin: { y: 0.6 },
+            colors: ['#0d9488', '#0284c7', '#d97706', '#fb7185', '#e11d48']
+          });
+        }
+
+        if (authGate) {
+          authGate.classList.add('hidden');
+        }
+      } else {
+        if (authError) {
+          authError.style.display = 'block';
+          // Re-trigger animation
+          authError.style.animation = 'none';
+          void authError.offsetWidth;
+          authError.style.animation = 'authShake 0.3s ease-in-out';
+        }
+      }
+    });
+  }
+
+  // Lock / Logout button
+  if (logoutBtn) {
+    logoutBtn.addEventListener('click', () => {
+      localStorage.removeItem('aniversario_auth_session');
+      if (authGate) {
+        authGate.classList.remove('hidden');
+        if (passwordInput) passwordInput.value = '';
+        if (authError) authError.style.display = 'none';
+      }
+    });
+  }
 
   console.log('Rodrigo & Carmen Gloria Story Interactive Engine fully active.');
 });

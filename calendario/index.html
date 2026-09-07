@@ -17,12 +17,33 @@
     
     <title>Mi Calendario 💕 — Para que nada importante se te pase</title>
     
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;1,400&display=swap" rel="stylesheet">
-    <script type="module" crossorigin src="/calendario/assets/index-JaUOB6v2.js"></script>
-    <link rel="stylesheet" crossorigin href="/calendario/assets/index-DS-z-m_c.css">
+    <script>
+      (function() {
+        var CLEAN_V5_KEY = 'mi_calendario_blank_clean_v5_init';
+        if (!localStorage.getItem(CLEAN_V5_KEY)) {
+          try {
+            var keys = Object.keys(localStorage);
+            for (var i = 0; i < keys.length; i++) {
+              var k = keys[i];
+              if (k.indexOf('mi_calendario_') === 0 && k !== 'mi_calendario_user_auth_pass') {
+                localStorage.removeItem(k);
+              }
+            }
+            localStorage.setItem(CLEAN_V5_KEY, 'true');
+          } catch(e) {}
+        }
+      })();
+    </script>
+    <script type="module" crossorigin src="/calendario/assets/index-CBzX-9zc.js"></script>
+    <link rel="stylesheet" crossorigin href="/calendario/assets/index-Ca8Xa1Sk.css">
   <link rel="manifest" href="/calendario/manifest.webmanifest"><script id="vite-plugin-pwa:register-sw" src="/calendario/registerSW.js"></script></head>
   <body class="bg-vanilla-50 text-warmGray-800 antialiased font-sans selection:bg-blush-200 selection:text-blush-700">
     <div id="root"></div>

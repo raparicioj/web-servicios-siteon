@@ -1,5 +1,23 @@
 {
   "cleanUrls": true,
+  "headers": [
+    {
+      "source": "/calendario",
+      "headers": [
+        { "key": "Cache-Control", "value": "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0" },
+        { "key": "Pragma", "value": "no-cache" },
+        { "key": "Expires", "value": "0" }
+      ]
+    },
+    {
+      "source": "/calendario/(index\\.html|sw\\.js|registerSW\\.js)",
+      "headers": [
+        { "key": "Cache-Control", "value": "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0" },
+        { "key": "Pragma", "value": "no-cache" },
+        { "key": "Expires", "value": "0" }
+      ]
+    }
+  ],
   "rewrites": [
     { "source": "/calendario", "destination": "/calendario/index.html" },
     { "source": "/calendario/:path*", "destination": "/calendario/index.html" }

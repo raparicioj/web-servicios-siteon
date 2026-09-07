@@ -1,5 +1,5 @@
 {
-  "version": "v7_force_clean_reload",
-  "buildTime": 1788823250000,
-  "description": "Auto update with audio chimes and PWA refresh"
+  "version": "v8_enviar_respuesta_button",
+  "buildTime": 1788823750000,
+  "description": "Boton Enviar respuesta en recordatorios"
 }

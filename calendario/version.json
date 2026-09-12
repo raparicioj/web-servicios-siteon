@@ -1,5 +1,5 @@
 {
-  "version": "v12_dual_whatsapp_and_clean_digits",
-  "buildTime": 1789256000000,
-  "description": "Envio simultaneo de WhatsApp a ambos (Carmen y Rodrigo) con digitos limpios sin signo mas para Meta Cloud API"
+  "version": "v16_bulletproof_sync_and_whatsapp",
+  "buildTime": 1789257000000,
+  "description": "Sincronizacion instantanea sin descarte de snapshots v16 y notificaciones directas por WhatsApp con apertura garantizada y aviso por producto"
 }

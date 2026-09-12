@@ -1,5 +1,5 @@
 {
-  "version": "v10_shopping_whatsapp_auto_dispatch",
-  "buildTime": 1789250000000,
-  "description": "Notificaciones automaticas por WhatsApp para lista de compras"
+  "version": "v11_mobile_header_and_realtime_sync",
+  "buildTime": 1789255000000,
+  "description": "Menu superior optimizado para notch movil, sincronizacion tiempo real multidispositivo y WhatsApp confiable"
 }

@@ -1,5 +1,5 @@
 {
-  "version": "v11_mobile_header_and_realtime_sync",
-  "buildTime": 1789255000000,
-  "description": "Menu superior optimizado para notch movil, sincronizacion tiempo real multidispositivo y WhatsApp confiable"
+  "version": "v12_dual_whatsapp_and_clean_digits",
+  "buildTime": 1789256000000,
+  "description": "Envio simultaneo de WhatsApp a ambos (Carmen y Rodrigo) con digitos limpios sin signo mas para Meta Cloud API"
 }

@@ -1,5 +1,5 @@
 {
-  "version": "v17_mobile_header_safe_and_dual_whatsapp_sequential",
-  "buildTime": 1789258000000,
-  "description": "Menu superior con safe-area para iPhone notch, notificaciones 100% automaticas sin checks manuales y envio secuencial garantizado para Carmen Gloria y Rodrigo"
+  "version": "v18_carmen_e164_whatsapp_delivery",
+  "buildTime": 1789262000000,
+  "description": "WhatsApp webhook E.164 formatting with + prefix for Carmen Gloria (+56930970033) and dynamic receiver mapping"
 }

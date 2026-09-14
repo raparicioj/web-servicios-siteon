@@ -1,5 +1,5 @@
 {
-  "version": "v18_carmen_e164_whatsapp_delivery",
-  "buildTime": 1789262000000,
-  "description": "WhatsApp webhook E.164 formatting with + prefix for Carmen Gloria (+56930970033) and dynamic receiver mapping"
+  "version": "v19_custom_phone_support_and_diagnostics",
+  "buildTime": 1789266000000,
+  "description": "Permitir guardar teléfono real de Carmen Gloria en Settings sin sobreescritura y diagnóstico transparente de webhook"
 }

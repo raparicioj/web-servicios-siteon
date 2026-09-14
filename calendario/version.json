@@ -1,5 +1,5 @@
 {
-  "version": "v20_parallel_dual_whatsapp_instant_dispatch",
-  "buildTime": 1789270000000,
-  "description": "Despacho simultaneo inmediato en paralelo Promise.allSettled a Carmen Gloria y Rodrigo sin congelamiento de timers en movil"
+  "version": "v21_green_api_native_chatid_support",
+  "buildTime": 1789274000000,
+  "description": "Soporte nativo para Green API con chatId automatico (@c.us) y despacho paralelo permanente sin ventana de 24h"
 }

@@ -1,5 +1,5 @@
 {
-  "version": "v23_event_guests_module",
-  "buildTime": 1789360000000,
-  "description": "Modulo completo y boton para ver y agregar invitados en eventos especiales (cumpleaños, fiestas patrias, año nuevo) con confirmaciones RSVP y enlaces de invitacion por WhatsApp"
+  "version": "v21_green_api_native_chatid_support",
+  "buildTime": 1789274000000,
+  "description": "Soporte nativo para Green API con chatId automatico (@c.us) y despacho paralelo permanente sin ventana de 24h"
 }

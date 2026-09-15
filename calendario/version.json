@@ -1,5 +1,5 @@
 {
-  "version": "v21_green_api_native_chatid_support",
-  "buildTime": 1789274000000,
-  "description": "Soporte nativo para Green API con chatId automatico (@c.us) y despacho paralelo permanente sin ventana de 24h"
+  "version": "v24_interactive_guests_ux_and_live_sync",
+  "buildTime": 1789480000000,
+  "description": "Flujo prolijo para agregar invitados uno a uno con invitacion por WhatsApp con todos los detalles del evento, sincronizacion en tiempo real de confirmados y pills tactiles"
 }

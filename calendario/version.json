@@ -1,5 +1,5 @@
 {
-  "version": "v28_private_strict_visibility_enforcement",
-  "buildTime": 1789499000000,
-  "description": "Estricta privacidad: las actividades guardadas como 'Privado estricto' o 'Solo yo' son 100% invisibles para la pareja y no disparan notificaciones de WhatsApp hacia ella"
+  "version": "v29_scheduled_reminders_and_owner_private_whatsapp",
+  "buildTime": 1789505000000,
+  "description": "Recordatorios automáticos por WhatsApp a las 09:00 AM, 30 min antes y 10 min antes, con enrutamiento exclusivo al owner en actividades privadas (Solo yo)"
 }

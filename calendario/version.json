@@ -1,5 +1,5 @@
 {
-  "version": "v26_automated_whatsapp_both_events_and_guests",
-  "buildTime": 1789497000000,
-  "description": "Notificaciones automáticas en paralelo por WhatsApp tanto a Carmen Gloria (+56930970033) como a Rodrigo (+56942362353) al crear, modificar eventos y gestionar invitados"
+  "version": "v27_event_editing_and_guest_companions_editor",
+  "buildTime": 1789498000000,
+  "description": "Edición directa de título, fecha, hora, lugar y notas en detalle de evento, editor interactivo de acompañantes en lista de invitados, y notificación automática por WhatsApp a Rodrigo y Carmen Gloria en cada cambio"
 }

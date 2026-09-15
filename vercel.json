@@ -16,10 +16,28 @@
         { "key": "Pragma", "value": "no-cache" },
         { "key": "Expires", "value": "0" }
       ]
+    },
+    {
+      "source": "/admin-calendario",
+      "headers": [
+        { "key": "Cache-Control", "value": "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0" },
+        { "key": "Pragma", "value": "no-cache" },
+        { "key": "Expires", "value": "0" }
+      ]
+    },
+    {
+      "source": "/admin-calendario/(index\\.html)",
+      "headers": [
+        { "key": "Cache-Control", "value": "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0" },
+        { "key": "Pragma", "value": "no-cache" },
+        { "key": "Expires", "value": "0" }
+      ]
     }
   ],
   "rewrites": [
     { "source": "/calendario", "destination": "/calendario/index.html" },
-    { "source": "/calendario/:path*", "destination": "/calendario/index.html" }
+    { "source": "/calendario/:path*", "destination": "/calendario/index.html" },
+    { "source": "/admin-calendario", "destination": "/admin-calendario/index.html" },
+    { "source": "/admin-calendario/:path*", "destination": "/admin-calendario/index.html" }
   ]
 }

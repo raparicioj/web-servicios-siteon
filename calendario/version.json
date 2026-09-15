@@ -1,5 +1,5 @@
 {
-  "version": "v21_green_api_native_chatid_support",
-  "buildTime": 1789274000000,
-  "description": "Soporte nativo para Green API con chatId automatico (@c.us) y despacho paralelo permanente sin ventana de 24h"
+  "version": "v22_multi_tenant_instances_and_admin_panel",
+  "buildTime": 1789310000000,
+  "description": "Panel de Administración independiente para crear nuevas instancias de parejas con aislamiento seguro de datos y preservación de instancia principal Carmen Gloria & Rodrigo"
 }

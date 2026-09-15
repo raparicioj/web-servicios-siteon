@@ -1,5 +1,5 @@
 {
-  "version": "v22_multi_tenant_instances_and_admin_panel",
-  "buildTime": 1789310000000,
-  "description": "Panel de Administración independiente para crear nuevas instancias de parejas con aislamiento seguro de datos y preservación de instancia principal Carmen Gloria & Rodrigo"
+  "version": "v23_event_guests_module",
+  "buildTime": 1789360000000,
+  "description": "Modulo completo y boton para ver y agregar invitados en eventos especiales (cumpleaños, fiestas patrias, año nuevo) con confirmaciones RSVP y enlaces de invitacion por WhatsApp"
 }

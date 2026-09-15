@@ -1,5 +1,5 @@
 {
-  "version": "v25_traditional_manual_whatsapp_invites",
-  "buildTime": 1789495000000,
-  "description": "Apertura tradicional manual de WhatsApp con todos los detalles del evento (fecha, hora, direccion, notas) tanto al agregar como por invitado"
+  "version": "v26_automated_whatsapp_both_events_and_guests",
+  "buildTime": 1789497000000,
+  "description": "Notificaciones automáticas en paralelo por WhatsApp tanto a Carmen Gloria (+56930970033) como a Rodrigo (+56942362353) al crear, modificar eventos y gestionar invitados"
 }

@@ -1,5 +1,5 @@
 {
-  "version": "v24_interactive_guests_ux_and_live_sync",
-  "buildTime": 1789480000000,
-  "description": "Flujo prolijo para agregar invitados uno a uno con invitacion por WhatsApp con todos los detalles del evento, sincronizacion en tiempo real de confirmados y pills tactiles"
+  "version": "v25_traditional_manual_whatsapp_invites",
+  "buildTime": 1789495000000,
+  "description": "Apertura tradicional manual de WhatsApp con todos los detalles del evento (fecha, hora, direccion, notas) tanto al agregar como por invitado"
 }

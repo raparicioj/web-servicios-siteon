@@ -1,5 +1,5 @@
 {
-  "version": "v27_top_sync_bar",
-  "buildTime": 1789750000000,
-  "description": "Barra de sincronizacion en tiempo real arriba del encabezado y bajada ergonomica de controles"
+  "version": "v28_notifications_read_fix",
+  "buildTime": 1789751000000,
+  "description": "Corrección de persistencia, sincronización y reseteo de notificaciones leídas"
 }

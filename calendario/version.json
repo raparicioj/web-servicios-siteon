@@ -1,5 +1,5 @@
 {
-  "version": "v22_contrast_fix",
-  "buildTime": 1789748500000,
-  "description": "Corrección completa de contraste en botones seleccionados y tabs del calendario"
+  "version": "v27_top_sync_bar",
+  "buildTime": 1789750000000,
+  "description": "Barra de sincronizacion en tiempo real arriba del encabezado y bajada ergonomica de controles"
 }

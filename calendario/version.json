@@ -1,5 +1,5 @@
 {
-  "version": "v29_scheduled_reminders_and_owner_private_whatsapp",
-  "buildTime": 1789505000000,
-  "description": "Recordatorios automáticos por WhatsApp a las 09:00 AM, 30 min antes y 10 min antes, con enrutamiento exclusivo al owner en actividades privadas (Solo yo)"
+  "version": "v22_contrast_fix",
+  "buildTime": 1789748500000,
+  "description": "Corrección completa de contraste en botones seleccionados y tabs del calendario"
 }

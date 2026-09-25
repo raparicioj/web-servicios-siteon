@@ -1,5 +1,5 @@
 {
-  "version": "v28_notifications_read_fix",
-  "buildTime": 1789751000000,
-  "description": "Corrección de persistencia, sincronización y reseteo de notificaciones leídas"
+  "version": "v29_cloud_cron_reminders",
+  "buildTime": 1789830000000,
+  "description": "Automatización en la nube 24/7 para recordatorios matutinos (09:00 hrs) y alertas programadas"
 }

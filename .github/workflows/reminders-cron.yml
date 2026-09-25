@@ -1,0 +1,15 @@
+name: WhatsApp Reminders Cron 24/7
+
+on:
+  schedule:
+    # Runs every 10 minutes
+    - cron: '*/10 * * * *'
+  workflow_dispatch:
+
+jobs:
+  ping-reminders-cron:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Reminders Cron API
+        run: |
+          curl -s -X GET "https://siteon.cl/api/cron-reminders" | jq . || curl -s -X GET "https://siteon.cl/api/cron-reminders"

@@ -1,0 +1,9 @@
+{
+  "name": "web-servicios-siteon",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "mqtt": "^5.15.2"
+  }
+}

@@ -6,6 +6,10 @@
       "schedule": "0 12 * * *"
     }
   ],
+  "redirects": [
+    { "source": "/gastos", "destination": "/Gastos", "permanent": true },
+    { "source": "/gastos/:path*", "destination": "/Gastos/:path*", "permanent": true }
+  ],
   "headers": [
     {
       "source": "/calendario",

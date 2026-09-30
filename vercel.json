@@ -7,67 +7,153 @@
     }
   ],
   "redirects": [
-    { "source": "/gastos", "destination": "/Gastos", "permanent": true },
-    { "source": "/gastos/:path*", "destination": "/Gastos/:path*", "permanent": true }
+    {
+      "source": "/gastos",
+      "destination": "/Gastos",
+      "permanent": true
+    },
+    {
+      "source": "/gastos/:path*",
+      "destination": "/Gastos/:path*",
+      "permanent": true
+    }
   ],
   "headers": [
     {
       "source": "/calendario",
       "headers": [
-        { "key": "Cache-Control", "value": "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0" },
-        { "key": "Pragma", "value": "no-cache" },
-        { "key": "Expires", "value": "0" }
+        {
+          "key": "Cache-Control",
+          "value": "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0"
+        },
+        {
+          "key": "Pragma",
+          "value": "no-cache"
+        },
+        {
+          "key": "Expires",
+          "value": "0"
+        }
       ]
     },
     {
       "source": "/calendario/(index\\.html|sw\\.js|registerSW\\.js)",
       "headers": [
-        { "key": "Cache-Control", "value": "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0" },
-        { "key": "Pragma", "value": "no-cache" },
-        { "key": "Expires", "value": "0" }
+        {
+          "key": "Cache-Control",
+          "value": "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0"
+        },
+        {
+          "key": "Pragma",
+          "value": "no-cache"
+        },
+        {
+          "key": "Expires",
+          "value": "0"
+        }
       ]
     },
     {
       "source": "/admin-calendario",
       "headers": [
-        { "key": "Cache-Control", "value": "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0" },
-        { "key": "Pragma", "value": "no-cache" },
-        { "key": "Expires", "value": "0" }
+        {
+          "key": "Cache-Control",
+          "value": "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0"
+        },
+        {
+          "key": "Pragma",
+          "value": "no-cache"
+        },
+        {
+          "key": "Expires",
+          "value": "0"
+        }
       ]
     },
     {
       "source": "/admin-calendario/(index\\.html)",
       "headers": [
-        { "key": "Cache-Control", "value": "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0" },
-        { "key": "Pragma", "value": "no-cache" },
-        { "key": "Expires", "value": "0" }
+        {
+          "key": "Cache-Control",
+          "value": "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0"
+        },
+        {
+          "key": "Pragma",
+          "value": "no-cache"
+        },
+        {
+          "key": "Expires",
+          "value": "0"
+        }
       ]
     },
     {
       "source": "/(Gastos|gastos)",
       "headers": [
-        { "key": "Cache-Control", "value": "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0" },
-        { "key": "Pragma", "value": "no-cache" },
-        { "key": "Expires", "value": "0" }
+        {
+          "key": "Cache-Control",
+          "value": "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0"
+        },
+        {
+          "key": "Pragma",
+          "value": "no-cache"
+        },
+        {
+          "key": "Expires",
+          "value": "0"
+        }
       ]
     },
     {
       "source": "/(Gastos|gastos)/(index\\.html)",
       "headers": [
-        { "key": "Cache-Control", "value": "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0" },
-        { "key": "Pragma", "value": "no-cache" },
-        { "key": "Expires", "value": "0" }
+        {
+          "key": "Cache-Control",
+          "value": "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0"
+        },
+        {
+          "key": "Pragma",
+          "value": "no-cache"
+        },
+        {
+          "key": "Expires",
+          "value": "0"
+        }
       ]
     }
   ],
   "rewrites": [
-    { "source": "/calendario", "destination": "/calendario/index.html" },
-    { "source": "/calendario/:path*", "destination": "/calendario/index.html" },
-    { "source": "/admin-calendario", "destination": "/admin-calendario/index.html" },
-    { "source": "/admin-calendario/:path*", "destination": "/admin-calendario/index.html" },
-    { "source": "/Gastos", "destination": "/Gastos/index.html" },
-    { "source": "/Gastos/:path*", "destination": "/Gastos/index.html" },
-    { "source": "/gastos", "destination": "/Gastos/index.html" },
-    { "source": "/gastos/:path*", "destination": "/Gastos/index.html" }
+    {
+      "source": "/calendario",
+      "destination": "/calendario/index.html"
+    },
+    {
+      "source": "/calendario/:path*",
+      "destination": "/calendario/index.html"
+    },
+    {
+      "source": "/admin-calendario",
+      "destination": "/admin-calendario/index.html"
+    },
+    {
+      "source": "/admin-calendario/:path*",
+      "destination": "/admin-calendario/index.html"
+    },
+    {
+      "source": "/Gastos",
+      "destination": "/Gastos/index.html"
+    },
+    {
+      "source": "/Gastos/:path*",
+      "destination": "/Gastos/index.html"
+    },
+    {
+      "source": "/gastos",
+      "destination": "/Gastos/index.html"
+    },
+    {
+      "source": "/gastos/:path*",
+      "destination": "/Gastos/index.html"
+    }
   ]
 }

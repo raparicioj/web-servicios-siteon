@@ -107,7 +107,7 @@ async function fetchSupabaseEvents(dateStr) {
  */
 async function fetchSentReminderKeys() {
   try {
-    const url = `${SUPABASE_URL}/rest/v1/activity_logs?action=eq.reminder_dispatched&select=entity_id`;
+    const url = `${SUPABASE_URL}/rest/v1/activity_logs?action=eq.reminder_dispatched&select=entity_id,id`;
     const res = await fetch(url, {
       headers: {
         apikey: SUPABASE_KEY,
@@ -120,6 +120,12 @@ async function fetchSentReminderKeys() {
     if (Array.isArray(data)) {
       data.forEach((item) => {
         if (item.entity_id) set.add(item.entity_id);
+        if (item.id) {
+          set.add(item.id);
+          if (item.id.startsWith('log_')) {
+            set.add(item.id.replace(/^log_/, ''));
+          }
+        }
       });
     }
     return set;
@@ -135,7 +141,7 @@ async function fetchSentReminderKeys() {
 async function recordReminderSentInSupabase(reminderKey, eventTitle, reminderType) {
   try {
     const logRow = {
-      id: `log_remind_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
+      id: `log_${reminderKey}`,
       couple_id: 'c_carmen_rodrigo',
       user_id: 'system_cloud',
       user_name: 'Mi Calendario Cloud ☁️',
@@ -152,6 +158,7 @@ async function recordReminderSentInSupabase(reminderKey, eventTitle, reminderTyp
         apikey: SUPABASE_KEY,
         Authorization: `Bearer ${SUPABASE_KEY}`,
         'Content-Type': 'application/json',
+        Prefer: 'resolution=merge-duplicates',
       },
       body: JSON.stringify(logRow),
     });

@@ -2,8 +2,8 @@ name: WhatsApp Reminders Cron 24/7
 
 on:
   schedule:
-    # Runs every 10 minutes
-    - cron: '*/10 * * * *'
+    # Runs every 5 minutes 24/7 for exact reminder delivery
+    - cron: '*/5 * * * *'
   workflow_dispatch:
 
 jobs:

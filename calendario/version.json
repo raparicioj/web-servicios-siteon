@@ -1,5 +1,5 @@
 {
-  "version": "v30_frequent_tasks_board",
-  "buildTime": 1789910000000,
-  "description": "Módulo funcional de tareas frecuentes y rutinas para Carmen Gloria y Rodrigo"
+  "version": "v31_frequent_tasks_green_top_modal",
+  "buildTime": 1789914000000,
+  "description": "Modal de tareas frecuentes posicionado arriba, con soporte de recurrencia diaria, semanal, mensual o multi-fecha en verde en el calendario"
 }

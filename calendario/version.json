@@ -1,5 +1,5 @@
 {
-  "version": "v31_frequent_tasks_green_top_modal",
-  "buildTime": 1789914000000,
-  "description": "Modal de tareas frecuentes posicionado arriba, con soporte de recurrencia diaria, semanal, mensual o multi-fecha en verde en el calendario"
+  "version": "v32_summarized_frequent_tasks_plus_fechas",
+  "buildTime": 1789918000000,
+  "description": "Boton +Tarea frecuente directo en cabecera y agrupacion resumida de tareas frecuentes con boton + para ver y marcar fechas individuales hasta finalizar"
 }

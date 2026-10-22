@@ -1,5 +1,5 @@
 {
-  "version": "v32_summarized_frequent_tasks_plus_fechas",
-  "buildTime": 1789918000000,
-  "description": "Boton +Tarea frecuente directo en cabecera y agrupacion resumida de tareas frecuentes con boton + para ver y marcar fechas individuales hasta finalizar"
+  "version": "v33_consolidated_dashboard_frequent_tasks",
+  "buildTime": 1789922000000,
+  "description": "Boton renombrado a Guardar y Programar, y tareas frecuentes consolidadas en el tablero principal con boton + y sub-fechas interiores"
 }

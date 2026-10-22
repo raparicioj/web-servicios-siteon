@@ -1,5 +1,5 @@
 {
-  "version": "v34_accurate_time_deportes_ocio_duration_select",
-  "buildTime": 1789926000000,
-  "description": "Correccion de hora en resumen de rutina, categorias Deportes y Ocio separadas, y selector de duracion desplegable"
+  "version": "v35_scrollspy_dashboard_navigation",
+  "buildTime": 1789930000000,
+  "description": "Navegacion fija de iconos en chiquitito con scrollspy automatico al desplazarse por el dashboard"
 }

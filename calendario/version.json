@@ -1,5 +1,5 @@
 {
-  "version": "v29_cloud_cron_reminders",
-  "buildTime": 1789830000000,
-  "description": "Automatización en la nube 24/7 para recordatorios matutinos (09:00 hrs) y alertas programadas"
+  "version": "v30_frequent_tasks_board",
+  "buildTime": 1789910000000,
+  "description": "Módulo funcional de tareas frecuentes y rutinas para Carmen Gloria y Rodrigo"
 }

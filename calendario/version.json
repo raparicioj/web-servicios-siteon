@@ -1,5 +1,5 @@
 {
-  "version": "v33_consolidated_dashboard_frequent_tasks",
-  "buildTime": 1789922000000,
-  "description": "Boton renombrado a Guardar y Programar, y tareas frecuentes consolidadas en el tablero principal con boton + y sub-fechas interiores"
+  "version": "v34_accurate_time_deportes_ocio_duration_select",
+  "buildTime": 1789926000000,
+  "description": "Correccion de hora en resumen de rutina, categorias Deportes y Ocio separadas, y selector de duracion desplegable"
 }

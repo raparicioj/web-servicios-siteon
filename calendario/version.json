@@ -1,5 +1,5 @@
 {
-  "version": "v36_fixed_header_scrollspy_icons",
-  "buildTime": 1789932000000,
-  "description": "Barra superior fija permanente en Header con iconos en chiquitito y deteccion de scroll en tiempo real"
+  "version": "v37_world_class_scrollspy_header",
+  "buildTime": 1789935000000,
+  "description": "Header unificado ultracompacto con Scrollspy matematico getBoundingClientRect, auto-centrado horizontal y animacion liquida"
 }

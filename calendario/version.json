@@ -1,5 +1,5 @@
 {
-  "version": "v35_scrollspy_dashboard_navigation",
-  "buildTime": 1789930000000,
-  "description": "Navegacion fija de iconos en chiquitito con scrollspy automatico al desplazarse por el dashboard"
+  "version": "v36_fixed_header_scrollspy_icons",
+  "buildTime": 1789932000000,
+  "description": "Barra superior fija permanente en Header con iconos en chiquitito y deteccion de scroll en tiempo real"
 }

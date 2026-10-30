@@ -149,7 +149,7 @@
       ]
     },
     {
-      "source": "/(MagenKapap|magenkapap)/(index\\.html)",
+      "source": "/(MagenKapap|magenkapap)/(index\\.html|admin|galeria|contacto|entrenamientos|sobre-nosotros)",
       "headers": [
         {
           "key": "Cache-Control",

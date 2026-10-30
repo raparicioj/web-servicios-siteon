@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+  <!-- Escudo táctico Magen Kapap -->
+  <defs>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fbbf24"/>
+      <stop offset="50%" stop-color="#d97706"/>
+      <stop offset="100%" stop-color="#92400e"/>
+    </linearGradient>
+    <linearGradient id="shieldGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#090d16"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Contorno Escudo Exterior -->
+  <path d="M100 15 L175 45 V105 C175 150 100 185 100 185 C100 185 25 150 25 105 V45 Z" 
+        fill="url(#shieldGrad)" 
+        stroke="url(#goldGrad)" 
+        stroke-width="5" 
+        stroke-linejoin="round"/>
+
+  <!-- Línea interior táctica -->
+  <path d="M100 28 L162 53 V105 C162 142 100 172 100 172 C100 172 38 142 38 105 V53 Z" 
+        fill="none" 
+        stroke="#475569" 
+        stroke-width="1.5" 
+        stroke-dasharray="4 3"/>
+
+  <!-- Estrella de David estilizada / Emblema Magen Kapap -->
+  <polygon points="100,50 115,82 148,82 122,102 132,135 100,116 68,135 78,102 52,82 85,82" 
+           fill="none" 
+           stroke="url(#goldGrad)" 
+           stroke-width="3" 
+           stroke-linejoin="round"/>
+
+  <!-- Letras K y M tácticas -->
+  <text x="100" y="158" font-family="'Oswald', sans-serif" font-size="14" font-weight="700" fill="#f8fafc" text-anchor="middle" letter-spacing="3">MAGEN KAPAP</text>
+  <text x="100" y="170" font-family="'Plus Jakarta Sans', sans-serif" font-size="7" font-weight="600" fill="#f59e0b" text-anchor="middle" letter-spacing="2">KRAV MAGA</text>
+</svg>
+

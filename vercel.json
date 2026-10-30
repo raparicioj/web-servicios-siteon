@@ -201,19 +201,19 @@
     },
     {
       "source": "/MagenKapap",
-      "destination": "/MagenKapap/index.html"
+      "destination": "/MagenKapap"
     },
     {
       "source": "/MagenKapap/:path*",
-      "destination": "/MagenKapap/index.html"
+      "destination": "/MagenKapap"
     },
     {
       "source": "/magenkapap",
-      "destination": "/MagenKapap/index.html"
+      "destination": "/MagenKapap"
     },
     {
       "source": "/magenkapap/:path*",
-      "destination": "/MagenKapap/index.html"
+      "destination": "/MagenKapap"
     }
   ]
 }

@@ -217,7 +217,19 @@ function fetchMqttSnapshot(brokerUrl) {
   });
 }
 
+const PAUSED_TEMPORARILY = true;
+
 export default async function handler(req, res) {
+  if (PAUSED_TEMPORARILY) {
+    return res.status(200).json({
+      success: true,
+      paused: true,
+      message: 'Mi Calendario y todas sus notificaciones están temporalmente deshabilitados.',
+      dispatchedCount: 0,
+      dispatched: [],
+    });
+  }
+
   const chile = getChileTime();
   const startTime = Date.now();
   const logEntries = [];

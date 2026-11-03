@@ -1,5 +1,5 @@
 {
-  "version": "v37_world_class_scrollspy_header",
-  "buildTime": 1789935000000,
-  "description": "Header unificado ultracompacto con Scrollspy matematico getBoundingClientRect, auto-centrado horizontal y animacion liquida"
+  "version": "v38_paused_offline_mode",
+  "buildTime": 1793720000000,
+  "description": "Servicio temporalmente pausado y notificaciones deshabilitadas"
 }

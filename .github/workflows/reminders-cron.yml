@@ -1,15 +1,16 @@
-name: WhatsApp Reminders Cron 24/7
+name: WhatsApp Reminders Cron 24/7 (PAUSED)
 
 on:
-  schedule:
-    # Runs every 5 minutes 24/7 for exact reminder delivery
-    - cron: '*/5 * * * *'
+  # Temporalmente deshabilitado a solicitud del usuario.
+  # Para reactivar, descomentar las 2 líneas de schedule:
+  # schedule:
+  #   - cron: '*/5 * * * *'
   workflow_dispatch:
 
 jobs:
   ping-reminders-cron:
     runs-on: ubuntu-latest
     steps:
-      - name: Trigger Reminders Cron API
+      - name: Trigger Reminders Cron API (Paused)
         run: |
-          curl -s -X GET "https://siteon.cl/api/cron-reminders" | jq . || curl -s -X GET "https://siteon.cl/api/cron-reminders"
+          echo "Mi Calendario notifications are temporarily paused."

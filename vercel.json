@@ -1,11 +1,6 @@
 {
   "cleanUrls": true,
-  "crons": [
-    {
-      "path": "/api/cron-reminders",
-      "schedule": "0 12 * * *"
-    }
-  ],
+  "crons": [],
   "redirects": [
     {
       "source": "/gastos",

@@ -2,50 +2,87 @@
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/calendario/pwa-192x192.svg" />
-    <link rel="apple-touch-icon" href="/calendario/pwa-192x192.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-    
-    <!-- PWA & Mobile Web App Meta Tags -->
-    <meta name="theme-color" content="#FFFFFF" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-    <meta name="apple-mobile-web-app-title" content="Mi Calendario" />
-    <meta name="application-name" content="Mi Calendario" />
-    <meta name="mobile-web-app-capable" content="yes" />
-    <meta name="description" content="Organizador personal y de pareja para Carmen Gloria y Rodrigo 💕" />
-    
-    <title>Mi Calendario 💕 — Para que nada importante se te pase</title>
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
-    
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;1,400&display=swap" rel="stylesheet">
+    <title>Mi Calendario — Temporalmente Fuera de Servicio</title>
     <script>
-      (function() {
-        var CLEAN_V5_KEY = 'mi_calendario_blank_clean_v5_init';
-        if (!localStorage.getItem(CLEAN_V5_KEY)) {
-          try {
-            var keys = Object.keys(localStorage);
-            for (var i = 0; i < keys.length; i++) {
-              var k = keys[i];
-              if (k.indexOf('mi_calendario_') === 0 && k !== 'mi_calendario_user_auth_pass') {
-                localStorage.removeItem(k);
-              }
+      (async function () {
+        try {
+          if ('serviceWorker' in navigator) {
+            const regs = await navigator.serviceWorker.getRegistrations();
+            for (const r of regs) {
+              await r.unregister();
             }
-            localStorage.setItem(CLEAN_V5_KEY, 'true');
-          } catch(e) {}
-        }
+          }
+          if ('caches' in window) {
+            const keys = await caches.keys();
+            for (const k of keys) {
+              await caches.delete(k);
+            }
+          }
+        } catch (e) {}
       })();
     </script>
-    <script type="module" crossorigin src="/calendario/assets/index-BpqWQBZ1.js"></script>
-    <link rel="stylesheet" crossorigin href="/calendario/assets/index-CfaznhKr.css">
-  <link rel="manifest" href="/calendario/manifest.webmanifest"><script id="vite-plugin-pwa:register-sw" src="/calendario/registerSW.js"></script></head>
-  <body class="bg-vanilla-50 text-warmGray-800 antialiased font-sans selection:bg-blush-200 selection:text-blush-700">
-    <div id="root"></div>
+    <style>
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      body {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #0f172a;
+        color: #f8fafc;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        padding: 24px;
+        text-align: center;
+      }
+      .card {
+        max-width: 420px;
+        width: 100%;
+        background: #1e293b;
+        border: 1px solid #334155;
+        border-radius: 20px;
+        padding: 36px 28px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+      }
+      .icon {
+        font-size: 42px;
+        margin-bottom: 16px;
+      }
+      h1 {
+        font-size: 20px;
+        font-weight: 700;
+        margin-bottom: 10px;
+        color: #ffffff;
+      }
+      p {
+        font-size: 14px;
+        line-height: 1.6;
+        color: #94a3b8;
+      }
+      .badge {
+        display: inline-block;
+        margin-top: 20px;
+        padding: 6px 14px;
+        border-radius: 999px;
+        background: rgba(244, 63, 94, 0.15);
+        border: 1px solid rgba(244, 63, 94, 0.35);
+        color: #fda4af;
+        font-size: 12px;
+        font-weight: 600;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <div class="icon">⏸️</div>
+      <h1>Aplicación Temporalmente en Pausa</h1>
+      <p>
+        Mi Calendario y todas sus notificaciones automáticas se encuentran temporalmente deshabilitados por mantenimiento.
+      </p>
+      <span class="badge">Servicio Pausado</span>
+    </div>
   </body>
 </html>

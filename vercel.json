@@ -11,16 +11,6 @@
       "source": "/gastos/:path*",
       "destination": "/Gastos/:path*",
       "permanent": true
-    },
-    {
-      "source": "/magenkapap",
-      "destination": "/MagenKapap",
-      "permanent": true
-    },
-    {
-      "source": "/magenkapap/:path*",
-      "destination": "/MagenKapap/:path*",
-      "permanent": true
     }
   ],
   "headers": [
@@ -125,40 +115,6 @@
           "value": "0"
         }
       ]
-    },
-    {
-      "source": "/(MagenKapap|magenkapap)",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0"
-        },
-        {
-          "key": "Pragma",
-          "value": "no-cache"
-        },
-        {
-          "key": "Expires",
-          "value": "0"
-        }
-      ]
-    },
-    {
-      "source": "/(MagenKapap|magenkapap)/(index\\.html|admin|galeria|contacto|entrenamientos|sobre-nosotros)",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0"
-        },
-        {
-          "key": "Pragma",
-          "value": "no-cache"
-        },
-        {
-          "key": "Expires",
-          "value": "0"
-        }
-      ]
     }
   ],
   "rewrites": [
@@ -193,22 +149,6 @@
     {
       "source": "/gastos/:path*",
       "destination": "/Gastos/index.html"
-    },
-    {
-      "source": "/MagenKapap",
-      "destination": "/MagenKapap"
-    },
-    {
-      "source": "/MagenKapap/:path*",
-      "destination": "/MagenKapap"
-    },
-    {
-      "source": "/magenkapap",
-      "destination": "/MagenKapap"
-    },
-    {
-      "source": "/magenkapap/:path*",
-      "destination": "/MagenKapap"
     }
   ]
 }

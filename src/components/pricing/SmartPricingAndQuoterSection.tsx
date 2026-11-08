@@ -13,12 +13,9 @@ import {
   Cloud,
   Cpu,
   FileCheck2,
-  HelpCircle,
   Info,
   Laptop,
-  Layers,
   Loader2,
-  Lock,
   MessageCircle,
   Minus,
   MonitorCheck,
@@ -241,8 +238,10 @@ export function SmartPricingAndQuoterSection({
     }
 
     // 3.3 Equipos adicionales (0,2 UF / equipo adicional sobre la cobertura de usuarios/equipos del plan)
-    // Evita cobrar dos veces por el computador principal de cada usuario cubierto
-    const coveredComputersBaseline = Math.max(usersCount, selectedPlan.included_computers || selectedPlan.max_users);
+    const coveredComputersBaseline = Math.max(
+      usersCount,
+      selectedPlan.included_computers || selectedPlan.max_users
+    );
     const extraComputers = Math.max(0, computersCount - coveredComputersBaseline);
     if (extraComputers > 0) {
       const extraCompUf = Number((extraComputers * rates.extra_computer_uf).toFixed(2));
@@ -278,7 +277,6 @@ export function SmartPricingAndQuoterSection({
           included_in_plan: true,
         });
       } else {
-        // Si forzó el plan Start pero pidió M365 completo, agregamos 1 UF de gestión de directorio/tenant
         breakdown.push({
           label: `${suiteLabel} sobre plan básico`,
           uf: 1.0,
@@ -585,7 +583,6 @@ export function SmartPricingAndQuoterSection({
       const activePlan = modalPlan || quoteCalculation.selectedPlan;
       const ivaPct = pricingConfig.iva_percentage || 19;
 
-      // Construir objeto quote_details según si vino de la tarjeta o del cotizador interactivo
       let payloadQuoteDetails: QuoteConfiguration;
       if (modalSource === 'smart_quoter') {
         payloadQuoteDetails = {
@@ -725,26 +722,30 @@ export function SmartPricingAndQuoterSection({
       id="planes-soporte"
       className={`relative overflow-hidden ${
         standalonePage ? 'pt-12 pb-28' : 'py-24'
-      } bg-gradient-to-b from-[#081c2b]/95 via-[#0d2638]/95 to-[#091e2e]/95 text-white border-b border-teal-300/20`}
+      } bg-gradient-to-b from-[#164261]/90 via-[#1a4c6e]/90 to-[#143d59]/90 text-white border-b border-teal-300/30`}
     >
-      {/* Efectos sutiles de iluminación radial tipo Stripe / Linear */}
+      {/* Iluminación atmosférica luminosa en tonos Calipso Claro y Turquesa */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 h-[460px] w-[980px] rounded-full bg-gradient-to-r from-[#2dd4bf]/15 via-[#5eead4]/10 to-[#0284c7]/15 blur-3xl"
+        className="pointer-events-none absolute -top-36 left-1/2 -translate-x-1/2 h-[520px] w-[1100px] rounded-full bg-gradient-to-r from-[#5eead4]/25 via-[#2dd4bf]/22 to-[#67e8f9]/25 blur-3xl"
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute top-[45%] right-0 h-[420px] w-[620px] rounded-full bg-[#2dd4bf]/15 blur-3xl"
       />
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* ==================== BANNER PROMOCIONAL Y CABECERA ==================== */}
         <div className="text-center max-w-3xl mx-auto mb-10">
           {pricingConfig.promo_active && pricingConfig.promo_text && (
-            <div className="inline-flex items-center gap-2 rounded-full border border-[#5eead4]/50 bg-[#11354d]/90 px-4 py-1.5 text-xs font-bold text-[#99f6e4] mb-5 shadow-lg">
+            <div className="inline-flex items-center gap-2 rounded-full border border-[#99f6e4]/60 bg-[#1e587d]/95 px-4 py-1.5 text-xs font-bold text-[#ccfbf1] mb-5 shadow-lg">
               <Sparkles className="h-3.5 w-3.5 text-[#5eead4] shrink-0" />
               <span>{pricingConfig.promo_text}</span>
             </div>
           )}
 
           <div className="block">
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-teal-300/30 bg-[#2dd4bf]/15 px-3.5 py-1 text-[11px] font-extrabold uppercase tracking-widest text-[#5eead4]">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-[#5eead4]/50 bg-[#2dd4bf]/20 px-4 py-1 text-[11px] font-extrabold uppercase tracking-widest text-[#99f6e4]">
               {pricingConfig.section_badge}
             </span>
           </div>
@@ -753,31 +754,31 @@ export function SmartPricingAndQuoterSection({
             {pricingConfig.section_title}
           </h2>
 
-          <p className="text-base sm:text-lg text-teal-50/85 mt-4 leading-relaxed">
+          <p className="text-base sm:text-lg text-teal-50/95 mt-4 leading-relaxed">
             {pricingConfig.section_subtitle}
           </p>
         </div>
 
         {/* ==================== BARRA DE CALCULADORA UF / CLP OFICIAL ==================== */}
-        <div className="mb-12 rounded-2xl border border-teal-300/25 bg-[#0f2d42]/90 p-4 sm:px-6 shadow-xl backdrop-blur-md">
+        <div className="mb-12 rounded-2xl border border-[#5eead4]/45 bg-[#1e557a]/90 p-4 sm:px-6 shadow-xl backdrop-blur-md">
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
             <div className="flex flex-wrap items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#2dd4bf]/20 border border-[#5eead4]/40 text-[#5eead4]">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#5eead4]/25 border border-[#99f6e4]/50 text-[#99f6e4]">
                 <Calculator className="h-5 w-5" />
               </div>
               <div>
                 <div className="flex flex-wrap items-center gap-2">
-                  <span className="text-xs font-extrabold uppercase tracking-wider text-[#99f6e4]">
+                  <span className="text-xs font-extrabold uppercase tracking-wider text-[#ccfbf1]">
                     Tasa de Conversión Activa:
                   </span>
-                  <span className="inline-flex items-center gap-1.5 rounded-lg bg-[#081c2b] border border-[#5eead4]/40 px-2.5 py-0.5 text-sm font-extrabold text-[#5eead4]">
+                  <span className="inline-flex items-center gap-1.5 rounded-lg bg-[#143d59] border border-[#5eead4]/50 px-2.5 py-0.5 text-sm font-extrabold text-[#5eead4]">
                     1 UF = ${ufRateClp.toLocaleString('es-CL')} CLP
                   </span>
-                  <span className="text-xs text-teal-100/75">
+                  <span className="text-xs text-teal-50/90">
                     • Actualizado: <strong className="text-white">{ufDate}</strong> ({ufSourceLabel})
                   </span>
                 </div>
-                <p className="text-xs text-teal-100/75 mt-0.5">
+                <p className="text-xs text-teal-50/90 mt-0.5">
                   Todos los planes y el cotizador expresan{' '}
                   <strong className="text-[#99f6e4]">
                     valores netos mensuales más IVA ({pricingConfig.iva_percentage}%)
@@ -794,7 +795,7 @@ export function SmartPricingAndQuoterSection({
                     type="button"
                     onClick={handleRefreshOfficialUf}
                     disabled={syncingUf}
-                    className="inline-flex items-center gap-1.5 rounded-xl border border-teal-300/35 bg-[#133852] hover:bg-[#194766] px-3.5 py-2 text-xs font-bold text-teal-50 transition-all"
+                    className="inline-flex items-center gap-1.5 rounded-xl border border-[#5eead4]/50 bg-[#174666] hover:bg-[#215d87] px-3.5 py-2 text-xs font-bold text-white transition-all"
                   >
                     <RefreshCw className={`h-3.5 w-3.5 ${syncingUf ? 'animate-spin' : ''}`} />
                     <span>
@@ -807,16 +808,19 @@ export function SmartPricingAndQuoterSection({
                 <button
                   type="button"
                   onClick={handleUseReferenceUf}
-                  className="inline-flex items-center gap-1.5 rounded-xl border border-teal-300/35 bg-[#133852] hover:bg-[#194766] px-3.5 py-2 text-xs font-bold text-teal-50 transition-all"
+                  className="inline-flex items-center gap-1.5 rounded-xl border border-[#5eead4]/50 bg-[#174666] hover:bg-[#215d87] px-3.5 py-2 text-xs font-bold text-white transition-all"
                 >
-                  <span>Restaurar UF Referencia (${(pricingConfig.uf_value_clp || 41290).toLocaleString('es-CL')})</span>
+                  <span>
+                    Restaurar UF Referencia ($
+                    {(pricingConfig.uf_value_clp || 41290).toLocaleString('es-CL')})
+                  </span>
                 </button>
               )}
 
               <button
                 type="button"
                 onClick={() => setShowUfConverter((v) => !v)}
-                className="inline-flex items-center gap-1.5 rounded-xl bg-[#5eead4]/15 hover:bg-[#5eead4]/25 border border-[#5eead4]/40 px-3.5 py-2 text-xs font-extrabold text-[#99f6e4] transition-all"
+                className="inline-flex items-center gap-1.5 rounded-xl bg-[#5eead4]/20 hover:bg-[#5eead4]/30 border border-[#99f6e4]/50 px-3.5 py-2 text-xs font-extrabold text-[#ccfbf1] transition-all"
               >
                 <Calculator className="h-3.5 w-3.5" />
                 <span>{showUfConverter ? 'Ocultar Calculadora UF' : 'Calculadora UF ↔ CLP'}</span>
@@ -834,12 +838,12 @@ export function SmartPricingAndQuoterSection({
 
           {/* Convertidor interactivo desplegable UF <-> CLP + IVA */}
           {showUfConverter && (
-            <div className="mt-4 pt-4 border-t border-teal-300/20 grid grid-cols-1 md:grid-cols-4 gap-4 items-center">
+            <div className="mt-4 pt-4 border-t border-teal-200/30 grid grid-cols-1 md:grid-cols-4 gap-4 items-center">
               <div>
-                <label className="block text-[11px] font-bold uppercase tracking-wider text-teal-100/80 mb-1">
+                <label className="block text-[11px] font-bold uppercase tracking-wider text-teal-50 mb-1">
                   Monto en UF a simular
                 </label>
-                <div className="flex items-center rounded-xl border border-teal-300/35 bg-[#081c2b] px-3 py-2">
+                <div className="flex items-center rounded-xl border border-[#5eead4]/50 bg-[#143d59] px-3 py-2">
                   <input
                     type="number"
                     step="0.5"
@@ -853,8 +857,8 @@ export function SmartPricingAndQuoterSection({
                 </div>
               </div>
 
-              <div className="rounded-xl bg-[#081c2b]/90 border border-teal-300/20 p-3">
-                <div className="text-[11px] font-bold uppercase tracking-wider text-teal-100/70">
+              <div className="rounded-xl bg-[#153f5c] border border-teal-200/30 p-3">
+                <div className="text-[11px] font-bold uppercase tracking-wider text-teal-100">
                   Equivalencia Neta (Sin IVA)
                 </div>
                 <div className="text-base font-display font-extrabold text-white mt-0.5">
@@ -862,17 +866,17 @@ export function SmartPricingAndQuoterSection({
                 </div>
               </div>
 
-              <div className="rounded-xl bg-[#081c2b]/90 border border-teal-300/20 p-3">
-                <div className="text-[11px] font-bold uppercase tracking-wider text-teal-100/70">
+              <div className="rounded-xl bg-[#153f5c] border border-teal-200/30 p-3">
+                <div className="text-[11px] font-bold uppercase tracking-wider text-teal-100">
                   IVA ({pricingConfig.iva_percentage}%)
                 </div>
-                <div className="text-base font-display font-extrabold text-teal-100 mt-0.5">
+                <div className="text-base font-display font-extrabold text-teal-50 mt-0.5">
                   {formatClp(convertedClpIva)}
                 </div>
               </div>
 
-              <div className="rounded-xl bg-[#133b54] border border-[#5eead4]/40 p-3">
-                <div className="text-[11px] font-bold uppercase tracking-wider text-[#99f6e4]">
+              <div className="rounded-xl bg-[#1b5e6f] border border-[#99f6e4]/60 p-3">
+                <div className="text-[11px] font-bold uppercase tracking-wider text-[#ccfbf1]">
                   Total Estimado con IVA
                 </div>
                 <div className="text-base font-display font-extrabold text-[#5eead4] mt-0.5">
@@ -883,7 +887,7 @@ export function SmartPricingAndQuoterSection({
           )}
         </div>
 
-        {/* ==================== 2. TARJETAS DE LOS 4 PLANES COMERCIALES ==================== */}
+        {/* ==================== 2. TARJETAS DE LOS 4 PLANES COMERCIALES (TONOS MÁS CLAROS Y LUMINOSOS) ==================== */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch mb-20">
           {activePlans.map((plan) => {
             const isRecommended = plan.recommended;
@@ -895,12 +899,12 @@ export function SmartPricingAndQuoterSection({
                 key={plan.id}
                 className={`group relative rounded-3xl p-7 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1.5 ${
                   isRecommended
-                    ? 'bg-gradient-to-b from-[#13405e] via-[#0f3149] to-[#0a2234] border-2 border-[#5eead4] shadow-[0_24px_60px_rgba(45,212,191,0.28)] lg:scale-[1.03] z-10'
-                    : 'bg-[#0f2d42]/90 hover:bg-[#133750]/95 border border-teal-300/25 hover:border-[#5eead4]/55 shadow-xl'
+                    ? 'bg-gradient-to-b from-[#1f6e7e] via-[#195a6d] to-[#15485b] border-2 border-[#99f6e4] shadow-[0_24px_60px_rgba(94,234,212,0.32)] lg:scale-[1.03] z-10'
+                    : 'bg-gradient-to-b from-[#1e557a]/95 to-[#174463]/95 hover:from-[#23618a] hover:to-[#1b4f72] border border-[#5eead4]/40 hover:border-[#99f6e4] shadow-xl'
                 }`}
               >
                 {isRecommended && (
-                  <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-gradient-to-r from-[#5eead4] to-[#2dd4bf] px-4 py-1 text-[11px] font-extrabold uppercase tracking-wider text-slate-950 shadow-lg">
+                  <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-gradient-to-r from-[#99f6e4] via-[#5eead4] to-[#2dd4bf] px-4 py-1 text-[11px] font-extrabold uppercase tracking-wider text-slate-950 shadow-lg">
                     ★ PLAN RECOMENDADO
                   </div>
                 )}
@@ -911,15 +915,15 @@ export function SmartPricingAndQuoterSection({
                     <span
                       className={`inline-flex items-center gap-1 rounded-full px-3 py-1 text-[11px] font-bold ${
                         isRecommended
-                          ? 'bg-[#5eead4]/20 text-[#99f6e4] border border-[#5eead4]/40'
-                          : 'bg-[#081c2b] text-teal-100 border border-teal-300/25'
+                          ? 'bg-[#5eead4]/25 text-[#ccfbf1] border border-[#99f6e4]/50'
+                          : 'bg-[#143c58] text-teal-50 border border-[#5eead4]/35'
                       }`}
                     >
                       <Users className="h-3 w-3 text-[#5eead4]" />
                       <span>Hasta {plan.max_users} usuarios</span>
                     </span>
 
-                    <span className="text-[11px] font-bold text-[#67e8f9]">
+                    <span className="text-[11px] font-bold text-[#99f6e4]">
                       {plan.is_from_price ? 'Escalable' : 'Diagnóstico Gratis'}
                     </span>
                   </div>
@@ -927,12 +931,12 @@ export function SmartPricingAndQuoterSection({
                   <h3 className="font-display text-xl font-extrabold text-white tracking-tight">
                     {plan.name}
                   </h3>
-                  <p className="text-xs text-teal-100/80 mt-1.5 min-h-[36px] leading-relaxed">
+                  <p className="text-xs text-teal-50/90 mt-1.5 min-h-[36px] leading-relaxed">
                     {plan.tagline}
                   </p>
 
                   {/* Bloque de Precio UF y CLP */}
-                  <div className="my-6 pb-5 border-b border-teal-300/20">
+                  <div className="my-6 pb-5 border-b border-teal-200/25">
                     <div className="flex items-baseline gap-1.5">
                       {plan.is_from_price && (
                         <span className="text-xs font-bold uppercase tracking-wider text-[#99f6e4]">
@@ -942,23 +946,23 @@ export function SmartPricingAndQuoterSection({
                       <span className="font-display text-3xl sm:text-4xl font-extrabold text-white">
                         {formatUf(plan.price_uf)}
                       </span>
-                      <span className="text-xs font-bold text-teal-100/80">/ mes + IVA</span>
+                      <span className="text-xs font-bold text-teal-50/90">/ mes + IVA</span>
                     </div>
 
-                    <div className="mt-2 flex flex-wrap items-center justify-between gap-1 rounded-xl bg-[#081c2b]/85 border border-teal-300/20 px-3 py-2">
+                    <div className="mt-2.5 flex flex-wrap items-center justify-between gap-1 rounded-xl bg-[#133b57]/90 border border-[#5eead4]/35 px-3 py-2.5">
                       <div>
-                        <div className="text-[10px] font-bold uppercase tracking-wider text-teal-200/75">
+                        <div className="text-[10px] font-bold uppercase tracking-wider text-teal-100/90">
                           Referencia actual neta:
                         </div>
                         <div className="text-sm font-extrabold text-[#5eead4]">
                           {plan.is_from_price ? 'Desde ' : ''}
                           {formatClp(netClp)}{' '}
-                          <span className="text-[11px] font-semibold text-teal-100/75">+ IVA</span>
+                          <span className="text-[11px] font-semibold text-teal-50">+ IVA</span>
                         </div>
                       </div>
                       <div className="text-right">
-                        <div className="text-[10px] text-teal-100/65">Total c/IVA:</div>
-                        <div className="text-xs font-bold text-teal-50">
+                        <div className="text-[10px] text-teal-100/80">Total c/IVA:</div>
+                        <div className="text-xs font-bold text-white">
                           {formatClp(netClp + ivaClp)}
                         </div>
                       </div>
@@ -974,7 +978,7 @@ export function SmartPricingAndQuoterSection({
                       {plan.features.map((feat) => (
                         <li
                           key={feat}
-                          className="flex items-start gap-2.5 text-xs text-teal-50/90 leading-relaxed"
+                          className="flex items-start gap-2.5 text-xs text-white/95 leading-relaxed"
                         >
                           <CheckCircle2 className="h-4 w-4 text-[#5eead4] shrink-0 mt-0.5" />
                           <span>{feat}</span>
@@ -991,8 +995,8 @@ export function SmartPricingAndQuoterSection({
                     onClick={() => openModalFromPlanCard(plan)}
                     className={`w-full inline-flex items-center justify-center gap-2 rounded-full py-3.5 px-5 text-xs font-extrabold transition-all shadow-lg ${
                       isRecommended
-                        ? 'bg-[#5eead4] hover:bg-[#99f6e4] text-slate-950 shadow-[0_10px_25px_rgba(94,234,212,0.3)]'
-                        : 'bg-[#174666] hover:bg-[#5eead4] text-white hover:text-slate-950 border border-[#5eead4]/40'
+                        ? 'bg-[#5eead4] hover:bg-[#99f6e4] text-slate-950 shadow-[0_10px_25px_rgba(94,234,212,0.35)]'
+                        : 'bg-[#23648e] hover:bg-[#5eead4] text-white hover:text-slate-950 border border-[#99f6e4]/50'
                     }`}
                   >
                     <span>{plan.cta_label}</span>
@@ -1002,7 +1006,7 @@ export function SmartPricingAndQuoterSection({
                   <button
                     type="button"
                     onClick={() => loadPlanIntoQuoter(plan)}
-                    className="w-full inline-flex items-center justify-center gap-1.5 rounded-full py-2 px-4 text-[11px] font-bold text-[#99f6e4] hover:text-white hover:bg-white/5 transition-colors"
+                    className="w-full inline-flex items-center justify-center gap-1.5 rounded-full py-2 px-4 text-[11px] font-bold text-[#ccfbf1] hover:text-white hover:bg-white/10 transition-colors"
                   >
                     <Calculator className="h-3.5 w-3.5" />
                     <span>Personalizar con adicionales en Cotizador</span>
@@ -1013,24 +1017,24 @@ export function SmartPricingAndQuoterSection({
           })}
         </div>
 
-        {/* ==================== 3. COTIZADOR INTELIGENTE INTERACTIVO ==================== */}
+        {/* ==================== 3. COTIZADOR INTELIGENTE INTERACTIVO (TONOS CLAROS Y LUMINOSOS) ==================== */}
         <div
           id="cotizador-inteligente"
-          className="scroll-mt-24 rounded-3xl border-2 border-[#5eead4]/45 bg-gradient-to-br from-[#0e2c40]/95 via-[#0a2132]/95 to-[#081a28]/95 p-6 sm:p-10 shadow-[0_25px_70px_rgba(8,28,43,0.75)] mb-20"
+          className="scroll-mt-24 rounded-3xl border-2 border-[#5eead4]/60 bg-gradient-to-br from-[#1d5479]/95 via-[#184868]/95 to-[#153e5c]/95 p-6 sm:p-10 shadow-[0_25px_70px_rgba(15,45,68,0.65)] mb-20"
         >
-          <div className="flex flex-col lg:flex-row lg:items-end justify-between mb-8 pb-6 border-b border-teal-300/20 gap-4">
+          <div className="flex flex-col lg:flex-row lg:items-end justify-between mb-8 pb-6 border-b border-teal-200/30 gap-4">
             <div>
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-[#5eead4]/20 border border-[#5eead4]/40 px-3.5 py-1 text-xs font-extrabold uppercase tracking-wider text-[#99f6e4]">
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-[#5eead4]/25 border border-[#99f6e4]/50 px-3.5 py-1 text-xs font-extrabold uppercase tracking-wider text-[#ccfbf1]">
                 <SlidersHorizontal className="h-3.5 w-3.5 text-[#5eead4]" />
                 <span>Simulador de Presupuesto TI en Tiempo Real</span>
               </span>
               <h3 className="font-display text-2xl sm:text-4xl font-extrabold text-white mt-3">
                 Cotizador Inteligente Site On
               </h3>
-              <p className="text-sm sm:text-base text-teal-50/85 mt-1.5 max-w-2xl">
+              <p className="text-sm sm:text-base text-teal-50/95 mt-1.5 max-w-2xl">
                 Configura la cantidad de usuarios, equipos, servidores y servicios que utiliza tu
                 empresa. El sistema recomienda automáticamente el plan ideal{' '}
-                <strong className="text-[#5eead4]">
+                <strong className="text-[#99f6e4]">
                   sin cobrar dos veces lo que ya está incluido
                 </strong>
                 .
@@ -1041,7 +1045,7 @@ export function SmartPricingAndQuoterSection({
               <button
                 type="button"
                 onClick={() => setManualPlanOverrideSlug(null)}
-                className="self-start lg:self-auto inline-flex items-center gap-1.5 rounded-xl border border-[#5eead4]/40 bg-[#133852] px-3.5 py-2 text-xs font-bold text-[#99f6e4] hover:bg-[#194766]"
+                className="self-start lg:self-auto inline-flex items-center gap-1.5 rounded-xl border border-[#99f6e4]/50 bg-[#215d87] px-3.5 py-2 text-xs font-bold text-white hover:bg-[#286d9c]"
               >
                 <RefreshCw className="h-3.5 w-3.5" />
                 <span>Volver a recomendación automática</span>
@@ -1055,11 +1059,11 @@ export function SmartPricingAndQuoterSection({
               {/* 1. Sliders Numéricos: Usuarios, Computadores, Servidores, Sucursales */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {/* Cantidad de Usuarios */}
-                <div className="rounded-2xl border border-teal-300/25 bg-[#0b2233]/90 p-5">
+                <div className="rounded-2xl border border-[#5eead4]/40 bg-[#215c84]/90 p-5 shadow-md">
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center gap-2">
                       <Users className="h-4 w-4 text-[#5eead4]" />
-                      <label className="text-xs font-extrabold uppercase tracking-wider text-teal-50">
+                      <label className="text-xs font-extrabold uppercase tracking-wider text-white">
                         Cantidad de Usuarios
                       </label>
                     </div>
@@ -1071,7 +1075,7 @@ export function SmartPricingAndQuoterSection({
                           setUsersCount(next);
                           if (computersCount < next) setComputersCount(next);
                         }}
-                        className="h-7 w-7 rounded-lg bg-[#143952] hover:bg-[#5eead4] text-white hover:text-slate-950 flex items-center justify-center transition-colors"
+                        className="h-7 w-7 rounded-lg bg-[#153f5e] hover:bg-[#5eead4] text-white hover:text-slate-950 flex items-center justify-center transition-colors border border-[#5eead4]/35"
                         aria-label="Disminuir usuarios"
                       >
                         <Minus className="h-3.5 w-3.5" />
@@ -1086,7 +1090,7 @@ export function SmartPricingAndQuoterSection({
                           setUsersCount(next);
                           if (computersCount < next) setComputersCount(next);
                         }}
-                        className="h-7 w-7 rounded-lg bg-[#143952] hover:bg-[#5eead4] text-white hover:text-slate-950 flex items-center justify-center transition-colors"
+                        className="h-7 w-7 rounded-lg bg-[#153f5e] hover:bg-[#5eead4] text-white hover:text-slate-950 flex items-center justify-center transition-colors border border-[#5eead4]/35"
                         aria-label="Aumentar usuarios"
                       >
                         <Plus className="h-3.5 w-3.5" />
@@ -1105,7 +1109,7 @@ export function SmartPricingAndQuoterSection({
                     }}
                     className="w-full accent-[#5eead4] cursor-pointer"
                   />
-                  <div className="flex justify-between text-[11px] text-teal-100/65 mt-1">
+                  <div className="flex justify-between text-[11px] text-teal-50/90 mt-1">
                     <span>1 usuario</span>
                     <span>Adicional: {formatUf(pricingConfig.addon_rates.extra_user_uf)}/mes</span>
                     <span>40+</span>
@@ -1113,11 +1117,11 @@ export function SmartPricingAndQuoterSection({
                 </div>
 
                 {/* Cantidad de Computadores */}
-                <div className="rounded-2xl border border-teal-300/25 bg-[#0b2233]/90 p-5">
+                <div className="rounded-2xl border border-[#5eead4]/40 bg-[#215c84]/90 p-5 shadow-md">
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center gap-2">
                       <Laptop className="h-4 w-4 text-[#5eead4]" />
-                      <label className="text-xs font-extrabold uppercase tracking-wider text-teal-50">
+                      <label className="text-xs font-extrabold uppercase tracking-wider text-white">
                         Computadores / Equipos
                       </label>
                     </div>
@@ -1125,7 +1129,7 @@ export function SmartPricingAndQuoterSection({
                       <button
                         type="button"
                         onClick={() => setComputersCount(Math.max(1, computersCount - 1))}
-                        className="h-7 w-7 rounded-lg bg-[#143952] hover:bg-[#5eead4] text-white hover:text-slate-950 flex items-center justify-center transition-colors"
+                        className="h-7 w-7 rounded-lg bg-[#153f5e] hover:bg-[#5eead4] text-white hover:text-slate-950 flex items-center justify-center transition-colors border border-[#5eead4]/35"
                         aria-label="Disminuir computadores"
                       >
                         <Minus className="h-3.5 w-3.5" />
@@ -1136,7 +1140,7 @@ export function SmartPricingAndQuoterSection({
                       <button
                         type="button"
                         onClick={() => setComputersCount(Math.min(60, computersCount + 1))}
-                        className="h-7 w-7 rounded-lg bg-[#143952] hover:bg-[#5eead4] text-white hover:text-slate-950 flex items-center justify-center transition-colors"
+                        className="h-7 w-7 rounded-lg bg-[#153f5e] hover:bg-[#5eead4] text-white hover:text-slate-950 flex items-center justify-center transition-colors border border-[#5eead4]/35"
                         aria-label="Aumentar computadores"
                       >
                         <Plus className="h-3.5 w-3.5" />
@@ -1151,7 +1155,7 @@ export function SmartPricingAndQuoterSection({
                     onChange={(e) => setComputersCount(Number(e.target.value))}
                     className="w-full accent-[#5eead4] cursor-pointer"
                   />
-                  <div className="flex justify-between text-[11px] text-teal-100/65 mt-1">
+                  <div className="flex justify-between text-[11px] text-teal-50/90 mt-1">
                     <span>1 PC/Mac</span>
                     <span>Extra: {formatUf(pricingConfig.addon_rates.extra_computer_uf)}/mes</span>
                     <span>50+</span>
@@ -1159,11 +1163,11 @@ export function SmartPricingAndQuoterSection({
                 </div>
 
                 {/* Cantidad de Servidores */}
-                <div className="rounded-2xl border border-teal-300/25 bg-[#0b2233]/90 p-5">
+                <div className="rounded-2xl border border-[#5eead4]/40 bg-[#215c84]/90 p-5 shadow-md">
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center gap-2">
                       <Server className="h-4 w-4 text-[#5eead4]" />
-                      <label className="text-xs font-extrabold uppercase tracking-wider text-teal-50">
+                      <label className="text-xs font-extrabold uppercase tracking-wider text-white">
                         Servidores (Win / Linux)
                       </label>
                     </div>
@@ -1171,7 +1175,7 @@ export function SmartPricingAndQuoterSection({
                       <button
                         type="button"
                         onClick={() => setServersCount(Math.max(0, serversCount - 1))}
-                        className="h-7 w-7 rounded-lg bg-[#143952] hover:bg-[#5eead4] text-white hover:text-slate-950 flex items-center justify-center transition-colors"
+                        className="h-7 w-7 rounded-lg bg-[#153f5e] hover:bg-[#5eead4] text-white hover:text-slate-950 flex items-center justify-center transition-colors border border-[#5eead4]/35"
                         aria-label="Disminuir servidores"
                       >
                         <Minus className="h-3.5 w-3.5" />
@@ -1182,7 +1186,7 @@ export function SmartPricingAndQuoterSection({
                       <button
                         type="button"
                         onClick={() => setServersCount(Math.min(12, serversCount + 1))}
-                        className="h-7 w-7 rounded-lg bg-[#143952] hover:bg-[#5eead4] text-white hover:text-slate-950 flex items-center justify-center transition-colors"
+                        className="h-7 w-7 rounded-lg bg-[#153f5e] hover:bg-[#5eead4] text-white hover:text-slate-950 flex items-center justify-center transition-colors border border-[#5eead4]/35"
                         aria-label="Aumentar servidores"
                       >
                         <Plus className="h-3.5 w-3.5" />
@@ -1197,7 +1201,7 @@ export function SmartPricingAndQuoterSection({
                     onChange={(e) => setServersCount(Number(e.target.value))}
                     className="w-full accent-[#5eead4] cursor-pointer"
                   />
-                  <div className="flex justify-between text-[11px] text-teal-100/65 mt-1">
+                  <div className="flex justify-between text-[11px] text-teal-50/90 mt-1">
                     <span>Sin servidor</span>
                     <span>Desde {formatUf(pricingConfig.addon_rates.managed_server_uf)}/srv</span>
                     <span>10 srv</span>
@@ -1205,11 +1209,11 @@ export function SmartPricingAndQuoterSection({
                 </div>
 
                 {/* Cantidad de Sucursales */}
-                <div className="rounded-2xl border border-teal-300/25 bg-[#0b2233]/90 p-5">
+                <div className="rounded-2xl border border-[#5eead4]/40 bg-[#215c84]/90 p-5 shadow-md">
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center gap-2">
                       <Building2 className="h-4 w-4 text-[#5eead4]" />
-                      <label className="text-xs font-extrabold uppercase tracking-wider text-teal-50">
+                      <label className="text-xs font-extrabold uppercase tracking-wider text-white">
                         Sucursales / Oficinas
                       </label>
                     </div>
@@ -1217,7 +1221,7 @@ export function SmartPricingAndQuoterSection({
                       <button
                         type="button"
                         onClick={() => setBranchesCount(Math.max(1, branchesCount - 1))}
-                        className="h-7 w-7 rounded-lg bg-[#143952] hover:bg-[#5eead4] text-white hover:text-slate-950 flex items-center justify-center transition-colors"
+                        className="h-7 w-7 rounded-lg bg-[#153f5e] hover:bg-[#5eead4] text-white hover:text-slate-950 flex items-center justify-center transition-colors border border-[#5eead4]/35"
                         aria-label="Disminuir sucursales"
                       >
                         <Minus className="h-3.5 w-3.5" />
@@ -1228,7 +1232,7 @@ export function SmartPricingAndQuoterSection({
                       <button
                         type="button"
                         onClick={() => setBranchesCount(Math.min(10, branchesCount + 1))}
-                        className="h-7 w-7 rounded-lg bg-[#143952] hover:bg-[#5eead4] text-white hover:text-slate-950 flex items-center justify-center transition-colors"
+                        className="h-7 w-7 rounded-lg bg-[#153f5e] hover:bg-[#5eead4] text-white hover:text-slate-950 flex items-center justify-center transition-colors border border-[#5eead4]/35"
                         aria-label="Aumentar sucursales"
                       >
                         <Plus className="h-3.5 w-3.5" />
@@ -1243,7 +1247,7 @@ export function SmartPricingAndQuoterSection({
                     onChange={(e) => setBranchesCount(Number(e.target.value))}
                     className="w-full accent-[#5eead4] cursor-pointer"
                   />
-                  <div className="flex justify-between text-[11px] text-teal-100/65 mt-1">
+                  <div className="flex justify-between text-[11px] text-teal-50/90 mt-1">
                     <span>1 sede principal</span>
                     <span>Visitas desde {formatUf(pricingConfig.addon_rates.extra_visit_uf)}</span>
                     <span>8 sedes</span>
@@ -1252,8 +1256,8 @@ export function SmartPricingAndQuoterSection({
               </div>
 
               {/* 2. Selector de Plataforma de Correo (Microsoft 365 / Google Workspace) */}
-              <div className="rounded-2xl border border-teal-300/25 bg-[#0b2233]/90 p-5">
-                <label className="block text-xs font-extrabold uppercase tracking-wider text-[#99f6e4] mb-3">
+              <div className="rounded-2xl border border-[#5eead4]/40 bg-[#215c84]/90 p-5 shadow-md">
+                <label className="block text-xs font-extrabold uppercase tracking-wider text-[#ccfbf1] mb-3">
                   ¿Utilizas Microsoft 365 o Google Workspace en tu empresa?
                 </label>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
@@ -1273,8 +1277,8 @@ export function SmartPricingAndQuoterSection({
                       }
                       className={`rounded-xl px-3 py-2.5 text-xs font-bold border transition-all ${
                         productivitySuite === opt.id
-                          ? 'bg-[#5eead4] text-slate-950 border-[#5eead4] font-extrabold shadow-md'
-                          : 'bg-[#081c2b] text-teal-50 border-teal-300/25 hover:border-[#5eead4]/50'
+                          ? 'bg-[#5eead4] text-slate-950 border-[#99f6e4] font-extrabold shadow-md'
+                          : 'bg-[#153f5e] text-white border-[#5eead4]/35 hover:border-[#99f6e4]'
                       }`}
                     >
                       {opt.label}
@@ -1284,8 +1288,8 @@ export function SmartPricingAndQuoterSection({
               </div>
 
               {/* 3. Modalidad de Soporte Requerido */}
-              <div className="rounded-2xl border border-teal-300/25 bg-[#0b2233]/90 p-5">
-                <label className="block text-xs font-extrabold uppercase tracking-wider text-[#99f6e4] mb-3">
+              <div className="rounded-2xl border border-[#5eead4]/40 bg-[#215c84]/90 p-5 shadow-md">
+                <label className="block text-xs font-extrabold uppercase tracking-wider text-[#ccfbf1] mb-3">
                   Modalidad de Soporte TI preferida
                 </label>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
@@ -1319,8 +1323,8 @@ export function SmartPricingAndQuoterSection({
                       }
                       className={`text-left rounded-xl p-3.5 border transition-all ${
                         supportModality === mod.id
-                          ? 'bg-[#143d59] border-[#5eead4] shadow-md'
-                          : 'bg-[#081c2b] border-teal-300/20 hover:border-teal-300/45'
+                          ? 'bg-[#1d6478] border-[#99f6e4] shadow-md'
+                          : 'bg-[#153f5e] border-[#5eead4]/30 hover:border-[#99f6e4]/60'
                       }`}
                     >
                       <div className="flex items-center justify-between">
@@ -1329,15 +1333,15 @@ export function SmartPricingAndQuoterSection({
                           <CheckCircle2 className="h-4 w-4 text-[#5eead4] shrink-0" />
                         )}
                       </div>
-                      <p className="text-[11px] text-teal-100/75 mt-1">{mod.desc}</p>
+                      <p className="text-[11px] text-teal-50/90 mt-1">{mod.desc}</p>
                     </button>
                   ))}
                 </div>
               </div>
 
               {/* 4. Requerimientos Técnicos Especializados (Monitoreo, Cloud, IA) */}
-              <div className="rounded-2xl border border-teal-300/25 bg-[#0b2233]/90 p-5">
-                <label className="block text-xs font-extrabold uppercase tracking-wider text-[#99f6e4] mb-3">
+              <div className="rounded-2xl border border-[#5eead4]/40 bg-[#215c84]/90 p-5 shadow-md">
+                <label className="block text-xs font-extrabold uppercase tracking-wider text-[#ccfbf1] mb-3">
                   Capas Tecnológicas Adicionales
                 </label>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -1346,8 +1350,8 @@ export function SmartPricingAndQuoterSection({
                     onClick={() => setRequiresMonitoring((v) => !v)}
                     className={`flex flex-col justify-between text-left rounded-xl p-3.5 border transition-all ${
                       requiresMonitoring
-                        ? 'bg-[#143d59] border-[#5eead4]'
-                        : 'bg-[#081c2b] border-teal-300/20 hover:border-teal-300/45'
+                        ? 'bg-[#1d6478] border-[#99f6e4]'
+                        : 'bg-[#153f5e] border-[#5eead4]/30 hover:border-[#99f6e4]/60'
                     }`}
                   >
                     <div className="flex items-center justify-between w-full mb-2">
@@ -1356,7 +1360,7 @@ export function SmartPricingAndQuoterSection({
                         className={`h-4 w-4 rounded flex items-center justify-center text-[10px] font-bold ${
                           requiresMonitoring
                             ? 'bg-[#5eead4] text-slate-950'
-                            : 'border border-teal-300/40'
+                            : 'border border-teal-200/50'
                         }`}
                       >
                         {requiresMonitoring && <Check className="h-3 w-3" />}
@@ -1366,7 +1370,7 @@ export function SmartPricingAndQuoterSection({
                       <div className="text-xs font-extrabold text-white">
                         Monitoreo de Infraestructura
                       </div>
-                      <div className="text-[11px] text-teal-100/70 mt-0.5">
+                      <div className="text-[11px] text-teal-50/85 mt-0.5">
                         Incluido en Business Pro / Enterprise
                       </div>
                     </div>
@@ -1377,8 +1381,8 @@ export function SmartPricingAndQuoterSection({
                     onClick={() => setRequiresCloud((v) => !v)}
                     className={`flex flex-col justify-between text-left rounded-xl p-3.5 border transition-all ${
                       requiresCloud
-                        ? 'bg-[#143d59] border-[#5eead4]'
-                        : 'bg-[#081c2b] border-teal-300/20 hover:border-teal-300/45'
+                        ? 'bg-[#1d6478] border-[#99f6e4]'
+                        : 'bg-[#153f5e] border-[#5eead4]/30 hover:border-[#99f6e4]/60'
                     }`}
                   >
                     <div className="flex items-center justify-between w-full mb-2">
@@ -1387,7 +1391,7 @@ export function SmartPricingAndQuoterSection({
                         className={`h-4 w-4 rounded flex items-center justify-center text-[10px] font-bold ${
                           requiresCloud
                             ? 'bg-[#5eead4] text-slate-950'
-                            : 'border border-teal-300/40'
+                            : 'border border-teal-200/50'
                         }`}
                       >
                         {requiresCloud && <Check className="h-3 w-3" />}
@@ -1397,8 +1401,9 @@ export function SmartPricingAndQuoterSection({
                       <div className="text-xs font-extrabold text-white">
                         Servicios Cloud & Respaldos
                       </div>
-                      <div className="text-[11px] text-teal-100/70 mt-0.5">
-                        Incluido en Enterprise (+{formatUf(pricingConfig.addon_rates.cloud_management_uf)} en otros)
+                      <div className="text-[11px] text-teal-50/85 mt-0.5">
+                        Incluido en Enterprise (+
+                        {formatUf(pricingConfig.addon_rates.cloud_management_uf)} en otros)
                       </div>
                     </div>
                   </button>
@@ -1408,8 +1413,8 @@ export function SmartPricingAndQuoterSection({
                     onClick={() => setRequiresAutomationAi((v) => !v)}
                     className={`flex flex-col justify-between text-left rounded-xl p-3.5 border transition-all ${
                       requiresAutomationAi
-                        ? 'bg-[#143d59] border-[#5eead4]'
-                        : 'bg-[#081c2b] border-teal-300/20 hover:border-teal-300/45'
+                        ? 'bg-[#1d6478] border-[#99f6e4]'
+                        : 'bg-[#153f5e] border-[#5eead4]/30 hover:border-[#99f6e4]/60'
                     }`}
                   >
                     <div className="flex items-center justify-between w-full mb-2">
@@ -1418,7 +1423,7 @@ export function SmartPricingAndQuoterSection({
                         className={`h-4 w-4 rounded flex items-center justify-center text-[10px] font-bold ${
                           requiresAutomationAi
                             ? 'bg-[#5eead4] text-slate-950'
-                            : 'border border-teal-300/40'
+                            : 'border border-teal-200/50'
                         }`}
                       >
                         {requiresAutomationAi && <Check className="h-3 w-3" />}
@@ -1428,8 +1433,9 @@ export function SmartPricingAndQuoterSection({
                       <div className="text-xs font-extrabold text-white">
                         Automatización & IA
                       </div>
-                      <div className="text-[11px] text-teal-100/70 mt-0.5">
-                        Flujos comerciales y bots (+{formatUf(pricingConfig.addon_rates.automation_ai_uf)})
+                      <div className="text-[11px] text-teal-50/85 mt-0.5">
+                        Flujos comerciales y bots (+
+                        {formatUf(pricingConfig.addon_rates.automation_ai_uf)})
                       </div>
                     </div>
                   </button>
@@ -1438,13 +1444,13 @@ export function SmartPricingAndQuoterSection({
             </div>
 
             {/* Columna Derecha (5 cols): Resultado del Cotizador y Desglose UF / CLP + IVA */}
-            <div className="lg:col-span-5 rounded-3xl border-2 border-[#5eead4] bg-gradient-to-b from-[#11354d] to-[#081c2b] p-6 sm:p-7 shadow-2xl">
+            <div className="lg:col-span-5 rounded-3xl border-2 border-[#99f6e4] bg-gradient-to-b from-[#1e6078] via-[#195068] to-[#144058] p-6 sm:p-7 shadow-2xl">
               <div className="flex items-center justify-between gap-2 mb-3">
                 <span className="inline-flex items-center gap-1.5 rounded-full bg-[#5eead4] px-3 py-1 text-[11px] font-extrabold uppercase tracking-wider text-slate-950">
                   <Sparkles className="h-3 w-3" />
                   <span>Plan Recomendado para ti</span>
                 </span>
-                <span className="text-xs font-bold text-[#99f6e4]">
+                <span className="text-xs font-bold text-[#ccfbf1]">
                   Base: {formatUf(quoteCalculation.selectedPlan.price_uf)}/mes
                 </span>
               </div>
@@ -1452,13 +1458,13 @@ export function SmartPricingAndQuoterSection({
               <h4 className="font-display text-2xl sm:text-3xl font-extrabold text-white">
                 {quoteCalculation.selectedPlan.name}
               </h4>
-              <p className="text-xs text-teal-100/85 mt-1.5 leading-relaxed">
+              <p className="text-xs text-teal-50/95 mt-1.5 leading-relaxed">
                 {quoteCalculation.recommendationReason}
               </p>
 
               {/* Selector rápido por si desea comparar otro plan base */}
-              <div className="mt-4 pt-3 border-t border-teal-300/20">
-                <div className="text-[10px] font-bold uppercase tracking-wider text-teal-200/75 mb-2">
+              <div className="mt-4 pt-3 border-t border-teal-200/30">
+                <div className="text-[10px] font-bold uppercase tracking-wider text-teal-100 mb-2">
                   Cambiar plan base manualmente:
                 </div>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5">
@@ -1473,8 +1479,8 @@ export function SmartPricingAndQuoterSection({
                       }
                       className={`rounded-lg px-2 py-1.5 text-[10px] font-extrabold border transition-all truncate ${
                         quoteCalculation.selectedPlan.slug === p.slug
-                          ? 'bg-[#5eead4]/25 border-[#5eead4] text-white'
-                          : 'bg-[#081c2b]/70 border-teal-300/20 text-teal-100/70 hover:text-white'
+                          ? 'bg-[#5eead4] border-[#99f6e4] text-slate-950'
+                          : 'bg-[#133b54] border-teal-200/30 text-teal-50 hover:text-white'
                       }`}
                     >
                       {p.name.replace('SITE ON ', '')}
@@ -1484,7 +1490,7 @@ export function SmartPricingAndQuoterSection({
               </div>
 
               {/* Desglose de precio base + adicionales sin doble cobro */}
-              <div className="mt-5 pt-4 border-t border-teal-300/20 space-y-2.5">
+              <div className="mt-5 pt-4 border-t border-teal-200/30 space-y-2.5">
                 <div className="flex items-center justify-between text-xs font-bold text-white">
                   <span>Precio base {quoteCalculation.selectedPlan.name}</span>
                   <span>
@@ -1498,10 +1504,10 @@ export function SmartPricingAndQuoterSection({
                     key={`${item.label}-${i}`}
                     className="flex items-start justify-between gap-3 text-xs"
                   >
-                    <span className="text-teal-100/85 flex items-start gap-1.5">
+                    <span className="text-teal-50/95 flex items-start gap-1.5">
                       <CheckCircle2
                         className={`h-3.5 w-3.5 shrink-0 mt-0.5 ${
-                          item.included_in_plan ? 'text-[#5eead4]' : 'text-[#67e8f9]'
+                          item.included_in_plan ? 'text-[#5eead4]' : 'text-[#99f6e4]'
                         }`}
                       />
                       <span>{item.label}</span>
@@ -1520,8 +1526,8 @@ export function SmartPricingAndQuoterSection({
               </div>
 
               {/* Totales Neto, IVA y Total con IVA */}
-              <div className="mt-6 rounded-2xl bg-[#071622] border border-teal-300/30 p-4 space-y-2">
-                <div className="flex items-center justify-between text-xs text-teal-100/85">
+              <div className="mt-6 rounded-2xl bg-[#11354c] border border-[#5eead4]/50 p-4 space-y-2">
+                <div className="flex items-center justify-between text-xs text-teal-50">
                   <span>Subtotal Mensual Neto:</span>
                   <span className="font-bold text-white">
                     {formatUf(quoteCalculation.configuration.net_uf)} •{' '}
@@ -1529,7 +1535,7 @@ export function SmartPricingAndQuoterSection({
                   </span>
                 </div>
 
-                <div className="flex items-center justify-between text-xs text-teal-100/75">
+                <div className="flex items-center justify-between text-xs text-teal-100">
                   <span>IVA ({quoteCalculation.ivaPct}%):</span>
                   <span>
                     {formatUf(quoteCalculation.configuration.iva_uf)} •{' '}
@@ -1537,9 +1543,9 @@ export function SmartPricingAndQuoterSection({
                   </span>
                 </div>
 
-                <div className="pt-2.5 border-t border-teal-300/20 flex items-baseline justify-between">
+                <div className="pt-2.5 border-t border-teal-200/25 flex items-baseline justify-between">
                   <div>
-                    <div className="text-[11px] font-extrabold uppercase tracking-wider text-[#99f6e4]">
+                    <div className="text-[11px] font-extrabold uppercase tracking-wider text-[#ccfbf1]">
                       Total Mensual Estimado (Con IVA)
                     </div>
                     <div className="text-xs font-bold text-[#5eead4] mt-0.5">
@@ -1550,14 +1556,14 @@ export function SmartPricingAndQuoterSection({
                     <div className="font-display text-2xl sm:text-3xl font-extrabold text-white">
                       {formatClp(quoteCalculation.configuration.total_clp_with_iva)}
                     </div>
-                    <div className="text-[10px] text-teal-100/70">
+                    <div className="text-[10px] text-teal-100">
                       ({formatUf(quoteCalculation.configuration.total_uf_with_iva)} IVA incl.)
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div className="mt-4 flex items-start gap-2 rounded-xl bg-[#0f2d42]/80 border border-teal-300/20 p-3 text-[11px] text-teal-100/85 leading-relaxed">
+              <div className="mt-4 flex items-start gap-2 rounded-xl bg-[#15425e] border border-[#5eead4]/35 p-3 text-[11px] text-teal-50 leading-relaxed">
                 <Info className="h-4 w-4 text-[#5eead4] shrink-0 mt-0.5" />
                 <span>
                   El valor final está sujeto a{' '}
@@ -1580,7 +1586,7 @@ export function SmartPricingAndQuoterSection({
                 <button
                   type="button"
                   onClick={handleSendQuoteToWhatsApp}
-                  className="w-full inline-flex items-center justify-center gap-2 rounded-full border border-[#5eead4]/40 bg-[#12354d] hover:bg-[#184563] py-3 px-5 text-xs font-extrabold text-white transition-all"
+                  className="w-full inline-flex items-center justify-center gap-2 rounded-full border border-[#99f6e4]/50 bg-[#184c6c] hover:bg-[#216187] py-3 px-5 text-xs font-extrabold text-white transition-all"
                 >
                   <MessageCircle className="h-4 w-4 text-[#5eead4]" />
                   <span>Enviar esta simulación por WhatsApp</span>
@@ -1590,16 +1596,16 @@ export function SmartPricingAndQuoterSection({
           </div>
         </div>
 
-        {/* ==================== 4. COMPARADOR DE CARACTERÍSTICAS DE PLANES ==================== */}
+        {/* ==================== 4. COMPARADOR DE CARACTERÍSTICAS DE PLANES (MÁS CLARO Y LUMINOSO) ==================== */}
         <div id="comparador-planes" className="scroll-mt-24 mb-20">
           <div className="text-center max-w-3xl mx-auto mb-10">
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-teal-300/30 bg-[#2dd4bf]/15 px-3.5 py-1 text-[11px] font-extrabold uppercase tracking-wider text-[#99f6e4]">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-[#5eead4]/50 bg-[#2dd4bf]/20 px-3.5 py-1 text-[11px] font-extrabold uppercase tracking-wider text-[#ccfbf1]">
               Comparativa Técnica Transparente
             </span>
             <h3 className="font-display text-2xl sm:text-4xl font-extrabold text-white mt-3">
               Compara qué incluye cada plan mensual
             </h3>
-            <p className="text-sm sm:text-base text-teal-50/80 mt-2">
+            <p className="text-sm sm:text-base text-teal-50/90 mt-2">
               Revisa en detalle los alcances de atención, administración de sistemas, respaldos y
               niveles de servicio (SLA) antes de solicitar tu diagnóstico.
             </p>
@@ -1607,7 +1613,7 @@ export function SmartPricingAndQuoterSection({
 
           {/* Selector adaptable para Móviles */}
           <div className="lg:hidden mb-6">
-            <div className="text-xs font-bold uppercase tracking-wider text-[#99f6e4] mb-2 text-center">
+            <div className="text-xs font-bold uppercase tracking-wider text-[#ccfbf1] mb-2 text-center">
               Selecciona un plan para ver sus características:
             </div>
             <div className="grid grid-cols-2 gap-2">
@@ -1618,8 +1624,8 @@ export function SmartPricingAndQuoterSection({
                   onClick={() => setMobileComparedPlanSlug(p.slug)}
                   className={`rounded-xl py-2.5 px-3 text-xs font-extrabold border transition-all ${
                     mobileComparedPlanSlug === p.slug
-                      ? 'bg-[#5eead4] text-slate-950 border-[#5eead4] shadow-md'
-                      : 'bg-[#0f2d42] text-teal-50 border-teal-300/25'
+                      ? 'bg-[#5eead4] text-slate-950 border-[#99f6e4] shadow-md'
+                      : 'bg-[#1c5175] text-white border-[#5eead4]/35'
                   }`}
                 >
                   {p.name} ({formatUf(p.price_uf)})
@@ -1633,8 +1639,8 @@ export function SmartPricingAndQuoterSection({
                 activePlans.find((p) => p.slug === mobileComparedPlanSlug) || activePlans[0];
               if (!mobilePlan) return null;
               return (
-                <div className="mt-4 rounded-3xl border border-[#5eead4]/40 bg-[#0f2d42]/95 p-5 space-y-3 shadow-xl">
-                  <div className="flex items-center justify-between border-b border-teal-300/20 pb-3">
+                <div className="mt-4 rounded-3xl border border-[#5eead4]/50 bg-[#1c5175]/95 p-5 space-y-3 shadow-xl">
+                  <div className="flex items-center justify-between border-b border-teal-200/25 pb-3">
                     <div>
                       <h4 className="font-display text-lg font-extrabold text-white">
                         {mobilePlan.name}
@@ -1654,7 +1660,7 @@ export function SmartPricingAndQuoterSection({
                     </button>
                   </div>
 
-                  <div className="divide-y divide-teal-300/15">
+                  <div className="divide-y divide-teal-200/20">
                     {pricingConfig.comparison_rows.map((row) => {
                       const val = row.values[mobilePlan.slug];
                       return (
@@ -1662,14 +1668,14 @@ export function SmartPricingAndQuoterSection({
                           key={row.id}
                           className="py-2.5 flex items-center justify-between gap-4 text-xs"
                         >
-                          <span className="font-bold text-teal-100">{row.feature_name}</span>
+                          <span className="font-bold text-teal-50">{row.feature_name}</span>
                           <span className="text-right font-semibold text-white">
                             {val === true ? (
                               <span className="inline-flex items-center gap-1 text-[#5eead4]">
                                 <CheckCircle2 className="h-4 w-4" /> Incluido
                               </span>
                             ) : val === false ? (
-                              <span className="text-teal-200/40">No incluido</span>
+                              <span className="text-teal-100/50">No incluido</span>
                             ) : (
                               String(val)
                             )}
@@ -1684,18 +1690,18 @@ export function SmartPricingAndQuoterSection({
           </div>
 
           {/* Tabla Comparativa Completa para Escritorio */}
-          <div className="hidden lg:block overflow-hidden rounded-3xl border border-teal-300/25 bg-[#0c2436]/95 shadow-2xl">
+          <div className="hidden lg:block overflow-hidden rounded-3xl border border-[#5eead4]/45 bg-[#1b4e70]/95 shadow-2xl">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="border-b border-teal-300/25 bg-[#081a28]">
-                  <th className="py-5 px-6 text-xs font-extrabold uppercase tracking-wider text-[#99f6e4] w-[24%]">
+                <tr className="border-b border-teal-200/30 bg-[#143d59]">
+                  <th className="py-5 px-6 text-xs font-extrabold uppercase tracking-wider text-[#ccfbf1] w-[24%]">
                     Característica / Servicio
                   </th>
                   {activePlans.map((plan) => (
                     <th
                       key={plan.slug}
                       className={`py-5 px-5 text-center w-[19%] ${
-                        plan.recommended ? 'bg-[#143d59]/75 border-x border-[#5eead4]/40' : ''
+                        plan.recommended ? 'bg-[#1f657c]/90 border-x border-[#99f6e4]/50' : ''
                       }`}
                     >
                       {plan.recommended && (
@@ -1710,18 +1716,18 @@ export function SmartPricingAndQuoterSection({
                         {plan.is_from_price ? 'Desde ' : ''}
                         {formatUf(plan.price_uf)} / mes
                       </div>
-                      <div className="text-[11px] text-teal-100/75">
+                      <div className="text-[11px] text-teal-50/90">
                         {formatClp(convertUfToClp(plan.price_uf, ufRateClp))} + IVA
                       </div>
                     </th>
                   ))}
                 </tr>
               </thead>
-              <tbody className="divide-y divide-teal-300/15 text-xs">
+              <tbody className="divide-y divide-teal-200/20 text-xs">
                 {pricingConfig.comparison_rows.map((row) => (
                   <tr
                     key={row.id}
-                    className="hover:bg-[#113249]/60 transition-colors"
+                    className="hover:bg-[#235f87]/60 transition-colors"
                   >
                     <td className="py-4 px-6 font-bold text-white">{row.feature_name}</td>
                     {activePlans.map((plan) => {
@@ -1731,8 +1737,8 @@ export function SmartPricingAndQuoterSection({
                           key={`${row.id}-${plan.slug}`}
                           className={`py-4 px-5 text-center ${
                             plan.recommended
-                              ? 'bg-[#143d59]/40 border-x border-[#5eead4]/30 font-semibold text-white'
-                              : 'text-teal-50/90'
+                              ? 'bg-[#1f657c]/55 border-x border-[#99f6e4]/40 font-semibold text-white'
+                              : 'text-teal-50'
                           }`}
                         >
                           {val === true ? (
@@ -1741,7 +1747,7 @@ export function SmartPricingAndQuoterSection({
                               <span>Incluido</span>
                             </span>
                           ) : val === false ? (
-                            <span className="inline-flex items-center justify-center text-teal-200/35">
+                            <span className="inline-flex items-center justify-center text-teal-100/45">
                               —
                             </span>
                           ) : (
@@ -1754,15 +1760,15 @@ export function SmartPricingAndQuoterSection({
                 ))}
 
                 {/* Fila final de botones CTA */}
-                <tr className="bg-[#081a28]/90">
-                  <td className="py-5 px-6 text-xs font-bold text-[#99f6e4]">
+                <tr className="bg-[#143d59]/95">
+                  <td className="py-5 px-6 text-xs font-bold text-[#ccfbf1]">
                     Comienza con diagnóstico gratis
                   </td>
                   {activePlans.map((plan) => (
                     <td
                       key={`cta-${plan.slug}`}
                       className={`py-5 px-4 text-center ${
-                        plan.recommended ? 'bg-[#143d59]/60 border-x border-[#5eead4]/40' : ''
+                        plan.recommended ? 'bg-[#1f657c]/80 border-x border-[#99f6e4]/50' : ''
                       }`}
                     >
                       <button
@@ -1771,7 +1777,7 @@ export function SmartPricingAndQuoterSection({
                         className={`w-full rounded-full py-2.5 px-3 text-xs font-extrabold transition-all ${
                           plan.recommended
                             ? 'bg-[#5eead4] hover:bg-[#99f6e4] text-slate-950 shadow-md'
-                            : 'bg-[#174666] hover:bg-[#5eead4] text-white hover:text-slate-950 border border-[#5eead4]/35'
+                            : 'bg-[#23648e] hover:bg-[#5eead4] text-white hover:text-slate-950 border border-[#99f6e4]/45'
                         }`}
                       >
                         {plan.cta_label}
@@ -1787,35 +1793,35 @@ export function SmartPricingAndQuoterSection({
         {/* ==================== 5. REGLAS COMERCIALES, ALCANCE Y EXCLUSIONES ==================== */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Condiciones Operativas y Alcance */}
-          <div className="rounded-3xl border border-teal-300/25 bg-[#0f2d42]/90 p-7 shadow-xl">
+          <div className="rounded-3xl border border-[#5eead4]/40 bg-[#1d5377]/90 p-7 shadow-xl">
             <div className="flex items-center gap-3 mb-4">
-              <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#2dd4bf]/20 border border-[#5eead4]/40 text-[#5eead4]">
+              <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#5eead4]/25 border border-[#99f6e4]/50 text-[#5eead4]">
                 <FileCheck2 className="h-5 w-5" />
               </div>
               <div>
                 <h4 className="font-display text-lg font-extrabold text-white">
                   Condiciones de Contratación y Operación
                 </h4>
-                <p className="text-xs text-[#99f6e4]">
+                <p className="text-xs text-[#ccfbf1]">
                   Claridad comercial desde el primer día, sin letra chica
                 </p>
               </div>
             </div>
 
             <div className="mb-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <div className="rounded-xl bg-[#081c2b]/90 border border-teal-300/20 p-3.5">
+              <div className="rounded-xl bg-[#143d59] border border-[#5eead4]/35 p-3.5">
                 <div className="flex items-center gap-1.5 text-[11px] font-extrabold uppercase tracking-wider text-[#5eead4]">
                   <Clock className="h-3.5 w-3.5" />
                   <span>Horario Hábil de Soporte</span>
                 </div>
-                <p className="text-xs text-teal-50/90 mt-1">{pricingConfig.support_hours}</p>
+                <p className="text-xs text-white/95 mt-1">{pricingConfig.support_hours}</p>
               </div>
-              <div className="rounded-xl bg-[#081c2b]/90 border border-teal-300/20 p-3.5">
+              <div className="rounded-xl bg-[#143d59] border border-[#5eead4]/35 p-3.5">
                 <div className="flex items-center gap-1.5 text-[11px] font-extrabold uppercase tracking-wider text-[#5eead4]">
                   <Building2 className="h-3.5 w-3.5" />
                   <span>Cobertura de Visitas</span>
                 </div>
-                <p className="text-xs text-teal-50/90 mt-1">
+                <p className="text-xs text-white/95 mt-1">
                   {pricingConfig.onsite_coverage_area}
                 </p>
               </div>
@@ -1825,7 +1831,7 @@ export function SmartPricingAndQuoterSection({
               {pricingConfig.hiring_conditions.map((cond, idx) => (
                 <li
                   key={idx}
-                  className="flex items-start gap-2.5 text-xs text-teal-50/90 leading-relaxed"
+                  className="flex items-start gap-2.5 text-xs text-white/95 leading-relaxed"
                 >
                   <CheckCircle2 className="h-4 w-4 text-[#5eead4] shrink-0 mt-0.5" />
                   <span>{cond}</span>
@@ -1835,17 +1841,17 @@ export function SmartPricingAndQuoterSection({
           </div>
 
           {/* Exclusiones y Servicios Cotizables por Separado */}
-          <div className="rounded-3xl border border-teal-300/25 bg-[#0f2d42]/90 p-7 shadow-xl flex flex-col justify-between">
+          <div className="rounded-3xl border border-[#5eead4]/40 bg-[#1d5377]/90 p-7 shadow-xl flex flex-col justify-between">
             <div>
               <div className="flex items-center gap-3 mb-4">
-                <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-amber-400/15 border border-amber-300/40 text-amber-300">
+                <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-amber-400/20 border border-amber-300/50 text-amber-200">
                   <ShieldAlert className="h-5 w-5" />
                 </div>
                 <div>
                   <h4 className="font-display text-lg font-extrabold text-white">
                     Exclusiones del Abono Mensual (Cotización Independiente)
                   </h4>
-                  <p className="text-xs text-amber-200/90">
+                  <p className="text-xs text-amber-100">
                     Servicios y suministros que se presupuestan por proyecto o requerimiento
                   </p>
                 </div>
@@ -1855,7 +1861,7 @@ export function SmartPricingAndQuoterSection({
                 {pricingConfig.exclusions.map((excl, idx) => (
                   <li
                     key={idx}
-                    className="flex items-start gap-2.5 text-xs text-teal-50/85 leading-relaxed"
+                    className="flex items-start gap-2.5 text-xs text-white/95 leading-relaxed"
                   >
                     <ChevronRight className="h-4 w-4 text-amber-300 shrink-0 mt-0.5" />
                     <span>{excl}</span>
@@ -1864,8 +1870,8 @@ export function SmartPricingAndQuoterSection({
               </ul>
             </div>
 
-            <div className="pt-4 border-t border-teal-300/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-              <span className="text-xs text-teal-100/80">
+            <div className="pt-4 border-t border-teal-200/25 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+              <span className="text-xs text-teal-50">
                 ¿Necesitas una migración, servidor nuevo, cableado de red o proyecto especial?
               </span>
               <button
@@ -1884,7 +1890,7 @@ export function SmartPricingAndQuoterSection({
                     setModalOpen(true);
                   }
                 }}
-                className="shrink-0 inline-flex items-center gap-1.5 rounded-full bg-[#174666] hover:bg-[#5eead4] text-white hover:text-slate-950 border border-[#5eead4]/40 px-4 py-2 text-xs font-extrabold transition-all"
+                className="shrink-0 inline-flex items-center gap-1.5 rounded-full bg-[#23648e] hover:bg-[#5eead4] text-white hover:text-slate-950 border border-[#99f6e4]/50 px-4 py-2 text-xs font-extrabold transition-all"
               >
                 <span>Cotizar proyecto independiente</span>
                 <ArrowRight className="h-3.5 w-3.5" />
@@ -1894,7 +1900,7 @@ export function SmartPricingAndQuoterSection({
         </div>
 
         {/* Nota legal inferior */}
-        <p className="mt-8 text-center text-xs text-teal-100/65 max-w-4xl mx-auto leading-relaxed">
+        <p className="mt-8 text-center text-xs text-teal-50/85 max-w-4xl mx-auto leading-relaxed">
           * {pricingConfig.legal_disclaimer}
         </p>
       </div>
@@ -1902,12 +1908,12 @@ export function SmartPricingAndQuoterSection({
       {/* ==================== 6. MODAL DE SOLICITUD DE DIAGNÓSTICO Y PROPUESTA ==================== */}
       {modalOpen && (
         <div
-          className="fixed inset-0 z-[120] flex items-center justify-center bg-slate-950/80 backdrop-blur-md p-4 overflow-y-auto"
+          className="fixed inset-0 z-[120] flex items-center justify-center bg-slate-950/75 backdrop-blur-md p-4 overflow-y-auto"
           role="dialog"
           aria-modal="true"
           aria-labelledby="modal-diagnostic-title"
         >
-          <div className="relative w-full max-w-2xl rounded-3xl border-2 border-[#5eead4] bg-[#0b2436] p-6 sm:p-8 text-white shadow-[0_25px_80px_rgba(0,0,0,0.85)] my-8">
+          <div className="relative w-full max-w-2xl rounded-3xl border-2 border-[#99f6e4] bg-[#184868] p-6 sm:p-8 text-white shadow-[0_25px_80px_rgba(0,0,0,0.85)] my-8">
             <button
               type="button"
               onClick={() => setModalOpen(false)}
@@ -1919,31 +1925,31 @@ export function SmartPricingAndQuoterSection({
 
             {submitSuccess ? (
               <div className="py-6 text-center space-y-5">
-                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[#5eead4]/20 border-2 border-[#5eead4] text-[#5eead4]">
+                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[#5eead4]/25 border-2 border-[#5eead4] text-[#5eead4]">
                   <CheckCircle2 className="h-9 w-9" />
                 </div>
 
                 <div>
-                  <span className="inline-block rounded-full bg-[#5eead4]/20 border border-[#5eead4]/40 px-3.5 py-1 text-xs font-extrabold text-[#99f6e4]">
+                  <span className="inline-block rounded-full bg-[#5eead4]/25 border border-[#99f6e4]/50 px-3.5 py-1 text-xs font-extrabold text-[#ccfbf1]">
                     Código de Solicitud CRM: {submitSuccess.leadCode}
                   </span>
                   <h3 className="font-display text-2xl sm:text-3xl font-extrabold text-white mt-3">
                     ¡Diagnóstico Solicitado con Éxito!
                   </h3>
-                  <p className="text-sm text-teal-100/85 mt-2 max-w-lg mx-auto leading-relaxed">
+                  <p className="text-sm text-teal-50 mt-2 max-w-lg mx-auto leading-relaxed">
                     {submitSuccess.message}
                   </p>
                 </div>
 
-                <div className="rounded-2xl bg-[#081a28] border border-teal-300/25 p-4 max-w-md mx-auto text-left text-xs space-y-1.5">
+                <div className="rounded-2xl bg-[#123750] border border-[#5eead4]/40 p-4 max-w-md mx-auto text-left text-xs space-y-1.5">
                   <div className="flex justify-between">
-                    <span className="text-teal-100/70">Plan preseleccionado:</span>
+                    <span className="text-teal-100">Plan preseleccionado:</span>
                     <span className="font-extrabold text-[#5eead4]">
                       {submitSuccess.planName}
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-teal-100/70">Estado en CRM Site On:</span>
+                    <span className="text-teal-100">Estado en CRM Site On:</span>
                     <span className="font-bold text-emerald-300">
                       Nuevo • Asignado a Ingeniería
                     </span>
@@ -1962,7 +1968,7 @@ export function SmartPricingAndQuoterSection({
                   <button
                     type="button"
                     onClick={() => setModalOpen(false)}
-                    className="inline-flex items-center gap-2 rounded-full border border-teal-300/30 bg-[#133852] px-6 py-3 text-xs font-bold text-white"
+                    className="inline-flex items-center gap-2 rounded-full border border-teal-200/40 bg-[#133852] px-6 py-3 text-xs font-bold text-white"
                   >
                     <span>Volver a los planes</span>
                   </button>
@@ -1971,7 +1977,7 @@ export function SmartPricingAndQuoterSection({
             ) : (
               <div>
                 <div className="pr-8">
-                  <span className="inline-flex items-center gap-1.5 rounded-full bg-[#5eead4]/20 border border-[#5eead4]/40 px-3 py-1 text-[11px] font-extrabold uppercase tracking-wider text-[#99f6e4]">
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-[#5eead4]/25 border border-[#99f6e4]/50 px-3 py-1 text-[11px] font-extrabold uppercase tracking-wider text-[#ccfbf1]">
                     <ShieldCheck className="h-3.5 w-3.5 text-[#5eead4]" />
                     <span>Diagnóstico Inicial Gratuito • Sin Compromiso</span>
                   </span>
@@ -1996,15 +2002,19 @@ export function SmartPricingAndQuoterSection({
                   );
 
                   return (
-                    <div className="mt-4 mb-5 rounded-2xl bg-[#071824] border border-[#5eead4]/40 p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <div className="mt-4 mb-5 rounded-2xl bg-[#123750] border border-[#5eead4]/50 p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                       <div>
-                        <div className="text-[11px] font-bold uppercase tracking-wider text-[#99f6e4]">
+                        <div className="text-[11px] font-bold uppercase tracking-wider text-[#ccfbf1]">
                           {isQuoter ? 'Configuración del Cotizador Web' : 'Plan Seleccionado'}
                         </div>
                         <div className="text-base font-extrabold text-white">
                           {activePlan.name}{' '}
-                          <span className="text-xs font-normal text-teal-100/80">
-                            ({isQuoter ? `${usersCount} usuarios, ${computersCount} equipos, ${serversCount} srv` : `Hasta ${activePlan.max_users} usuarios`})
+                          <span className="text-xs font-normal text-teal-50">
+                            (
+                            {isQuoter
+                              ? `${usersCount} usuarios, ${computersCount} equipos, ${serversCount} srv`
+                              : `Hasta ${activePlan.max_users} usuarios`}
+                            )
                           </span>
                         </div>
                       </div>
@@ -2012,7 +2022,7 @@ export function SmartPricingAndQuoterSection({
                         <div className="text-sm font-extrabold text-[#5eead4]">
                           {formatUf(netUf)} / mes + IVA
                         </div>
-                        <div className="text-[11px] text-teal-100/75">
+                        <div className="text-[11px] text-teal-50">
                           Neto: {formatClp(netClp)} • c/IVA: {formatClp(totalClpWithIva)}
                         </div>
                       </div>
@@ -2034,7 +2044,7 @@ export function SmartPricingAndQuoterSection({
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-xs font-bold text-teal-50 mb-1">
+                      <label className="block text-xs font-bold text-white mb-1">
                         Nombre y Apellido *
                       </label>
                       <input
@@ -2043,12 +2053,12 @@ export function SmartPricingAndQuoterSection({
                         placeholder="Ej: Rodrigo Pérez"
                         value={formFullName}
                         onChange={(e) => setFormFullName(e.target.value)}
-                        className="w-full rounded-xl border border-teal-300/30 bg-[#071824] px-3.5 py-2.5 text-sm text-white placeholder-teal-200/40 focus:border-[#5eead4] focus:outline-none"
+                        className="w-full rounded-xl border border-[#5eead4]/40 bg-[#11354d] px-3.5 py-2.5 text-sm text-white placeholder-teal-100/50 focus:border-[#99f6e4] focus:outline-none"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-xs font-bold text-teal-50 mb-1">
+                      <label className="block text-xs font-bold text-white mb-1">
                         Empresa / Organización
                       </label>
                       <input
@@ -2056,12 +2066,12 @@ export function SmartPricingAndQuoterSection({
                         placeholder="Nombre de tu empresa"
                         value={formCompany}
                         onChange={(e) => setFormCompany(e.target.value)}
-                        className="w-full rounded-xl border border-teal-300/30 bg-[#071824] px-3.5 py-2.5 text-sm text-white placeholder-teal-200/40 focus:border-[#5eead4] focus:outline-none"
+                        className="w-full rounded-xl border border-[#5eead4]/40 bg-[#11354d] px-3.5 py-2.5 text-sm text-white placeholder-teal-100/50 focus:border-[#99f6e4] focus:outline-none"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-xs font-bold text-teal-50 mb-1">
+                      <label className="block text-xs font-bold text-white mb-1">
                         Correo Corporativo o de Contacto *
                       </label>
                       <input
@@ -2070,12 +2080,12 @@ export function SmartPricingAndQuoterSection({
                         placeholder="nombre@tuempresa.cl"
                         value={formEmail}
                         onChange={(e) => setFormEmail(e.target.value)}
-                        className="w-full rounded-xl border border-teal-300/30 bg-[#071824] px-3.5 py-2.5 text-sm text-white placeholder-teal-200/40 focus:border-[#5eead4] focus:outline-none"
+                        className="w-full rounded-xl border border-[#5eead4]/40 bg-[#11354d] px-3.5 py-2.5 text-sm text-white placeholder-teal-100/50 focus:border-[#99f6e4] focus:outline-none"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-xs font-bold text-teal-50 mb-1">
+                      <label className="block text-xs font-bold text-white mb-1">
                         Teléfono / WhatsApp Directo *
                       </label>
                       <input
@@ -2084,14 +2094,14 @@ export function SmartPricingAndQuoterSection({
                         placeholder="+56 9 XXXX XXXX"
                         value={formPhone}
                         onChange={(e) => setFormPhone(e.target.value)}
-                        className="w-full rounded-xl border border-teal-300/30 bg-[#071824] px-3.5 py-2.5 text-sm text-white placeholder-teal-200/40 focus:border-[#5eead4] focus:outline-none"
+                        className="w-full rounded-xl border border-[#5eead4]/40 bg-[#11354d] px-3.5 py-2.5 text-sm text-white placeholder-teal-100/50 focus:border-[#99f6e4] focus:outline-none"
                       />
                     </div>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 items-center">
                     <div>
-                      <label className="block text-xs font-bold text-teal-50 mb-1">
+                      <label className="block text-xs font-bold text-white mb-1">
                         Cantidad de Usuarios *
                       </label>
                       <input
@@ -2101,17 +2111,17 @@ export function SmartPricingAndQuoterSection({
                         required
                         value={formUsersCount}
                         onChange={(e) => setFormUsersCount(Math.max(1, Number(e.target.value)))}
-                        className="w-full rounded-xl border border-teal-300/30 bg-[#071824] px-3.5 py-2.5 text-sm font-bold text-[#5eead4] focus:border-[#5eead4] focus:outline-none"
+                        className="w-full rounded-xl border border-[#5eead4]/40 bg-[#11354d] px-3.5 py-2.5 text-sm font-bold text-[#5eead4] focus:border-[#99f6e4] focus:outline-none"
                       />
                     </div>
-                    <div className="sm:col-span-2 text-xs text-teal-100/75 pt-4">
+                    <div className="sm:col-span-2 text-xs text-teal-50/90 pt-4">
                       Validaremos presencialmente o en remoto la cantidad exacta de estaciones de
                       trabajo, cuentas de correo y red durante el diagnóstico gratuito.
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-xs font-bold text-teal-50 mb-1">
+                    <label className="block text-xs font-bold text-white mb-1">
                       Detalles de tu necesidad o situación actual *
                     </label>
                     <textarea
@@ -2119,11 +2129,11 @@ export function SmartPricingAndQuoterSection({
                       required
                       value={formDescription}
                       onChange={(e) => setFormDescription(e.target.value)}
-                      className="w-full rounded-xl border border-teal-300/30 bg-[#071824] px-3.5 py-2.5 text-xs text-white placeholder-teal-200/40 focus:border-[#5eead4] focus:outline-none leading-relaxed"
+                      className="w-full rounded-xl border border-[#5eead4]/40 bg-[#11354d] px-3.5 py-2.5 text-xs text-white placeholder-teal-100/50 focus:border-[#99f6e4] focus:outline-none leading-relaxed"
                     />
                   </div>
 
-                  <label className="flex items-start gap-2.5 text-xs text-teal-100/85 cursor-pointer">
+                  <label className="flex items-start gap-2.5 text-xs text-teal-50 cursor-pointer">
                     <input
                       type="checkbox"
                       checked={formPrivacy}
@@ -2156,7 +2166,7 @@ export function SmartPricingAndQuoterSection({
                     <button
                       type="button"
                       onClick={() => setModalOpen(false)}
-                      className="w-full sm:w-auto rounded-full border border-teal-300/30 px-5 py-3 text-xs font-bold text-teal-100 hover:bg-white/5"
+                      className="w-full sm:w-auto rounded-full border border-teal-200/40 px-5 py-3 text-xs font-bold text-teal-50 hover:bg-white/10"
                     >
                       Cancelar
                     </button>
@@ -2187,4 +2197,3 @@ export function SmartPricingAndQuoterSection({
     </section>
   );
 }
-

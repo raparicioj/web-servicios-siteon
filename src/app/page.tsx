@@ -128,21 +128,82 @@ export default async function HomePage() {
                     stroke="rgba(103, 232, 249, 0.35)"
                     strokeWidth="1.2"
                   />
-                  {/* Líneas radiales del núcleo a los nodos */}
-                  <line x1="250" y1="250" x2="250" y2="85" stroke="rgba(94,234,212,0.45)" strokeDasharray="4 4" />
-                  <line x1="250" y1="250" x2="395" y2="165" stroke="rgba(94,234,212,0.45)" strokeDasharray="4 4" />
-                  <line x1="250" y1="250" x2="395" y2="335" stroke="rgba(94,234,212,0.45)" strokeDasharray="4 4" />
-                  <line x1="250" y1="250" x2="105" y2="335" stroke="rgba(94,234,212,0.45)" strokeDasharray="4 4" />
-                  <line x1="250" y1="250" x2="105" y2="165" stroke="rgba(94,234,212,0.45)" strokeDasharray="4 4" />
+                  {/* Líneas radiales desde el perímetro del núcleo hacia los nodos (sin cruzar detrás del cristal) */}
+                  <line x1="250" y1="176" x2="250" y2="85" stroke="rgba(94,234,212,0.4)" strokeDasharray="4 4" />
+                  <line x1="314" y1="213" x2="395" y2="165" stroke="rgba(94,234,212,0.4)" strokeDasharray="4 4" />
+                  <line x1="314" y1="287" x2="395" y2="335" stroke="rgba(94,234,212,0.4)" strokeDasharray="4 4" />
+                  <line x1="186" y1="287" x2="105" y2="335" stroke="rgba(94,234,212,0.4)" strokeDasharray="4 4" />
+                  <line x1="186" y1="213" x2="105" y2="165" stroke="rgba(94,234,212,0.4)" strokeDasharray="4 4" />
                 </svg>
 
-                {/* NODO CENTRAL: SITE ON CORE */}
-                <div className="relative z-10 flex flex-col items-center justify-center w-36 h-36 rounded-full bg-[#0f2d42] border-2 border-[#5eead4] shadow-[0_0_55px_rgba(94,234,212,0.45)] text-center p-3">
-                  <span className="text-sm font-extrabold tracking-wider text-white">
+                {/* NODO CENTRAL: ISOTIPO SITE ON SUTIL Y TRANSLÚCIDO */}
+                <div className="relative z-10 flex flex-col items-center justify-center w-36 h-36 rounded-full bg-[#0e2a3f]/45 backdrop-blur-md border border-[#5eead4]/40 shadow-[0_0_42px_rgba(94,234,212,0.18)] text-center p-3 transition-all duration-500 hover:bg-[#12344d]/55 hover:border-[#99f6e4]/60">
+                  <div
+                    aria-hidden="true"
+                    className="pointer-events-none absolute inset-1.5 rounded-full border border-[#99f6e4]/15"
+                  />
+                  <svg
+                    viewBox="0 0 120 104"
+                    className="w-16 h-14 opacity-85 drop-shadow-[0_2px_10px_rgba(94,234,212,0.22)]"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    aria-label="Logo Site On Tecnología"
+                  >
+                    <defs>
+                      <linearGradient id="heroCoreRing" x1="10" y1="60" x2="112" y2="85" gradientUnits="userSpaceOnUse">
+                        <stop offset="0%" stopColor="#5eead4" stopOpacity="0.88" />
+                        <stop offset="50%" stopColor="#38bdf8" stopOpacity="0.82" />
+                        <stop offset="100%" stopColor="#0284c7" stopOpacity="0.75" />
+                      </linearGradient>
+                      <linearGradient id="heroCoreTileTop" x1="0" y1="0" x2="1" y2="1">
+                        <stop offset="0%" stopColor="#ccfbf1" stopOpacity="0.9" />
+                        <stop offset="100%" stopColor="#38bdf8" stopOpacity="0.8" />
+                      </linearGradient>
+                      <linearGradient id="heroCoreTileMid" x1="0" y1="0" x2="1" y2="1">
+                        <stop offset="0%" stopColor="#5eead4" stopOpacity="0.85" />
+                        <stop offset="100%" stopColor="#06b6d4" stopOpacity="0.78" />
+                      </linearGradient>
+                      <linearGradient id="heroCoreTileBot" x1="0" y1="0" x2="1" y2="1">
+                        <stop offset="0%" stopColor="#2dd4bf" stopOpacity="0.82" />
+                        <stop offset="100%" stopColor="#0284c7" stopOpacity="0.72" />
+                      </linearGradient>
+                    </defs>
+
+                    {/* Anillo Orbital Corporativo Site On */}
+                    <path
+                      d="M36 44 C 12 54, 8 78, 32 90 C 58 102, 98 94, 110 74 C 115 64, 108 53, 95 47 C 104 54, 107 64, 101 73 C 90 88, 56 93, 35 82 C 18 73, 20 55, 36 44 Z"
+                      fill="url(#heroCoreRing)"
+                    />
+
+                    {/* Grilla de Cubos en Perspectiva Isométrica */}
+                    <g transform="rotate(-19 62 46)">
+                      <rect x="29" y="18" width="13" height="13" rx="3.2" fill="url(#heroCoreTileTop)" />
+                      <rect x="47" y="15" width="16" height="15" rx="3.5" fill="url(#heroCoreTileTop)" />
+                      <rect x="68" y="15" width="19" height="17" rx="4" fill="url(#heroCoreTileTop)" />
+
+                      <rect
+                        x="44"
+                        y="34"
+                        width="17"
+                        height="17"
+                        rx="4"
+                        fill="#f0fdfa"
+                        fillOpacity="0.9"
+                        stroke="#5eead4"
+                        strokeWidth="1"
+                      />
+                      <rect x="66" y="36" width="20" height="18" rx="4.2" fill="url(#heroCoreTileMid)" />
+
+                      <rect x="41" y="55" width="18" height="18" rx="4.2" fill="url(#heroCoreTileBot)" />
+                      <rect x="63" y="58" width="20" height="19" rx="4.5" fill="url(#heroCoreTileBot)" />
+                    </g>
+                  </svg>
+
+                  <span className="font-display text-[11px] font-extrabold tracking-[0.2em] text-white/90 leading-none mt-1">
                     SITE ON
                   </span>
-                  <span className="text-[10px] font-extrabold uppercase tracking-widest text-[#5eead4] mt-0.5">
-                    Continuidad TI
+                  <span className="text-[8.5px] font-bold uppercase tracking-[0.22em] text-[#5eead4]/80 mt-0.5">
+                    TECNOLOGÍA
                   </span>
                 </div>
 

@@ -10,7 +10,7 @@ export const DEFAULT_PLATFORM_SETTINGS: PlatformSettings = {
   whatsapp_default_message:
     'Hola, llegué a Site On y quisiera recibir información sobre sus servicios de soporte y soluciones tecnológicas.',
   contact_email: 'contacto@siteon.cl',
-  notification_email: 'contacto@siteon.cl',
+  notification_email: 'raparicioj@gmail.com',
   city: 'Viña del Mar',
   region: 'Región de Valparaíso',
   country: 'Chile',

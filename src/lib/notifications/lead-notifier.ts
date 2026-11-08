@@ -17,7 +17,10 @@ export async function notifyNewLead(
   const notifyEmail =
     settings.notification_email ||
     process.env.SITEON_NOTIFY_EMAIL ||
-    'contacto@siteon.cl';
+    'raparicioj@gmail.com';
+  const recipients = Array.from(
+    new Set([notifyEmail, 'raparicioj@gmail.com', 'contacto@siteon.cl'])
+  );
 
   // 1. Envío por correo mediante Resend API (si RESEND_API_KEY está configurada)
   if (settings.resend_enabled && resendApiKey) {
@@ -59,7 +62,7 @@ export async function notifyNewLead(
         },
         body: JSON.stringify({
           from: 'Site On CRM <notificaciones@siteon.cl>',
-          to: [notifyEmail],
+          to: recipients,
           reply_to: lead.email,
           subject: `[Nuevo Lead ${lead.lead_code}] ${lead.full_name} — ${lead.service_name}`,
           html: htmlBody,

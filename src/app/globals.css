@@ -1,0 +1,45 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Fondo Calipso Oceánico Claro y Luminoso */
+body {
+  background-color: #0d2638;
+  background-image: radial-gradient(ellipse at 50% 0%, rgba(45, 212, 191, 0.22) 0%, rgba(34, 211, 238, 0.14) 45%, #0d2638 85%);
+  color: #f8fafc;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  overflow-x: hidden;
+}
+
+/* Cuadrícula arquitectónica calipso sutil estilo NPEC / Hexacore */
+.bg-architect-grid {
+  background-size: 56px 56px;
+  background-image: linear-gradient(to right, rgba(94, 234, 212, 0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(94, 234, 212, 0.06) 1px, transparent 1px);
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0d2638;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1c4b66;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #2dd4bf;
+}

@@ -1,8 +1,8 @@
 import mqtt from 'mqtt';
 
-const SUPABASE_URL = 'https://wlwadurbzzhlztxrvndp.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_0m8kTrv2R9L1InKHTu05tA_7dyUnAzN';
-const WEBHOOK_URL = 'https://hook.us2.make.com/8s77yqszg3dhcyr34iwu02xxwk3sxdtt';
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
+const WEBHOOK_URL = process.env.SITEON_MAKE_WEBHOOK_URL || '';
 const TOPIC = 'siteon/mi_calendario/carmen_rodrigo/v16_sync';
 const BROKER = 'mqtt://broker.emqx.io:1883';
 const BACKUP_BROKER = 'mqtt://broker.hivemq.com:1883';

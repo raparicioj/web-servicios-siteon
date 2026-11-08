@@ -79,10 +79,135 @@ export async function notifyNewLead(
       });
 
       if (mgRes.ok) {
-        channels.push('mailgun_email');
+        channels.push('mailgun_admin_email');
       } else {
         const errText = await mgRes.text();
-        errors.push(`Mailgun HTTP ${mgRes.status}: ${errText.slice(0, 160)}`);
+        errors.push(`Mailgun Admin HTTP ${mgRes.status}: ${errText.slice(0, 160)}`);
+      }
+
+      // 1.b. Enviar comprobante de solicitud y cotización formal al CLIENTE / VISITANTE
+      if (lead.email && lead.email.includes('@')) {
+        try {
+          const clientFormData = new URLSearchParams();
+          clientFormData.append('from', `Site On Tecnología <contacto@${mailgunDomain}>`);
+          clientFormData.append('to', lead.email);
+          clientFormData.append('h:Reply-To', `contacto@${mailgunDomain}`);
+          clientFormData.append(
+            'subject',
+            `Recibimos tu solicitud de diagnóstico [${lead.lead_code}] — Site On Tecnología`
+          );
+
+          const clientHtml = `
+            <div style="font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 620px; margin: 0 auto; background: #071521; color: #f8fafc; padding: 32px; border-radius: 16px; border: 1px solid #14384d;">
+              <!-- Header / Marca -->
+              <div style="border-bottom: 1px solid #14384d; padding-bottom: 20px; margin-bottom: 24px;">
+                <div style="font-size: 20px; font-weight: 800; color: #ffffff; letter-spacing: -0.02em;">
+                  SITE ON <span style="color: #38bdf8; font-weight: 400;">TECNOLOGÍA</span>
+                </div>
+                <div style="font-size: 12px; color: #94a3b8; margin-top: 4px;">
+                  Soporte TI, Infraestructura & Soluciones Empresariales • Viña del Mar, Chile
+                </div>
+              </div>
+
+              <!-- Saludo y confirmación -->
+              <div style="display: inline-block; padding: 4px 12px; border-radius: 9999px; background: rgba(56,189,248,0.15); color: #38bdf8; font-size: 12px; font-weight: 700; letter-spacing: 0.05em; margin-bottom: 14px;">
+                CÓDIGO DE SEGUIMIENTO: ${lead.lead_code}
+              </div>
+              <h1 style="margin: 0 0 12px; font-size: 22px; color: #ffffff; line-height: 1.3;">
+                ¡Hola ${lead.full_name.split(' ')[0]}! Recibimos tu solicitud con éxito
+              </h1>
+              <p style="margin: 0 0 24px; color: #cbd5e1; font-size: 14px; line-height: 1.6;">
+                Gracias por contactar a <strong>Site On Tecnología</strong>. Nuestro equipo de ingeniería y soporte TI ha registrado tu requerimiento y nos pondremos en contacto contigo dentro de las próximas horas hábiles para coordinar tu <strong>diagnóstico inicial gratuito</strong>.
+              </p>
+
+              <!-- Resumen del Requerimiento / Cotización -->
+              <div style="background: #0b1e2c; border: 1px solid #14384d; border-radius: 12px; padding: 20px; margin-bottom: 24px;">
+                <div style="font-size: 12px; font-weight: 700; text-transform: uppercase; color: #38bdf8; letter-spacing: 0.05em; margin-bottom: 14px;">
+                  Resumen de tu Solicitud
+                </div>
+                <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+                  <tr>
+                    <td style="padding: 8px 0; color: #94a3b8; width: 40%; border-bottom: 1px solid #14384d;">Servicio / Plan:</td>
+                    <td style="padding: 8px 0; color: #ffffff; font-weight: 600; border-bottom: 1px solid #14384d;">${lead.service_name}</td>
+                  </tr>
+                  ${lead.company ? `
+                  <tr>
+                    <td style="padding: 8px 0; color: #94a3b8; border-bottom: 1px solid #14384d;">Empresa:</td>
+                    <td style="padding: 8px 0; color: #ffffff; border-bottom: 1px solid #14384d;">${lead.company}</td>
+                  </tr>` : ''}
+                  ${lead.budget_range ? `
+                  <tr>
+                    <td style="padding: 8px 0; color: #94a3b8; border-bottom: 1px solid #14384d;">Presupuesto / Valor Ref.:</td>
+                    <td style="padding: 8px 0; color: #34d399; font-weight: 700; border-bottom: 1px solid #14384d;">${lead.budget_range}</td>
+                  </tr>` : ''}
+                  <tr>
+                    <td style="padding: 8px 0; color: #94a3b8; border-bottom: 1px solid #14384d;">Teléfono / WhatsApp:</td>
+                    <td style="padding: 8px 0; color: #ffffff; border-bottom: 1px solid #14384d;">${lead.phone}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 8px 0; color: #94a3b8;">Estado actual:</td>
+                    <td style="padding: 8px 0; color: #38bdf8; font-weight: 600;">Ingresado • Asignado a Consultoría</td>
+                  </tr>
+                </table>
+              </div>
+
+              <!-- Desglose cotizador si aplica -->
+              ${lead.quote_details ? `
+              <div style="background: rgba(56, 189, 248, 0.06); border: 1px solid rgba(56, 189, 248, 0.2); border-radius: 12px; padding: 18px; margin-bottom: 24px;">
+                <div style="font-size: 12px; font-weight: 700; color: #38bdf8; margin-bottom: 8px; text-transform: uppercase;">
+                  Configuración Simulada en Cotizador Web
+                </div>
+                <div style="font-size: 13px; color: #e2e8f0; line-height: 1.6;">
+                  • <strong>Plan Recomendado:</strong> ${lead.quote_details.recommended_plan_name}<br />
+                  • <strong>Alcance:</strong> ${lead.quote_details.users_count} usuarios, ${lead.quote_details.computers_count} computadores, ${lead.quote_details.servers_count} servidores.<br />
+                  • <strong>Soporte:</strong> ${lead.quote_details.support_modality === 'remote_and_scheduled_onsite' ? 'Remoto continuo + Visita mensual en terreno' : 'Remoto prioritario'}.<br />
+                  • <strong>Total Estimado:</strong> ${lead.quote_details.net_uf.toFixed(2)} UF + IVA ($${lead.quote_details.total_clp_with_iva.toLocaleString('es-CL')} CLP c/IVA).
+                </div>
+                <div style="font-size: 11px; color: #94a3b8; margin-top: 8px; font-style: italic;">
+                  * Nota: El valor final queda sujeto a validación técnica del estado de tu infraestructura durante el diagnóstico.
+                </div>
+              </div>` : ''}
+
+              <!-- Canales directos de atención -->
+              <div style="text-align: center; margin: 28px 0;">
+                <a href="https://wa.me/56958324650?text=Hola%20Site%20On,%20acabo%20de%20enviar%20mi%20solicitud%20${encodeURIComponent(lead.lead_code)}%20y%20me%20gustaria%20conversar%20directamente." style="display: inline-block; background: #22c55e; color: #052e16; font-weight: 800; font-size: 14px; text-decoration: none; padding: 14px 28px; border-radius: 10px; box-shadow: 0 4px 14px rgba(34,197,94,0.35);">
+                  ¿Tienes una urgencia? Escríbenos por WhatsApp →
+                </a>
+              </div>
+
+              <!-- Footer -->
+              <div style="border-top: 1px solid #14384d; padding-top: 20px; font-size: 12px; color: #64748b; line-height: 1.6;">
+                <p style="margin: 0 0 6px;">
+                  <strong>Site On Tecnología SpA</strong> • Viña del Mar, Chile<br />
+                  Sitio Web: <a href="https://www.siteon.cl" style="color: #38bdf8; text-decoration: none;">www.siteon.cl</a> | Correo: <a href="mailto:contacto@siteon.cl" style="color: #38bdf8; text-decoration: none;">contacto@siteon.cl</a>
+                </p>
+                <p style="margin: 0; font-size: 11px; color: #475569;">
+                  Este correo fue generado automáticamente en respuesta a tu solicitud en www.siteon.cl. Si no realizaste esta solicitud, puedes desestimar este mensaje.
+                </p>
+              </div>
+            </div>
+          `;
+
+          clientFormData.append('html', clientHtml);
+
+          const clientRes = await fetch(`https://${mailgunHost}/v3/${mailgunDomain}/messages`, {
+            method: 'POST',
+            headers: {
+              Authorization: `Basic ${basicAuth}`,
+              'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: clientFormData.toString(),
+          });
+
+          if (clientRes.ok) {
+            channels.push('mailgun_client_email');
+          } else {
+            const clientErr = await clientRes.text();
+            errors.push(`Mailgun Client HTTP ${clientRes.status}: ${clientErr.slice(0, 140)}`);
+          }
+        } catch (clientEx) {
+          errors.push(`Mailgun client email exception: ${(clientEx as Error).message}`);
+        }
       }
     } catch (err) {
       errors.push(`Mailgun exception: ${(err as Error).message}`);

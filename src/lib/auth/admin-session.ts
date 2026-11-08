@@ -87,24 +87,26 @@ export async function authenticateAdminCredentials(
   // 1. Intentar autenticación contra Supabase Auth primero
   try {
     const supabase = getServerSupabase();
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email: cleanEmail,
-      password,
-    });
+    if (supabase) {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: cleanEmail,
+        password,
+      });
 
-    if (!error && data.user?.email) {
-      const payload: Omit<AdminUserSession, 'exp'> = {
-        email: data.user.email.toLowerCase(),
-        name: 'Rodrigo Aparicio',
-        role: 'admin',
-        authMethod: 'supabase_auth',
-      };
-      const token = createSignedAdminToken(payload);
-      return {
-        ok: true,
-        session: { ...payload, exp: Date.now() + 1000 * 60 * 60 * 24 * 7 },
-        token,
-      };
+      if (!error && data.user?.email) {
+        const payload: Omit<AdminUserSession, 'exp'> = {
+          email: data.user.email.toLowerCase(),
+          name: 'Rodrigo Aparicio',
+          role: 'admin',
+          authMethod: 'supabase_auth',
+        };
+        const token = createSignedAdminToken(payload);
+        return {
+          ok: true,
+          session: { ...payload, exp: Date.now() + 1000 * 60 * 60 * 24 * 7 },
+          token,
+        };
+      }
     }
   } catch {
     // Continúa a verificación de credencial maestra de servidor

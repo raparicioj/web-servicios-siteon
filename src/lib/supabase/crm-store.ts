@@ -16,27 +16,48 @@ import {
   ServiceItem,
 } from '@/types/siteon';
 
-const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
-const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
-const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || SUPABASE_ANON_KEY;
-
 const PARTITION_ID = 'siteon_crm_v1';
 
 let serverClient: SupabaseClient | null = null;
 
-export function getServerSupabase(): SupabaseClient {
-  if (!SUPABASE_URL || !SUPABASE_SERVICE_KEY) {
-    throw new Error(
-      'Faltan variables de entorno de Supabase (NEXT_PUBLIC_SUPABASE_URL / NEXT_PUBLIC_SUPABASE_ANON_KEY).'
-    );
+// In-memory runtime fallback if environment variables are not yet configured in the hosting platform
+const memoryLeads = new Map<string, CRMLead>();
+const memoryActivities = new Map<string, CRMActivity>();
+let memorySettings: PlatformSettings = { ...DEFAULT_PLATFORM_SETTINGS };
+const memoryServices = new Map<string, ServiceItem>();
+const memoryPosts = new Map<string, BlogPost>();
+const memoryAnalytics: AnalyticsEvent[] = [];
+
+export function getServerSupabase(): SupabaseClient | null {
+  const supabaseUrl =
+    process.env.NEXT_PUBLIC_SUPABASE_URL ||
+    process.env.SUPABASE_URL ||
+    process.env.VITE_SUPABASE_URL ||
+    '';
+  const supabaseKey =
+    process.env.SUPABASE_SERVICE_ROLE_KEY ||
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
+    process.env.SUPABASE_ANON_KEY ||
+    process.env.SUPABASE_KEY ||
+    process.env.VITE_SUPABASE_ANON_KEY ||
+    '';
+
+  if (!supabaseUrl || !supabaseKey) {
+    return null;
   }
+
   if (!serverClient) {
-    serverClient = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY, {
-      auth: {
-        persistSession: false,
-        autoRefreshToken: false,
-      },
-    });
+    try {
+      serverClient = createClient(supabaseUrl, supabaseKey, {
+        auth: {
+          persistSession: false,
+          autoRefreshToken: false,
+        },
+      });
+    } catch (err) {
+      console.error('[SiteOn Supabase] Error al inicializar cliente Supabase:', err);
+      return null;
+    }
   }
   return serverClient;
 }
@@ -73,22 +94,28 @@ async function upsertPartitionRecord(
   payload: unknown
 ): Promise<boolean> {
   const supabase = getServerSupabase();
-  const { error } = await supabase.from('activity_logs').upsert({
-    id,
-    couple_id: PARTITION_ID,
-    user_id: recordType,
-    user_name: 'SiteOn Platform',
-    action: recordType,
-    entity_id: entityId,
-    entity_title: title,
-    description: JSON.stringify(payload),
-    timestamp: new Date().toISOString(),
-  });
-  if (error) {
-    console.error(`[SiteOn Supabase] Error en upsertPartitionRecord (${recordType}):`, error.message);
+  if (!supabase) return false;
+
+  try {
+    const { error } = await supabase.from('activity_logs').upsert({
+      id,
+      couple_id: PARTITION_ID,
+      user_id: recordType,
+      user_name: 'SiteOn Platform',
+      action: recordType,
+      entity_id: entityId,
+      entity_title: title,
+      description: JSON.stringify(payload),
+      timestamp: new Date().toISOString(),
+    });
+    if (error) {
+      console.error(`[SiteOn Supabase] Error en upsertPartitionRecord (${recordType}):`, error.message);
+      return false;
+    }
+    return true;
+  } catch {
     return false;
   }
-  return true;
 }
 
 async function listPartitionRecords<T>(
@@ -103,38 +130,50 @@ async function listPartitionRecords<T>(
   limit = 500
 ): Promise<T[]> {
   const supabase = getServerSupabase();
-  const { data, error } = await supabase
-    .from('activity_logs')
-    .select('*')
-    .eq('couple_id', PARTITION_ID)
-    .eq('user_id', recordType)
-    .order('timestamp', { ascending: false })
-    .limit(limit);
+  if (!supabase) return [];
 
-  if (error || !data) {
+  try {
+    const { data, error } = await supabase
+      .from('activity_logs')
+      .select('*')
+      .eq('couple_id', PARTITION_ID)
+      .eq('user_id', recordType)
+      .order('timestamp', { ascending: false })
+      .limit(limit);
+
+    if (error || !data) {
+      return [];
+    }
+
+    const parsed: T[] = [];
+    for (const row of data) {
+      try {
+        const item = JSON.parse(row.description) as T;
+        parsed.push(item);
+      } catch {
+        // ignore malformed entry
+      }
+    }
+    return parsed;
+  } catch {
     return [];
   }
-
-  const parsed: T[] = [];
-  for (const row of data) {
-    try {
-      const item = JSON.parse(row.description) as T;
-      parsed.push(item);
-    } catch {
-      // ignore malformed entry
-    }
-  }
-  return parsed;
 }
 
 async function deletePartitionRecord(id: string): Promise<boolean> {
   const supabase = getServerSupabase();
-  const { error } = await supabase
-    .from('activity_logs')
-    .delete()
-    .eq('couple_id', PARTITION_ID)
-    .eq('id', id);
-  return !error;
+  if (!supabase) return false;
+
+  try {
+    const { error } = await supabase
+      .from('activity_logs')
+      .delete()
+      .eq('couple_id', PARTITION_ID)
+      .eq('id', id);
+    return !error;
+  } catch {
+    return false;
+  }
 }
 
 // ============================================================================
@@ -143,47 +182,57 @@ async function deletePartitionRecord(id: string): Promise<boolean> {
 
 export async function listLeads(): Promise<{ leads: CRMLead[]; storageMode: 'native_sql' | 'supabase_partition' }> {
   const supabase = getServerSupabase();
-
-  const { data, error } = await supabase
-    .from('siteon_leads')
-    .select('*, activities:siteon_lead_activities(*)')
-    .order('created_at', { ascending: false });
-
-  if (!error && data) {
-    return { leads: data as CRMLead[], storageMode: 'native_sql' };
+  if (!supabase) {
+    const fallbackLeads = Array.from(memoryLeads.values()).sort(
+      (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+    );
+    return { leads: fallbackLeads, storageMode: 'supabase_partition' };
   }
 
-  if (isMissingTableError(error)) {
-    const [leads, activities] = await Promise.all([
-      listPartitionRecords<CRMLead>('siteon_lead', 500),
-      listPartitionRecords<CRMActivity>('siteon_activity', 1000),
-    ]);
+  try {
+    const { data, error } = await supabase
+      .from('siteon_leads')
+      .select('*, activities:siteon_lead_activities(*)')
+      .order('created_at', { ascending: false });
 
-    const activitiesByLead = new Map<string, CRMActivity[]>();
-    for (const act of activities) {
-      const list = activitiesByLead.get(act.lead_id) || [];
-      list.push(act);
-      activitiesByLead.set(act.lead_id, list);
+    if (!error && data) {
+      return { leads: data as CRMLead[], storageMode: 'native_sql' };
     }
 
-    const enriched = leads
-      .map((l) => ({
-        ...l,
-        activities: (activitiesByLead.get(l.id) || []).sort(
-          (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-        ),
-      }))
-      .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+    if (isMissingTableError(error)) {
+      const [leads, activities] = await Promise.all([
+        listPartitionRecords<CRMLead>('siteon_lead', 500),
+        listPartitionRecords<CRMActivity>('siteon_activity', 1000),
+      ]);
 
-    return { leads: enriched, storageMode: 'supabase_partition' };
+      const activitiesByLead = new Map<string, CRMActivity[]>();
+      for (const act of activities) {
+        const list = activitiesByLead.get(act.lead_id) || [];
+        list.push(act);
+        activitiesByLead.set(act.lead_id, list);
+      }
+
+      const enriched = leads
+        .map((l) => ({
+          ...l,
+          activities: (activitiesByLead.get(l.id) || []).sort(
+            (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+          ),
+        }))
+        .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+
+      return { leads: enriched, storageMode: 'supabase_partition' };
+    }
+  } catch (err) {
+    console.error('[SiteOn Supabase] Error en listLeads:', err);
   }
 
-  return { leads: [], storageMode: 'supabase_partition' };
+  return { leads: Array.from(memoryLeads.values()), storageMode: 'supabase_partition' };
 }
 
 export async function getLeadById(id: string): Promise<CRMLead | null> {
   const { leads } = await listLeads();
-  return leads.find((l) => l.id === id) || null;
+  return leads.find((l) => l.id === id) || memoryLeads.get(id) || null;
 }
 
 export async function findRecentDuplicateLead(email: string, serviceSlug: string): Promise<CRMLead | null> {
@@ -200,76 +249,87 @@ export async function findRecentDuplicateLead(email: string, serviceSlug: string
 }
 
 export async function createLead(lead: CRMLead, initialActivity: CRMActivity): Promise<CRMLead> {
+  const enrichedLead: CRMLead = { ...lead, activities: [initialActivity] };
+  memoryLeads.set(lead.id, enrichedLead);
+  memoryActivities.set(initialActivity.id, initialActivity);
+
   const supabase = getServerSupabase();
-
-  const { data, error } = await supabase
-    .from('siteon_leads')
-    .insert({
-      id: lead.id,
-      lead_code: lead.lead_code,
-      full_name: lead.full_name,
-      company: lead.company || null,
-      email: lead.email,
-      phone: lead.phone,
-      service_slug: lead.service_slug,
-      service_name: lead.service_name,
-      company_size: lead.company_size || null,
-      budget_range: lead.budget_range || null,
-      description: lead.description,
-      referral_source: lead.referral_source || null,
-      privacy_accepted: lead.privacy_accepted,
-      privacy_accepted_at: lead.privacy_accepted_at,
-      stage: lead.stage,
-      priority: lead.priority,
-      estimated_value_clp: lead.estimated_value_clp,
-      next_contact_at: lead.next_contact_at || null,
-      lost_reason: lead.lost_reason || null,
-      assigned_to: lead.assigned_to,
-      tags: lead.tags,
-      source_page: lead.source_page,
-      utm_source: lead.utm_source || null,
-      utm_medium: lead.utm_medium || null,
-      utm_campaign: lead.utm_campaign || null,
-      utm_term: lead.utm_term || null,
-      utm_content: lead.utm_content || null,
-      dedup_hash: lead.dedup_hash || null,
-      ai_score: lead.ai_score,
-      ai_classification: lead.ai_classification,
-      ai_summary: lead.ai_summary,
-      ai_suggested_action: lead.ai_suggested_action,
-      email_notification_status: lead.email_notification_status,
-      email_notification_error: lead.email_notification_error || null,
-      created_at: lead.created_at,
-      updated_at: lead.updated_at,
-    })
-    .select()
-    .single();
-
-  if (!error && data) {
-    await supabase.from('siteon_lead_activities').insert({
-      id: initialActivity.id,
-      lead_id: lead.id,
-      activity_type: initialActivity.activity_type,
-      title: initialActivity.title,
-      content: initialActivity.content,
-      author_name: initialActivity.author_name,
-      metadata: initialActivity.metadata || {},
-      created_at: initialActivity.created_at,
-    });
-    return { ...(data as CRMLead), activities: [initialActivity] };
+  if (!supabase) {
+    return enrichedLead;
   }
 
-  // Fallback resiliente en partición Supabase Cloud
-  await upsertPartitionRecord(`lead_${lead.id}`, 'siteon_lead', lead.id, lead.full_name, lead);
-  await upsertPartitionRecord(
-    `act_${initialActivity.id}`,
-    'siteon_activity',
-    lead.id,
-    initialActivity.title,
-    initialActivity
-  );
+  try {
+    const { data, error } = await supabase
+      .from('siteon_leads')
+      .insert({
+        id: lead.id,
+        lead_code: lead.lead_code,
+        full_name: lead.full_name,
+        company: lead.company || null,
+        email: lead.email,
+        phone: lead.phone,
+        service_slug: lead.service_slug,
+        service_name: lead.service_name,
+        company_size: lead.company_size || null,
+        budget_range: lead.budget_range || null,
+        description: lead.description,
+        referral_source: lead.referral_source || null,
+        privacy_accepted: lead.privacy_accepted,
+        privacy_accepted_at: lead.privacy_accepted_at,
+        stage: lead.stage,
+        priority: lead.priority,
+        estimated_value_clp: lead.estimated_value_clp,
+        next_contact_at: lead.next_contact_at || null,
+        lost_reason: lead.lost_reason || null,
+        assigned_to: lead.assigned_to,
+        tags: lead.tags,
+        source_page: lead.source_page,
+        utm_source: lead.utm_source || null,
+        utm_medium: lead.utm_medium || null,
+        utm_campaign: lead.utm_campaign || null,
+        utm_term: lead.utm_term || null,
+        utm_content: lead.utm_content || null,
+        dedup_hash: lead.dedup_hash || null,
+        ai_score: lead.ai_score,
+        ai_classification: lead.ai_classification,
+        ai_summary: lead.ai_summary,
+        ai_suggested_action: lead.ai_suggested_action,
+        email_notification_status: lead.email_notification_status,
+        email_notification_error: lead.email_notification_error || null,
+        created_at: lead.created_at,
+        updated_at: lead.updated_at,
+      })
+      .select()
+      .single();
 
-  return { ...lead, activities: [initialActivity] };
+    if (!error && data) {
+      await supabase.from('siteon_lead_activities').insert({
+        id: initialActivity.id,
+        lead_id: lead.id,
+        activity_type: initialActivity.activity_type,
+        title: initialActivity.title,
+        content: initialActivity.content,
+        author_name: initialActivity.author_name,
+        metadata: initialActivity.metadata || {},
+        created_at: initialActivity.created_at,
+      });
+      return { ...(data as CRMLead), activities: [initialActivity] };
+    }
+
+    // Fallback resiliente en partición Supabase Cloud
+    await upsertPartitionRecord(`lead_${lead.id}`, 'siteon_lead', lead.id, lead.full_name, lead);
+    await upsertPartitionRecord(
+      `act_${initialActivity.id}`,
+      'siteon_activity',
+      lead.id,
+      initialActivity.title,
+      initialActivity
+    );
+  } catch (err) {
+    console.error('[SiteOn Supabase] Error en createLead:', err);
+  }
+
+  return enrichedLead;
 }
 
 export async function updateLead(
@@ -304,25 +364,32 @@ export async function updateLead(
     ...updates,
     updated_at: new Date().toISOString(),
   };
+  memoryLeads.set(leadId, updatedLead);
 
   const supabase = getServerSupabase();
-  const { error } = await supabase
-    .from('siteon_leads')
-    .update({
-      ...updates,
-      updated_at: updatedLead.updated_at,
-    })
-    .eq('id', leadId);
+  if (supabase) {
+    try {
+      const { error } = await supabase
+        .from('siteon_leads')
+        .update({
+          ...updates,
+          updated_at: updatedLead.updated_at,
+        })
+        .eq('id', leadId);
 
-  if (error && isMissingTableError(error)) {
-    const { activities: _act, ...leadWithoutActivities } = updatedLead;
-    await upsertPartitionRecord(
-      `lead_${leadId}`,
-      'siteon_lead',
-      leadId,
-      updatedLead.full_name,
-      leadWithoutActivities
-    );
+      if (error && isMissingTableError(error)) {
+        const { activities: _act, ...leadWithoutActivities } = updatedLead;
+        await upsertPartitionRecord(
+          `lead_${leadId}`,
+          'siteon_lead',
+          leadId,
+          updatedLead.full_name,
+          leadWithoutActivities
+        );
+      }
+    } catch (err) {
+      console.error('[SiteOn Supabase] Error en updateLead:', err);
+    }
   }
 
   // Si cambió el estado del pipeline, registrar actividad automática
@@ -342,12 +409,19 @@ export async function updateLead(
 }
 
 export async function deleteLead(leadId: string): Promise<boolean> {
+  memoryLeads.delete(leadId);
   const supabase = getServerSupabase();
-  const { error } = await supabase.from('siteon_leads').delete().eq('id', leadId);
-  if (error && isMissingTableError(error)) {
-    return await deletePartitionRecord(`lead_${leadId}`);
+  if (!supabase) return true;
+
+  try {
+    const { error } = await supabase.from('siteon_leads').delete().eq('id', leadId);
+    if (error && isMissingTableError(error)) {
+      return await deletePartitionRecord(`lead_${leadId}`);
+    }
+    return !error;
+  } catch {
+    return false;
   }
-  return !error;
 }
 
 export async function addLeadActivity(input: {
@@ -369,16 +443,29 @@ export async function addLeadActivity(input: {
     created_at: new Date().toISOString(),
   };
 
+  memoryActivities.set(activity.id, activity);
+  const memLead = memoryLeads.get(input.lead_id);
+  if (memLead) {
+    memLead.activities = [activity, ...(memLead.activities || [])];
+    memoryLeads.set(input.lead_id, memLead);
+  }
+
   const supabase = getServerSupabase();
-  const { error } = await supabase.from('siteon_lead_activities').insert(activity);
-  if (error && isMissingTableError(error)) {
-    await upsertPartitionRecord(
-      `act_${activity.id}`,
-      'siteon_activity',
-      activity.lead_id,
-      activity.title,
-      activity
-    );
+  if (supabase) {
+    try {
+      const { error } = await supabase.from('siteon_lead_activities').insert(activity);
+      if (error && isMissingTableError(error)) {
+        await upsertPartitionRecord(
+          `act_${activity.id}`,
+          'siteon_activity',
+          activity.lead_id,
+          activity.title,
+          activity
+        );
+      }
+    } catch (err) {
+      console.error('[SiteOn Supabase] Error en addLeadActivity:', err);
+    }
   }
 
   return activity;
@@ -390,24 +477,32 @@ export async function addLeadActivity(input: {
 
 export async function getPlatformSettings(): Promise<PlatformSettings> {
   const supabase = getServerSupabase();
-  const { data, error } = await supabase
-    .from('siteon_settings')
-    .select('*')
-    .eq('id', 'default')
-    .single();
-
-  if (!error && data) {
-    return { ...DEFAULT_PLATFORM_SETTINGS, ...(data as PlatformSettings) };
+  if (!supabase) {
+    return memorySettings;
   }
 
-  if (isMissingTableError(error)) {
-    const records = await listPartitionRecords<PlatformSettings>('siteon_setting', 5);
-    if (records.length > 0) {
-      return { ...DEFAULT_PLATFORM_SETTINGS, ...records[0] };
+  try {
+    const { data, error } = await supabase
+      .from('siteon_settings')
+      .select('*')
+      .eq('id', 'default')
+      .single();
+
+    if (!error && data) {
+      return { ...DEFAULT_PLATFORM_SETTINGS, ...(data as PlatformSettings) };
     }
+
+    if (isMissingTableError(error)) {
+      const records = await listPartitionRecords<PlatformSettings>('siteon_setting', 5);
+      if (records.length > 0) {
+        return { ...DEFAULT_PLATFORM_SETTINGS, ...records[0] };
+      }
+    }
+  } catch (err) {
+    console.error('[SiteOn Supabase] Error en getPlatformSettings:', err);
   }
 
-  return DEFAULT_PLATFORM_SETTINGS;
+  return memorySettings;
 }
 
 export async function updatePlatformSettings(
@@ -420,18 +515,25 @@ export async function updatePlatformSettings(
     id: 'default',
     updated_at: new Date().toISOString(),
   };
+  memorySettings = nextSettings;
 
   const supabase = getServerSupabase();
-  const { error } = await supabase.from('siteon_settings').upsert(nextSettings);
+  if (supabase) {
+    try {
+      const { error } = await supabase.from('siteon_settings').upsert(nextSettings);
 
-  if (error && isMissingTableError(error)) {
-    await upsertPartitionRecord(
-      'setting_default',
-      'siteon_setting',
-      'default',
-      'Platform Settings',
-      nextSettings
-    );
+      if (error && isMissingTableError(error)) {
+        await upsertPartitionRecord(
+          'setting_default',
+          'siteon_setting',
+          'default',
+          'Platform Settings',
+          nextSettings
+        );
+      }
+    } catch (err) {
+      console.error('[SiteOn Supabase] Error en updatePlatformSettings:', err);
+    }
   }
 
   return nextSettings;
@@ -442,17 +544,24 @@ export async function updatePlatformSettings(
 // ============================================================================
 
 export async function listServices(includeInactive = false): Promise<ServiceItem[]> {
-  const supabase = getServerSupabase();
-  const { data, error } = await supabase
-    .from('siteon_services')
-    .select('*')
-    .order('sort_order', { ascending: true });
+  let customServices: ServiceItem[] = Array.from(memoryServices.values());
 
-  let customServices: ServiceItem[] = [];
-  if (!error && data && data.length > 0) {
-    customServices = data as ServiceItem[];
-  } else if (isMissingTableError(error)) {
-    customServices = await listPartitionRecords<ServiceItem>('siteon_service', 50);
+  const supabase = getServerSupabase();
+  if (supabase) {
+    try {
+      const { data, error } = await supabase
+        .from('siteon_services')
+        .select('*')
+        .order('sort_order', { ascending: true });
+
+      if (!error && data && data.length > 0) {
+        customServices = data as ServiceItem[];
+      } else if (isMissingTableError(error)) {
+        customServices = await listPartitionRecords<ServiceItem>('siteon_service', 50);
+      }
+    } catch (err) {
+      console.error('[SiteOn Supabase] Error en listServices:', err);
+    }
   }
 
   const mergedMap = new Map<string, ServiceItem>();
@@ -473,32 +582,46 @@ export async function getServiceBySlug(slug: string): Promise<ServiceItem | null
 }
 
 export async function saveServiceItem(service: ServiceItem): Promise<ServiceItem> {
+  memoryServices.set(service.slug, service);
   const supabase = getServerSupabase();
-  const { error } = await supabase.from('siteon_services').upsert(service, { onConflict: 'slug' });
-  if (error && isMissingTableError(error)) {
-    await upsertPartitionRecord(
-      `srv_${service.slug}`,
-      'siteon_service',
-      service.slug,
-      service.title,
-      service
-    );
+  if (supabase) {
+    try {
+      const { error } = await supabase.from('siteon_services').upsert(service, { onConflict: 'slug' });
+      if (error && isMissingTableError(error)) {
+        await upsertPartitionRecord(
+          `srv_${service.slug}`,
+          'siteon_service',
+          service.slug,
+          service.title,
+          service
+        );
+      }
+    } catch (err) {
+      console.error('[SiteOn Supabase] Error en saveServiceItem:', err);
+    }
   }
   return service;
 }
 
 export async function listBlogPosts(includeDrafts = false): Promise<BlogPost[]> {
-  const supabase = getServerSupabase();
-  const { data, error } = await supabase
-    .from('siteon_posts')
-    .select('*')
-    .order('published_at', { ascending: false });
+  let customPosts: BlogPost[] = Array.from(memoryPosts.values());
 
-  let customPosts: BlogPost[] = [];
-  if (!error && data && data.length > 0) {
-    customPosts = data as BlogPost[];
-  } else if (isMissingTableError(error)) {
-    customPosts = await listPartitionRecords<BlogPost>('siteon_post', 100);
+  const supabase = getServerSupabase();
+  if (supabase) {
+    try {
+      const { data, error } = await supabase
+        .from('siteon_posts')
+        .select('*')
+        .order('published_at', { ascending: false });
+
+      if (!error && data && data.length > 0) {
+        customPosts = data as BlogPost[];
+      } else if (isMissingTableError(error)) {
+        customPosts = await listPartitionRecords<BlogPost>('siteon_post', 100);
+      }
+    } catch (err) {
+      console.error('[SiteOn Supabase] Error en listBlogPosts:', err);
+    }
   }
 
   const mergedMap = new Map<string, BlogPost>();
@@ -521,10 +644,17 @@ export async function getBlogPostBySlug(slug: string): Promise<BlogPost | null> 
 }
 
 export async function saveBlogPost(post: BlogPost): Promise<BlogPost> {
+  memoryPosts.set(post.slug, post);
   const supabase = getServerSupabase();
-  const { error } = await supabase.from('siteon_posts').upsert(post, { onConflict: 'slug' });
-  if (error && isMissingTableError(error)) {
-    await upsertPartitionRecord(`post_${post.slug}`, 'siteon_post', post.slug, post.title, post);
+  if (supabase) {
+    try {
+      const { error } = await supabase.from('siteon_posts').upsert(post, { onConflict: 'slug' });
+      if (error && isMissingTableError(error)) {
+        await upsertPartitionRecord(`post_${post.slug}`, 'siteon_post', post.slug, post.title, post);
+      }
+    } catch (err) {
+      console.error('[SiteOn Supabase] Error en saveBlogPost:', err);
+    }
   }
   return post;
 }
@@ -541,35 +671,50 @@ export async function recordAnalyticsEvent(
     id: crypto.randomUUID(),
     created_at: new Date().toISOString(),
   };
+  memoryAnalytics.unshift(fullEvent);
 
   const supabase = getServerSupabase();
-  const { error } = await supabase.from('siteon_analytics_events').insert(fullEvent);
-  if (error && isMissingTableError(error)) {
-    await upsertPartitionRecord(
-      `ev_${fullEvent.id}`,
-      'siteon_analytics',
-      fullEvent.event_type,
-      fullEvent.page_path,
-      fullEvent
-    );
+  if (supabase) {
+    try {
+      const { error } = await supabase.from('siteon_analytics_events').insert(fullEvent);
+      if (error && isMissingTableError(error)) {
+        await upsertPartitionRecord(
+          `ev_${fullEvent.id}`,
+          'siteon_analytics',
+          fullEvent.event_type,
+          fullEvent.page_path,
+          fullEvent
+        );
+      }
+    } catch {
+      // ignore analytics logging errors
+    }
   }
 }
 
 export async function listAnalyticsEvents(limit = 300): Promise<AnalyticsEvent[]> {
   const supabase = getServerSupabase();
-  const { data, error } = await supabase
-    .from('siteon_analytics_events')
-    .select('*')
-    .order('created_at', { ascending: false })
-    .limit(limit);
+  if (!supabase) {
+    return memoryAnalytics.slice(0, limit);
+  }
 
-  if (!error && data) {
-    return data as AnalyticsEvent[];
+  try {
+    const { data, error } = await supabase
+      .from('siteon_analytics_events')
+      .select('*')
+      .order('created_at', { ascending: false })
+      .limit(limit);
+
+    if (!error && data) {
+      return data as AnalyticsEvent[];
+    }
+    if (isMissingTableError(error)) {
+      return await listPartitionRecords<AnalyticsEvent>('siteon_analytics', limit);
+    }
+  } catch {
+    // fallback
   }
-  if (isMissingTableError(error)) {
-    return await listPartitionRecords<AnalyticsEvent>('siteon_analytics', limit);
-  }
-  return [];
+  return memoryAnalytics.slice(0, limit);
 }
 
 export async function recordAuditLog(
@@ -589,8 +734,14 @@ export async function recordAuditLog(
     created_at: new Date().toISOString(),
   };
   const supabase = getServerSupabase();
-  const { error } = await supabase.from('siteon_audit_logs').insert(entry);
-  if (error && isMissingTableError(error)) {
-    await upsertPartitionRecord(`aud_${entry.id}`, 'siteon_audit', action, actorEmail, entry);
+  if (supabase) {
+    try {
+      const { error } = await supabase.from('siteon_audit_logs').insert(entry);
+      if (error && isMissingTableError(error)) {
+        await upsertPartitionRecord(`aud_${entry.id}`, 'siteon_audit', action, actorEmail, entry);
+      }
+    } catch {
+      // ignore audit log errors
+    }
   }
 }

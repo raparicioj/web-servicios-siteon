@@ -43,8 +43,11 @@ import {
   PIPELINE_STAGES,
   PipelineStage,
   PlatformSettings,
+  PricingConfig,
+  PricingPlan,
   ServiceItem,
 } from '@/types/siteon';
+import { convertUfToClp } from '@/data/siteon-catalog';
 import { generateCommercialFollowUpDraft } from '@/lib/ai/lead-intelligence';
 import { SiteOnLogo } from '@/components/layout/SiteOnLogo';
 
@@ -53,6 +56,7 @@ type AdminTab =
   | 'kanban'
   | 'prospectos'
   | 'clientes_erp'
+  | 'planes_precios'
   | 'servicios'
   | 'blog'
   | 'configuracion';
@@ -97,6 +101,8 @@ export function AdminCrmWorkspace({
   );
   const [leads, setLeads] = useState<CRMLead[]>([]);
   const [settings, setSettings] = useState<PlatformSettings | null>(null);
+  const [pricingConfig, setPricingConfig] = useState<PricingConfig | null>(null);
+  const [savingPricing, setSavingPricing] = useState(false);
   const [services, setServices] = useState<ServiceItem[]>([]);
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [analytics, setAnalytics] = useState<AnalyticsEvent[]>([]);
@@ -165,6 +171,7 @@ export function AdminCrmWorkspace({
         setStorageMode(data.storageMode || 'supabase_partition');
         setLeads(data.leads || []);
         setSettings(data.settings || null);
+        setPricingConfig(data.pricingConfig || null);
         setServices(data.services || []);
         setPosts(data.posts || []);
         setAnalytics(data.analytics || []);
@@ -598,6 +605,12 @@ export function AdminCrmWorkspace({
       label: 'Clientes & Contratos',
       badge: metrics.ganados,
       icon: UserCheck,
+    },
+    {
+      id: 'planes_precios',
+      label: 'Planes & Precios (UF)',
+      badge: pricingConfig?.plans?.length || 4,
+      icon: TrendingUp,
     },
     { id: 'servicios', label: 'Catálogo Servicios', icon: Layers },
     { id: 'blog', label: 'Blog & SEO', icon: BookOpen },
@@ -1567,6 +1580,498 @@ export function AdminCrmWorkspace({
             </div>
           )}
 
+          {/* ==================== PESTAÑA PLANES & PRECIOS (COTIZADOR Y UF) ==================== */}
+          {activeTab === 'planes_precios' && pricingConfig && (
+            <div className="space-y-6">
+              {/* Barra Superior: Guardar configuración de precios */}
+              <div className="rounded-2xl border border-teal-300/30 bg-[#0d1f33] p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                  <h2 className="text-lg font-bold text-white">
+                    Administración de Planes Comerciales, Tarifas UF y Cotizador Inteligente
+                  </h2>
+                  <p className="text-xs text-slate-300 mt-0.5">
+                    Cualquier ajuste aquí se refleja automáticamente en la página principal y en{' '}
+                    <Link href="/planes" target="_blank" className="text-[#5eead4] underline">
+                      /planes ↗
+                    </Link>{' '}
+                    sin modificar código fuente.
+                  </p>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-2.5">
+                  <button
+                    type="button"
+                    onClick={async () => {
+                      const res = await fetch('/api/uf?refresh=1');
+                      const data = await res.json();
+                      if (data?.official_daily_uf?.value) {
+                        setPricingConfig({
+                          ...pricingConfig,
+                          uf_value_clp: Number(data.official_daily_uf.value),
+                          uf_last_updated: String(data.official_daily_uf.date),
+                          uf_source_label: String(data.official_daily_uf.source),
+                        });
+                        showToast(
+                          `Valor UF oficial obtenido: $${Number(data.official_daily_uf.value).toLocaleString('es-CL')} CLP`
+                        );
+                      }
+                    }}
+                    className="inline-flex items-center gap-1.5 rounded-xl border border-teal-300/35 bg-[#122b44] hover:bg-[#193b5c] px-3.5 py-2.5 text-xs font-bold text-[#99f6e4]"
+                  >
+                    <RefreshCw className="h-3.5 w-3.5" />
+                    <span>Consultar UF SII / Banco Central Hoy</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    disabled={savingPricing}
+                    onClick={async () => {
+                      setSavingPricing(true);
+                      try {
+                        const res = await fetch('/api/admin/cms', {
+                          method: 'PUT',
+                          headers: { 'Content-Type': 'application/json' },
+                          body: JSON.stringify({
+                            resource: 'pricing',
+                            data: pricingConfig,
+                            whatsapp_number: settings?.whatsapp_number,
+                            whatsapp_display: settings?.whatsapp_display,
+                          }),
+                        });
+                        if (res.ok) {
+                          const json = await res.json();
+                          if (json.pricingConfig) setPricingConfig(json.pricingConfig);
+                          showToast('Planes, tarifas UF y cotizador actualizados en producción');
+                        }
+                      } finally {
+                        setSavingPricing(false);
+                      }
+                    }}
+                    className="inline-flex items-center gap-2 rounded-xl bg-[#5eead4] hover:bg-[#99f6e4] disabled:opacity-60 px-5 py-2.5 text-xs font-extrabold text-slate-950 shadow-lg"
+                  >
+                    {savingPricing ? (
+                      <>
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                        <span>Guardando...</span>
+                      </>
+                    ) : (
+                      <>
+                        <CheckCircle2 className="h-4 w-4" />
+                        <span>Guardar Planes y Precios</span>
+                      </>
+                    )}
+                  </button>
+                </div>
+              </div>
+
+              {/* Bloque 1: Configuración General UF, IVA, Promoción y WhatsApp */}
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <div className="lg:col-span-7 rounded-2xl border border-slate-800 bg-[#0d1627] p-5 space-y-4">
+                  <h3 className="text-sm font-bold text-white uppercase tracking-wider">
+                    1. Valor UF, Impuestos (IVA), Promoción y Textos Comerciales
+                  </h3>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+                    <div>
+                      <label className="block text-slate-300 mb-1">Modo de Cálculo UF</label>
+                      <select
+                        value={pricingConfig.uf_mode}
+                        onChange={(e) =>
+                          setPricingConfig({
+                            ...pricingConfig,
+                            uf_mode: e.target.value as 'official_auto' | 'manual_reference',
+                          })
+                        }
+                        className="w-full rounded-xl border border-slate-700 bg-[#070d19] px-3 py-2 text-white"
+                      >
+                        <option value="manual_reference">Valor UF Fijo / Manual</option>
+                        <option value="official_auto">Automático Diario (Banco Central)</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-slate-300 mb-1">Valor UF Activo (CLP)</label>
+                      <input
+                        type="number"
+                        step="1"
+                        value={pricingConfig.uf_value_clp}
+                        onChange={(e) =>
+                          setPricingConfig({
+                            ...pricingConfig,
+                            uf_value_clp: Number(e.target.value) || 41290,
+                            uf_last_updated: new Date().toISOString().split('T')[0],
+                          })
+                        }
+                        className="w-full rounded-xl border border-slate-700 bg-[#070d19] px-3 py-2 text-[#5eead4] font-mono font-bold"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-slate-300 mb-1">IVA (%)</label>
+                      <input
+                        type="number"
+                        step="1"
+                        min={0}
+                        max={50}
+                        value={pricingConfig.iva_percentage}
+                        onChange={(e) =>
+                          setPricingConfig({
+                            ...pricingConfig,
+                            iva_percentage: Number(e.target.value) || 19,
+                          })
+                        }
+                        className="w-full rounded-xl border border-slate-700 bg-[#070d19] px-3 py-2 text-white font-mono"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                    <div>
+                      <label className="block text-slate-300 mb-1">Título Principal Sección</label>
+                      <input
+                        type="text"
+                        value={pricingConfig.section_title}
+                        onChange={(e) =>
+                          setPricingConfig({ ...pricingConfig, section_title: e.target.value })
+                        }
+                        className="w-full rounded-xl border border-slate-700 bg-[#070d19] px-3 py-2 text-white"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-slate-300 mb-1">
+                        WhatsApp Oficial Cotizaciones (sin +)
+                      </label>
+                      <input
+                        type="text"
+                        value={settings?.whatsapp_number || '56958324650'}
+                        onChange={(e) =>
+                          settings &&
+                          setSettings({
+                            ...settings,
+                            whatsapp_number: e.target.value,
+                          })
+                        }
+                        className="w-full rounded-xl border border-slate-700 bg-[#070d19] px-3 py-2 text-emerald-400 font-mono"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="text-xs">
+                    <div className="flex items-center justify-between mb-1">
+                      <label className="text-slate-300">Banner de Promoción Superior</label>
+                      <label className="inline-flex items-center gap-1.5 text-[#5eead4] cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={pricingConfig.promo_active}
+                          onChange={(e) =>
+                            setPricingConfig({
+                              ...pricingConfig,
+                              promo_active: e.target.checked,
+                            })
+                          }
+                          className="accent-[#5eead4]"
+                        />
+                        <span>Promoción Activa</span>
+                      </label>
+                    </div>
+                    <input
+                      type="text"
+                      value={pricingConfig.promo_text}
+                      onChange={(e) =>
+                        setPricingConfig({ ...pricingConfig, promo_text: e.target.value })
+                      }
+                      className="w-full rounded-xl border border-slate-700 bg-[#070d19] px-3 py-2 text-white"
+                    />
+                  </div>
+                </div>
+
+                {/* Bloque 2: Tarifas Unitarias del Cotizador Inteligente */}
+                <div className="lg:col-span-5 rounded-2xl border border-slate-800 bg-[#0d1627] p-5 space-y-4">
+                  <h3 className="text-sm font-bold text-white uppercase tracking-wider">
+                    2. Tarifas Unitarias del Cotizador (UF Mensuales)
+                  </h3>
+                  <div className="grid grid-cols-2 gap-3 text-xs">
+                    <div>
+                      <label className="block text-slate-300 mb-1">Usuario adicional (UF)</label>
+                      <input
+                        type="number"
+                        step="0.1"
+                        value={pricingConfig.addon_rates.extra_user_uf}
+                        onChange={(e) =>
+                          setPricingConfig({
+                            ...pricingConfig,
+                            addon_rates: {
+                              ...pricingConfig.addon_rates,
+                              extra_user_uf: Number(e.target.value) || 0,
+                            },
+                          })
+                        }
+                        className="w-full rounded-xl border border-slate-700 bg-[#070d19] px-3 py-2 text-[#5eead4] font-mono font-bold"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-slate-300 mb-1">Equipo adicional (UF)</label>
+                      <input
+                        type="number"
+                        step="0.1"
+                        value={pricingConfig.addon_rates.extra_computer_uf}
+                        onChange={(e) =>
+                          setPricingConfig({
+                            ...pricingConfig,
+                            addon_rates: {
+                              ...pricingConfig.addon_rates,
+                              extra_computer_uf: Number(e.target.value) || 0,
+                            },
+                          })
+                        }
+                        className="w-full rounded-xl border border-slate-700 bg-[#070d19] px-3 py-2 text-[#5eead4] font-mono font-bold"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-slate-300 mb-1">Servidor administrado (UF)</label>
+                      <input
+                        type="number"
+                        step="0.5"
+                        value={pricingConfig.addon_rates.managed_server_uf}
+                        onChange={(e) =>
+                          setPricingConfig({
+                            ...pricingConfig,
+                            addon_rates: {
+                              ...pricingConfig.addon_rates,
+                              managed_server_uf: Number(e.target.value) || 0,
+                            },
+                          })
+                        }
+                        className="w-full rounded-xl border border-slate-700 bg-[#070d19] px-3 py-2 text-[#5eead4] font-mono font-bold"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-slate-300 mb-1">Monitoreo avanzado (UF)</label>
+                      <input
+                        type="number"
+                        step="0.5"
+                        value={pricingConfig.addon_rates.advanced_monitoring_uf}
+                        onChange={(e) =>
+                          setPricingConfig({
+                            ...pricingConfig,
+                            addon_rates: {
+                              ...pricingConfig.addon_rates,
+                              advanced_monitoring_uf: Number(e.target.value) || 0,
+                            },
+                          })
+                        }
+                        className="w-full rounded-xl border border-slate-700 bg-[#070d19] px-3 py-2 text-[#5eead4] font-mono font-bold"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-slate-300 mb-1">Visita / Sede extra (UF)</label>
+                      <input
+                        type="number"
+                        step="0.5"
+                        value={pricingConfig.addon_rates.extra_visit_uf}
+                        onChange={(e) =>
+                          setPricingConfig({
+                            ...pricingConfig,
+                            addon_rates: {
+                              ...pricingConfig.addon_rates,
+                              extra_visit_uf: Number(e.target.value) || 0,
+                            },
+                          })
+                        }
+                        className="w-full rounded-xl border border-slate-700 bg-[#070d19] px-3 py-2 text-[#5eead4] font-mono font-bold"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-slate-300 mb-1">Gestión Cloud extra (UF)</label>
+                      <input
+                        type="number"
+                        step="0.5"
+                        value={pricingConfig.addon_rates.cloud_management_uf}
+                        onChange={(e) =>
+                          setPricingConfig({
+                            ...pricingConfig,
+                            addon_rates: {
+                              ...pricingConfig.addon_rates,
+                              cloud_management_uf: Number(e.target.value) || 0,
+                            },
+                          })
+                        }
+                        className="w-full rounded-xl border border-slate-700 bg-[#070d19] px-3 py-2 text-[#5eead4] font-mono font-bold"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Bloque 3: Editor de los 4 Planes (Start, Business, Business Pro, Enterprise) */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                {pricingConfig.plans.map((plan, idx) => {
+                  const updateThisPlan = (patch: Partial<PricingPlan>) => {
+                    const nextPlans = pricingConfig.plans.map((p, i) => {
+                      if (patch.recommended === true && i !== idx) {
+                        return { ...p, recommended: false };
+                      }
+                      return i === idx ? { ...p, ...patch } : p;
+                    });
+                    setPricingConfig({ ...pricingConfig, plans: nextPlans });
+                  };
+
+                  return (
+                    <div
+                      key={plan.id}
+                      className={`rounded-2xl border p-5 space-y-4 ${
+                        plan.recommended
+                          ? 'border-[#5eead4] bg-[#0e2238]'
+                          : 'border-slate-800 bg-[#0d1627]'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between gap-2 border-b border-slate-800 pb-3">
+                        <div>
+                          <span className="text-[11px] font-mono text-[#5eead4]">
+                            {plan.slug}
+                          </span>
+                          <input
+                            type="text"
+                            value={plan.name}
+                            onChange={(e) => updateThisPlan({ name: e.target.value })}
+                            className="block bg-transparent text-base font-extrabold text-white focus:outline-none"
+                          />
+                        </div>
+
+                        <div className="flex items-center gap-3 text-xs">
+                          <label className="inline-flex items-center gap-1.5 text-[#5eead4] font-bold cursor-pointer">
+                            <input
+                              type="checkbox"
+                              checked={plan.recommended}
+                              onChange={(e) =>
+                                updateThisPlan({ recommended: e.target.checked })
+                              }
+                              className="accent-[#5eead4]"
+                            />
+                            <span>Destacado</span>
+                          </label>
+
+                          <label className="inline-flex items-center gap-1.5 text-slate-300 cursor-pointer">
+                            <input
+                              type="checkbox"
+                              checked={plan.active}
+                              onChange={(e) => updateThisPlan({ active: e.target.checked })}
+                              className="accent-emerald-400"
+                            />
+                            <span>Activo</span>
+                          </label>
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-xs">
+                        <div>
+                          <label className="block text-slate-400 mb-1">Precio (UF/mes)</label>
+                          <input
+                            type="number"
+                            step="0.5"
+                            value={plan.price_uf}
+                            onChange={(e) =>
+                              updateThisPlan({ price_uf: Number(e.target.value) || 0 })
+                            }
+                            className="w-full rounded-xl border border-slate-700 bg-[#070d19] px-2.5 py-2 text-[#5eead4] font-mono font-bold"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-slate-400 mb-1">Equiv. CLP Neto</label>
+                          <div className="rounded-xl border border-slate-800 bg-[#070d19] px-2.5 py-2 text-slate-300 font-mono">
+                            $
+                            {convertUfToClp(
+                              plan.price_uf,
+                              pricingConfig.uf_value_clp
+                            ).toLocaleString('es-CL')}
+                          </div>
+                        </div>
+
+                        <div>
+                          <label className="block text-slate-400 mb-1">Máx. Usuarios</label>
+                          <input
+                            type="number"
+                            min={1}
+                            value={plan.max_users}
+                            onChange={(e) => {
+                              const u = Number(e.target.value) || 1;
+                              updateThisPlan({
+                                max_users: u,
+                                included_computers: u,
+                              });
+                            }}
+                            className="w-full rounded-xl border border-slate-700 bg-[#070d19] px-2.5 py-2 text-white font-mono"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-slate-400 mb-1">Srv. Incluidos</label>
+                          <input
+                            type="number"
+                            min={0}
+                            value={plan.included_servers}
+                            onChange={(e) =>
+                              updateThisPlan({
+                                included_servers: Number(e.target.value) || 0,
+                              })
+                            }
+                            className="w-full rounded-xl border border-slate-700 bg-[#070d19] px-2.5 py-2 text-white font-mono"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
+                        <div>
+                          <label className="block text-slate-400 mb-1">Subtítulo comercial</label>
+                          <input
+                            type="text"
+                            value={plan.tagline}
+                            onChange={(e) => updateThisPlan({ tagline: e.target.value })}
+                            className="w-full rounded-xl border border-slate-700 bg-[#070d19] px-3 py-2 text-white"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-slate-400 mb-1">Texto Botón CTA</label>
+                          <input
+                            type="text"
+                            value={plan.cta_label}
+                            onChange={(e) => updateThisPlan({ cta_label: e.target.value })}
+                            className="w-full rounded-xl border border-slate-700 bg-[#070d19] px-3 py-2 text-white"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="text-xs">
+                        <label className="block text-slate-400 mb-1">
+                          Características incluidas (una por línea):
+                        </label>
+                        <textarea
+                          rows={5}
+                          value={plan.features.join('\n')}
+                          onChange={(e) =>
+                            updateThisPlan({
+                              features: e.target.value
+                                .split('\n')
+                                .map((s) => s.trim())
+                                .filter(Boolean),
+                            })
+                          }
+                          className="w-full rounded-xl border border-slate-700 bg-[#070d19] p-3 text-slate-200 leading-relaxed"
+                        />
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
           {/* ==================== PESTAÑA SERVICIOS ==================== */}
           {activeTab === 'servicios' && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -2106,6 +2611,70 @@ export function AdminCrmWorkspace({
                 </p>
               </div>
             </div>
+
+            {/* Detalle Estructurado del Cotizador Inteligente (cuando aplica) */}
+            {selectedLead.quote_details && (
+              <div className="rounded-2xl border border-[#5eead4]/50 bg-[#0b2236] p-4 space-y-3 text-xs">
+                <div className="flex items-center justify-between border-b border-teal-300/20 pb-2.5">
+                  <span className="inline-flex items-center gap-1.5 font-extrabold text-[#5eead4] uppercase tracking-wider">
+                    <Sparkles className="h-4 w-4" /> Configuración Solicitada en Cotizador Web
+                  </span>
+                  <span className="rounded-full bg-[#5eead4]/20 border border-[#5eead4]/40 px-2.5 py-0.5 text-[11px] font-bold text-[#99f6e4]">
+                    {selectedLead.quote_details.recommended_plan_name}
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                  <div className="rounded-xl bg-[#071522] p-2.5 border border-teal-300/15">
+                    <span className="text-[10px] text-teal-200/70 block">Usuarios</span>
+                    <span className="text-sm font-extrabold text-white">
+                      {selectedLead.quote_details.users_count}
+                    </span>
+                  </div>
+                  <div className="rounded-xl bg-[#071522] p-2.5 border border-teal-300/15">
+                    <span className="text-[10px] text-teal-200/70 block">Computadores</span>
+                    <span className="text-sm font-extrabold text-white">
+                      {selectedLead.quote_details.computers_count}
+                    </span>
+                  </div>
+                  <div className="rounded-xl bg-[#071522] p-2.5 border border-teal-300/15">
+                    <span className="text-[10px] text-teal-200/70 block">Servidores</span>
+                    <span className="text-sm font-extrabold text-white">
+                      {selectedLead.quote_details.servers_count}
+                    </span>
+                  </div>
+                  <div className="rounded-xl bg-[#071522] p-2.5 border border-teal-300/15">
+                    <span className="text-[10px] text-teal-200/70 block">Sucursales</span>
+                    <span className="text-sm font-extrabold text-white">
+                      {selectedLead.quote_details.branches_count}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="rounded-xl bg-[#071522] p-3 border border-teal-300/20 space-y-1.5">
+                  <div className="flex justify-between text-teal-100/80">
+                    <span>Valor Mensual Neto:</span>
+                    <span className="font-bold text-white">
+                      {selectedLead.quote_details.net_uf.toFixed(2)} UF ($
+                      {selectedLead.quote_details.net_clp.toLocaleString('es-CL')} CLP)
+                    </span>
+                  </div>
+                  <div className="flex justify-between text-teal-100/70">
+                    <span>IVA:</span>
+                    <span>
+                      ${selectedLead.quote_details.iva_clp.toLocaleString('es-CL')} CLP
+                    </span>
+                  </div>
+                  <div className="flex justify-between pt-1.5 border-t border-teal-300/15 font-extrabold text-[#5eead4]">
+                    <span>Total Estimado con IVA:</span>
+                    <span>
+                      ${selectedLead.quote_details.total_clp_with_iva.toLocaleString('es-CL')} CLP (
+                      {selectedLead.quote_details.total_uf_with_iva.toFixed(2)} UF)
+                    </span>
+                  </div>
+                </div>
+              </div>
+            )}
 
             {/* Registrar Nueva Nota o Llamada */}
             <form

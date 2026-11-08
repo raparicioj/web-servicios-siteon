@@ -15,19 +15,22 @@ import {
 } from 'lucide-react';
 import {
   getPlatformSettings,
+  getPricingConfig,
   listBlogPosts,
   listServices,
 } from '@/lib/supabase/crm-store';
 import { ServiceIcon } from '@/components/services/ServiceIcon';
 import { SmartLeadForm } from '@/components/forms/SmartLeadForm';
+import { SmartPricingAndQuoterSection } from '@/components/pricing/SmartPricingAndQuoterSection';
 
 export const dynamic = 'force-dynamic';
 
 export default async function HomePage() {
-  const [services, posts, settings] = await Promise.all([
+  const [services, posts, settings, pricingConfig] = await Promise.all([
     listServices(false),
     listBlogPosts(false),
     getPlatformSettings(),
+    getPricingConfig(),
   ]);
 
   const cleanPhone = settings.whatsapp_number.replace(/\D/g, '') || '56958324650';
@@ -322,170 +325,11 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ==================== 3. SECCIÓN CLARA CON TARJETA CALIPSO DESTACADA ==================== */}
-      <section id="planes-soporte" className="py-24 bg-[#f0fdfa] text-slate-900">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <span className="inline-block rounded-full bg-teal-100 border border-teal-300 px-4 py-1 text-xs font-extrabold uppercase tracking-wider text-teal-900">
-              Continuidad Operativa Mensual
-            </span>
-            <h2 className="font-display text-3xl sm:text-5xl font-extrabold text-slate-950 mt-3">
-              Planes de Soporte TI para Empresas
-            </h2>
-            <p className="text-base text-slate-600 mt-3">
-              Explora nuestros planes mensuales diseñados para mantener tu oficina, computadores y
-              servidores operando sin interrupciones, con diagnóstico inicial gratuito.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
-              {
-                name: 'Plan Profesional',
-                uf: '1 UF / mes*',
-                clp: '$39.934 CLP',
-                desc: 'Ideal para profesionales independientes o trabajo remoto.',
-                features: [
-                  'Diagnóstico inicial gratis',
-                  'Hasta 3 eventos mensuales',
-                  'Asistencia remota rápida',
-                  'Optimización y seguridad PC/Mac',
-                ],
-                featured: false,
-              },
-              {
-                name: 'Plan Emprendedores',
-                uf: '2 UF / mes*',
-                clp: '$79.868 CLP',
-                desc: 'Para oficinas y empresas que están comenzando a crecer.',
-                features: [
-                  'Diagnóstico inicial gratis',
-                  'Soporte remoto y presencial',
-                  'Mantención preventiva mensual',
-                  'Configuración de correos y red',
-                ],
-                featured: false,
-              },
-              {
-                name: 'Plan Negocios Pyme',
-                uf: '3 UF / mes*',
-                clp: '$119.802 CLP',
-                desc: 'Cobertura completa para empresas que no pueden detener sus ventas.',
-                features: [
-                  'Diagnóstico de red y equipos gratis',
-                  'Soporte prioritario On-Site y Remoto',
-                  'Administración Wi-Fi y Microsoft 365',
-                  'Monitoreo de respaldos y servidores',
-                ],
-                featured: true,
-              },
-              {
-                name: 'Plan Corporativo Pro',
-                uf: '4 UF / mes*',
-                clp: '$159.736 CLP',
-                desc: 'Para empresas con sucursales, servidores Windows/Linux o Cloud.',
-                features: [
-                  'SLA preferente ante urgencias',
-                  'Administración de servidores y red',
-                  'Seguridad avanzada y respaldos Cloud',
-                  'Consultoría TI mensual para gerencia',
-                ],
-                featured: false,
-              },
-            ].map((plan) => (
-              <div
-                key={plan.name}
-                className={`rounded-3xl p-7 flex flex-col justify-between transition-all ${
-                  plan.featured
-                    ? 'bg-gradient-to-b from-[#0f3852] to-[#0a2538] text-white shadow-[0_20px_50px_rgba(13,148,136,0.3)] scale-[1.02] border-2 border-[#5eead4]'
-                    : 'bg-white border border-teal-200 text-slate-900 hover:border-[#2dd4bf] hover:shadow-xl'
-                }`}
-              >
-                <div>
-                  <div className="flex items-center justify-between gap-2 mb-4">
-                    <span
-                      className={`inline-block rounded-full px-3 py-0.5 text-[11px] font-bold ${
-                        plan.featured
-                          ? 'bg-[#5eead4]/20 text-[#99f6e4] border border-[#5eead4]/40'
-                          : 'bg-teal-50 text-teal-800 border border-teal-200'
-                      }`}
-                    >
-                      + Diagnóstico gratis
-                    </span>
-                    {plan.featured && (
-                      <span className="inline-block rounded-full bg-[#5eead4] px-3 py-0.5 text-[11px] font-extrabold text-slate-950">
-                        Más elegido
-                      </span>
-                    )}
-                  </div>
-
-                  <h3
-                    className={`text-xl font-extrabold ${
-                      plan.featured ? 'text-white' : 'text-slate-950'
-                    }`}
-                  >
-                    {plan.name}
-                  </h3>
-                  <p
-                    className={`text-xs mt-1 mb-5 ${
-                      plan.featured ? 'text-teal-100' : 'text-slate-600'
-                    }`}
-                  >
-                    {plan.desc}
-                  </p>
-
-                  <div
-                    className={`mb-5 pb-4 border-b ${
-                      plan.featured ? 'border-white/15' : 'border-slate-200'
-                    }`}
-                  >
-                    <div
-                      className={`text-3xl font-display font-extrabold ${
-                        plan.featured ? 'text-white' : 'text-slate-950'
-                      }`}
-                    >
-                      {plan.clp}
-                    </div>
-                    <div
-                      className={`text-xs font-bold mt-1 ${
-                        plan.featured ? 'text-[#5eead4]' : 'text-[#0d9488]'
-                      }`}
-                    >
-                      Equivalente a {plan.uf}
-                    </div>
-                  </div>
-
-                  <ul className="space-y-2.5 text-xs mb-7">
-                    {plan.features.map((f) => (
-                      <li key={f} className="flex items-start gap-2">
-                        <CheckCircle2
-                          className={`h-4 w-4 shrink-0 mt-0.5 ${
-                            plan.featured ? 'text-[#5eead4]' : 'text-[#0d9488]'
-                          }`}
-                        />
-                        <span className={plan.featured ? 'text-slate-100' : 'text-slate-700'}>
-                          {f}
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                <Link
-                  href="#solicitar-asesoria"
-                  className={`w-full rounded-full py-3.5 text-center text-xs font-extrabold transition-all ${
-                    plan.featured
-                      ? 'bg-[#5eead4] hover:bg-[#99f6e4] text-slate-950 shadow-lg'
-                      : 'bg-[#0d9488] hover:bg-[#0f766e] text-white'
-                  }`}
-                >
-                  Contratar este plan →
-                </Link>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* ==================== 3. PLANES COMERCIALES, COMPARADOR Y COTIZADOR INTELIGENTE ==================== */}
+      <SmartPricingAndQuoterSection
+        pricingConfig={pricingConfig}
+        settings={settings}
+      />
 
       {/* ==================== 4. VENTAJAS COMPETITIVAS & VALORES ==================== */}
       <section className="py-24 bg-[#102d42]/80 backdrop-blur-sm border-b border-teal-300/20">

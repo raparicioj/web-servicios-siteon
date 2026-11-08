@@ -1,6 +1,7 @@
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import {
   DEFAULT_PLATFORM_SETTINGS,
+  DEFAULT_PRICING_CONFIG,
   INITIAL_BLOG_POSTS,
   INITIAL_SERVICES,
 } from '@/data/siteon-catalog';
@@ -13,6 +14,7 @@ import {
   LeadPriority,
   PipelineStage,
   PlatformSettings,
+  PricingConfig,
   ServiceItem,
 } from '@/types/siteon';
 
@@ -24,6 +26,8 @@ let serverClient: SupabaseClient | null = null;
 const memoryLeads = new Map<string, CRMLead>();
 const memoryActivities = new Map<string, CRMActivity>();
 let memorySettings: PlatformSettings = { ...DEFAULT_PLATFORM_SETTINGS };
+let memoryPricingConfig: PricingConfig = { ...DEFAULT_PRICING_CONFIG };
+let cachedOfficialUf: { value: number; date: string; source: string; fetchedAt: number } | null = null;
 const memoryServices = new Map<string, ServiceItem>();
 const memoryPosts = new Map<string, BlogPost>();
 const memoryAnalytics: AnalyticsEvent[] = [];
@@ -85,6 +89,7 @@ async function upsertPartitionRecord(
     | 'siteon_lead'
     | 'siteon_activity'
     | 'siteon_setting'
+    | 'siteon_pricing'
     | 'siteon_post'
     | 'siteon_service'
     | 'siteon_analytics'
@@ -123,6 +128,7 @@ async function listPartitionRecords<T>(
     | 'siteon_lead'
     | 'siteon_activity'
     | 'siteon_setting'
+    | 'siteon_pricing'
     | 'siteon_post'
     | 'siteon_service'
     | 'siteon_analytics'
@@ -196,7 +202,21 @@ export async function listLeads(): Promise<{ leads: CRMLead[]; storageMode: 'nat
       .order('created_at', { ascending: false });
 
     if (!error && data) {
-      return { leads: data as CRMLead[], storageMode: 'native_sql' };
+      const hydrated = (data as CRMLead[]).map((l) => {
+        const sortedActs = (l.activities || []).sort(
+          (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+        );
+        const quoteAct = sortedActs.find((a) => a.metadata && a.metadata.quote_details);
+        return {
+          ...l,
+          activities: sortedActs,
+          quote_details:
+            l.quote_details ||
+            (quoteAct?.metadata?.quote_details as CRMLead['quote_details']) ||
+            null,
+        };
+      });
+      return { leads: hydrated, storageMode: 'native_sql' };
     }
 
     if (isMissingTableError(error)) {
@@ -213,12 +233,20 @@ export async function listLeads(): Promise<{ leads: CRMLead[]; storageMode: 'nat
       }
 
       const enriched = leads
-        .map((l) => ({
-          ...l,
-          activities: (activitiesByLead.get(l.id) || []).sort(
+        .map((l) => {
+          const sortedActs = (activitiesByLead.get(l.id) || []).sort(
             (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-          ),
-        }))
+          );
+          const quoteAct = sortedActs.find((a) => a.metadata && a.metadata.quote_details);
+          return {
+            ...l,
+            activities: sortedActs,
+            quote_details:
+              l.quote_details ||
+              (quoteAct?.metadata?.quote_details as CRMLead['quote_details']) ||
+              null,
+          };
+        })
         .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
 
       return { leads: enriched, storageMode: 'supabase_partition' };
@@ -744,4 +772,162 @@ export async function recordAuditLog(
       // ignore audit log errors
     }
   }
+}
+
+// ============================================================================
+// 5. PLANES COMERCIALES, COTIZADOR INTELIGENTE Y VALOR OFICIAL DE LA UF
+// ============================================================================
+
+export async function fetchOfficialUfFromApi(forceRefresh = false): Promise<{
+  value: number;
+  date: string;
+  source: string;
+} | null> {
+  const now = Date.now();
+  // Caché de 12 horas en servidor para evitar latencia excesiva y respetar límites de API pública
+  if (!forceRefresh && cachedOfficialUf && now - cachedOfficialUf.fetchedAt < 12 * 60 * 60 * 1000) {
+    return {
+      value: cachedOfficialUf.value,
+      date: cachedOfficialUf.date,
+      source: cachedOfficialUf.source,
+    };
+  }
+
+  try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 3000);
+    const res = await fetch('https://mindicador.cl/api/uf', {
+      signal: controller.signal,
+      next: { revalidate: 43200 },
+    });
+    clearTimeout(timeoutId);
+
+    if (res.ok) {
+      const json = await res.json();
+      const firstSerie = Array.isArray(json?.serie) && json.serie.length > 0 ? json.serie[0] : null;
+      const numericVal = Number(firstSerie?.valor);
+      if (numericVal && numericVal > 30000 && numericVal < 80000) {
+        const isoDate = firstSerie?.fecha
+          ? String(firstSerie.fecha).split('T')[0]
+          : new Date().toISOString().split('T')[0];
+        cachedOfficialUf = {
+          value: Math.round(numericVal * 100) / 100,
+          date: isoDate,
+          source: 'Banco Central de Chile / Mindicador Oficial',
+          fetchedAt: now,
+        };
+        return {
+          value: cachedOfficialUf.value,
+          date: cachedOfficialUf.date,
+          source: cachedOfficialUf.source,
+        };
+      }
+    }
+  } catch {
+    // En caso de falla de red, se mantiene el último valor válido almacenado
+  }
+
+  if (cachedOfficialUf) {
+    return {
+      value: cachedOfficialUf.value,
+      date: cachedOfficialUf.date,
+      source: cachedOfficialUf.source,
+    };
+  }
+  return null;
+}
+
+export async function getPricingConfig(): Promise<PricingConfig> {
+  let storedConfig: PricingConfig = { ...DEFAULT_PRICING_CONFIG, ...memoryPricingConfig };
+
+  const supabase = getServerSupabase();
+  if (supabase) {
+    try {
+      const records = await listPartitionRecords<PricingConfig>('siteon_pricing', 5);
+      if (records.length > 0 && records[0]?.plans?.length) {
+        storedConfig = {
+          ...DEFAULT_PRICING_CONFIG,
+          ...records[0],
+          addon_rates: {
+            ...DEFAULT_PRICING_CONFIG.addon_rates,
+            ...(records[0].addon_rates || {}),
+          },
+          plans: records[0].plans,
+          comparison_rows:
+            records[0].comparison_rows?.length
+              ? records[0].comparison_rows
+              : DEFAULT_PRICING_CONFIG.comparison_rows,
+          exclusions:
+            records[0].exclusions?.length
+              ? records[0].exclusions
+              : DEFAULT_PRICING_CONFIG.exclusions,
+          hiring_conditions:
+            records[0].hiring_conditions?.length
+              ? records[0].hiring_conditions
+              : DEFAULT_PRICING_CONFIG.hiring_conditions,
+        };
+        memoryPricingConfig = storedConfig;
+      }
+    } catch (err) {
+      console.error('[SiteOn Supabase] Error en getPricingConfig:', err);
+    }
+  }
+
+  // Si está en modo automático de UF oficial, intentar sincronizar pero siempre mantener el último valor válido si falla
+  if (storedConfig.uf_mode === 'official_auto') {
+    const official = await fetchOfficialUfFromApi(false);
+    if (official && official.value > 0) {
+      // Si el usuario aún no ha forzado modo manual y la API oficial responde, adjuntamos el dato oficial disponible
+      // Nota: conservamos uf_value_clp configurado si es mayor o actualizamos con el valor vigente
+      storedConfig = {
+        ...storedConfig,
+        uf_value_clp: official.value,
+        uf_last_updated: official.date,
+        uf_source_label: official.source,
+      };
+    }
+  }
+
+  return storedConfig;
+}
+
+export async function updatePricingConfig(
+  updates: Partial<PricingConfig>
+): Promise<PricingConfig> {
+  const current = await getPricingConfig();
+  const nextConfig: PricingConfig = {
+    ...current,
+    ...updates,
+    id: 'default',
+    addon_rates: {
+      ...current.addon_rates,
+      ...(updates.addon_rates || {}),
+    },
+    plans: updates.plans && updates.plans.length > 0 ? updates.plans : current.plans,
+    comparison_rows:
+      updates.comparison_rows && updates.comparison_rows.length > 0
+        ? updates.comparison_rows
+        : current.comparison_rows,
+    exclusions:
+      updates.exclusions && updates.exclusions.length > 0
+        ? updates.exclusions
+        : current.exclusions,
+    hiring_conditions:
+      updates.hiring_conditions && updates.hiring_conditions.length > 0
+        ? updates.hiring_conditions
+        : current.hiring_conditions,
+    updated_at: new Date().toISOString(),
+  };
+
+  memoryPricingConfig = nextConfig;
+
+  await upsertPartitionRecord(
+    'pricing_config_default',
+    'siteon_pricing',
+    'default',
+    'SiteOn Pricing & Quoter Config',
+    nextConfig
+  );
+
+  return nextConfig;
 }

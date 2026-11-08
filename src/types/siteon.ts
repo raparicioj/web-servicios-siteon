@@ -66,9 +66,112 @@ export interface CRMLead {
   ai_suggested_action: string;
   email_notification_status: 'pending' | 'sent' | 'failed' | 'skipped';
   email_notification_error?: string | null;
+  quote_details?: QuoteConfiguration | null;
   created_at: string;
   updated_at: string;
   activities?: CRMActivity[];
+}
+
+export interface PricingPlan {
+  id: string;
+  slug: 'site-on-start' | 'site-on-business' | 'site-on-business-pro' | 'site-on-enterprise' | string;
+  name: string;
+  badge?: string;
+  tagline: string;
+  price_uf: number;
+  is_from_price: boolean;
+  reference_clp: number;
+  max_users: number;
+  included_computers: number;
+  included_servers: number;
+  includes_m365_workspace: boolean;
+  includes_monitoring: boolean;
+  includes_cloud_hybrid: boolean;
+  onsite_visits_summary: string;
+  features: string[];
+  cta_label: string;
+  recommended: boolean;
+  active: boolean;
+  sort_order: number;
+}
+
+export interface PricingAddonRates {
+  extra_user_uf: number;
+  extra_computer_uf: number;
+  managed_server_uf: number;
+  advanced_monitoring_uf: number;
+  extra_visit_uf: number;
+  cloud_management_uf: number;
+  automation_ai_uf: number;
+}
+
+export interface PricingComparisonRow {
+  id: string;
+  feature_name: string;
+  category: 'Cobertura & Soporte' | 'Infraestructura & Cloud' | 'Gestión & SLA';
+  tooltip?: string;
+  values: {
+    'site-on-start': string | boolean;
+    'site-on-business': string | boolean;
+    'site-on-business-pro': string | boolean;
+    'site-on-enterprise': string | boolean;
+    [key: string]: string | boolean;
+  };
+}
+
+export interface PricingConfig {
+  id: string;
+  uf_mode: 'official_auto' | 'manual_reference';
+  uf_value_clp: number;
+  uf_last_updated: string;
+  uf_source_label: string;
+  iva_percentage: number;
+  promo_active: boolean;
+  promo_text: string;
+  promo_discount_pct: number;
+  section_badge: string;
+  section_title: string;
+  section_subtitle: string;
+  legal_disclaimer: string;
+  support_hours: string;
+  onsite_coverage_area: string;
+  addon_rates: PricingAddonRates;
+  plans: PricingPlan[];
+  comparison_rows: PricingComparisonRow[];
+  exclusions: string[];
+  hiring_conditions: string[];
+  updated_at: string;
+}
+
+export interface QuoteConfiguration {
+  source: 'plan_card' | 'smart_quoter';
+  recommended_plan_slug: string;
+  recommended_plan_name: string;
+  users_count: number;
+  computers_count: number;
+  servers_count: number;
+  branches_count: number;
+  productivity_suite: 'none' | 'microsoft_365' | 'google_workspace' | 'both';
+  support_modality: 'remote_only' | 'remote_and_scheduled_onsite' | 'intensive_onsite';
+  requires_monitoring: boolean;
+  requires_cloud: boolean;
+  requires_automation_ai: boolean;
+  base_price_uf: number;
+  addons_uf: number;
+  addons_breakdown: {
+    label: string;
+    uf: number;
+    clp: number;
+    included_in_plan: boolean;
+  }[];
+  net_uf: number;
+  net_clp: number;
+  iva_uf: number;
+  iva_clp: number;
+  total_uf_with_iva: number;
+  total_clp_with_iva: number;
+  uf_rate_used: number;
+  uf_date_used: string;
 }
 
 export interface ServiceUseCase {

@@ -4,6 +4,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getAdminSessionFromCookies } from '@/lib/auth/admin-session';
 import {
   getPlatformSettings,
+  getPricingConfig,
   listAnalyticsEvents,
   listBlogPosts,
   listLeads,
@@ -12,8 +13,9 @@ import {
   saveBlogPost,
   saveServiceItem,
   updatePlatformSettings,
+  updatePricingConfig,
 } from '@/lib/supabase/crm-store';
-import { BlogPost, ServiceItem } from '@/types/siteon';
+import { BlogPost, PricingConfig, ServiceItem } from '@/types/siteon';
 
 export async function GET() {
   const session = await getAdminSessionFromCookies();
@@ -21,13 +23,15 @@ export async function GET() {
     return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
   }
 
-  const [{ leads, storageMode }, settings, services, posts, analytics] = await Promise.all([
-    listLeads(),
-    getPlatformSettings(),
-    listServices(true),
-    listBlogPosts(true),
-    listAnalyticsEvents(400),
-  ]);
+  const [{ leads, storageMode }, settings, pricingConfig, services, posts, analytics] =
+    await Promise.all([
+      listLeads(),
+      getPlatformSettings(),
+      getPricingConfig(),
+      listServices(true),
+      listBlogPosts(true),
+      listAnalyticsEvents(400),
+    ]);
 
   let sqlMigration = '';
   try {
@@ -49,6 +53,7 @@ export async function GET() {
     storageMode,
     leads,
     settings,
+    pricingConfig,
     services,
     posts,
     analytics,
@@ -71,6 +76,23 @@ export async function PUT(req: NextRequest) {
       whatsapp_number: updated.whatsapp_number,
     });
     return NextResponse.json({ ok: true, settings: updated });
+  }
+
+  if (resource === 'pricing') {
+    const pricingData = (body.data || {}) as Partial<PricingConfig>;
+    const updatedPricing = await updatePricingConfig(pricingData);
+    if (body.whatsapp_number) {
+      await updatePlatformSettings({
+        whatsapp_number: String(body.whatsapp_number).replace(/\D/g, ''),
+        whatsapp_display: String(body.whatsapp_display || body.whatsapp_number),
+      });
+    }
+    await recordAuditLog(session.email, 'update_pricing_config', 'pricing', 'default', {
+      uf_value_clp: updatedPricing.uf_value_clp,
+      uf_mode: updatedPricing.uf_mode,
+      iva_percentage: updatedPricing.iva_percentage,
+    });
+    return NextResponse.json({ ok: true, pricingConfig: updatedPricing });
   }
 
   if (resource === 'service') {

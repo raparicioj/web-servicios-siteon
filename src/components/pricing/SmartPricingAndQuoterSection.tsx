@@ -147,6 +147,7 @@ export function SmartPricingAndQuoterSection({
   const [requiresCloud, setRequiresCloud] = useState<boolean>(false);
   const [requiresAutomationAi, setRequiresAutomationAi] = useState<boolean>(false);
   const [manualPlanOverrideSlug, setManualPlanOverrideSlug] = useState<string | null>(null);
+  const [isQuoterExpanded, setIsQuoterExpanded] = useState<boolean>(false);
 
   // Comparador móvil: plan activo seleccionado en vista móvil
   const [mobileComparedPlanSlug, setMobileComparedPlanSlug] = useState<string>(
@@ -568,10 +569,13 @@ export function SmartPricingAndQuoterSection({
     if (plan.includes_m365_workspace && productivitySuite === 'none') {
       setProductivitySuite('microsoft_365');
     }
-    const el = document.getElementById('cotizador-inteligente');
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
+    setIsQuoterExpanded(true);
+    setTimeout(() => {
+      const el = document.getElementById('cotizador-inteligente');
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 50);
   };
 
   const handleDiagnosticSubmit = async (e: React.FormEvent) => {
@@ -826,13 +830,25 @@ export function SmartPricingAndQuoterSection({
                 <span>{showUfConverter ? 'Ocultar Calculadora UF' : 'Calculadora UF ↔ CLP'}</span>
               </button>
 
-              <a
-                href="#cotizador-inteligente"
+              <button
+                type="button"
+                onClick={() => {
+                  setIsQuoterExpanded((prev) => {
+                    const next = !prev;
+                    if (next) {
+                      setTimeout(() => {
+                        const el = document.getElementById('cotizador-inteligente');
+                        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                      }, 50);
+                    }
+                    return next;
+                  });
+                }}
                 className="inline-flex items-center gap-1.5 rounded-xl bg-[#5eead4] hover:bg-[#99f6e4] px-4 py-2 text-xs font-extrabold text-slate-950 transition-all shadow-md"
               >
                 <SlidersHorizontal className="h-3.5 w-3.5" />
-                <span>Ir al Cotizador Inteligente</span>
-              </a>
+                <span>{isQuoterExpanded ? 'Ocultar Cotizador' : 'Abrir Cotizador Inteligente'}</span>
+              </button>
             </div>
           </div>
 
@@ -1017,11 +1033,62 @@ export function SmartPricingAndQuoterSection({
           })}
         </div>
 
-        {/* ==================== 3. COTIZADOR INTELIGENTE INTERACTIVO (TONOS CLAROS Y LUMINOSOS) ==================== */}
-        <div
-          id="cotizador-inteligente"
-          className="scroll-mt-24 rounded-3xl border-2 border-[#5eead4]/60 bg-gradient-to-br from-[#1d5479]/95 via-[#184868]/95 to-[#153e5c]/95 p-6 sm:p-10 shadow-[0_25px_70px_rgba(15,45,68,0.65)] mb-20"
-        >
+        {/* ==================== BOTÓN LARGO ELEGANTE PARA DESPLEGAR COTIZADOR INTELIGENTE ==================== */}
+        <div className="mb-14">
+          <button
+            type="button"
+            onClick={() => {
+              setIsQuoterExpanded((prev) => {
+                const next = !prev;
+                if (next) {
+                  setTimeout(() => {
+                    const el = document.getElementById('cotizador-inteligente');
+                    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                  }, 60);
+                }
+                return next;
+              });
+            }}
+            className="group relative w-full overflow-hidden rounded-2xl border-2 border-[#5eead4]/60 bg-gradient-to-r from-[#174666] via-[#1f5c87] to-[#174666] p-4 sm:p-5 text-left shadow-[0_12px_35px_rgba(15,45,68,0.45)] transition-all duration-300 hover:border-[#99f6e4] hover:shadow-[0_16px_45px_rgba(94,234,212,0.25)] focus:outline-none"
+          >
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div className="flex items-center gap-3.5">
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[#5eead4]/25 border border-[#99f6e4]/60 text-[#5eead4] shadow-inner group-hover:scale-105 transition-transform">
+                  <SlidersHorizontal className="h-6 w-6" />
+                </div>
+                <div>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="text-base sm:text-lg font-extrabold text-white">
+                      ¿Necesitas una configuración personalizada para tu empresa?
+                    </span>
+                    <span className="inline-flex items-center rounded-full bg-[#5eead4]/20 border border-[#99f6e4]/60 px-2.5 py-0.5 text-[10px] font-extrabold uppercase tracking-wide text-[#ccfbf1]">
+                      Simulador en Vivo
+                    </span>
+                  </div>
+                  <p className="text-xs sm:text-sm text-teal-100/90 mt-0.5">
+                    {isQuoterExpanded
+                      ? 'Haz clic para plegar el cotizador interactivo'
+                      : 'Calcula tu presupuesto según cantidad de usuarios, servidores, equipos y Microsoft 365 / Google'}
+                  </p>
+                </div>
+              </div>
+
+              <div className="inline-flex items-center self-start sm:self-center gap-2 rounded-xl bg-[#5eead4] px-4 py-2.5 text-xs font-black text-slate-950 shadow-md group-hover:bg-[#99f6e4] transition-colors shrink-0">
+                <span>{isQuoterExpanded ? 'Ocultar Cotizador' : 'Desplegar Cotizador Inteligente'}</span>
+                <span className={`inline-block transition-transform duration-300 text-sm font-bold ${isQuoterExpanded ? 'rotate-180' : ''}`}>
+                  ▼
+                </span>
+              </div>
+            </div>
+          </button>
+        </div>
+
+        {/* ==================== 3. COTIZADOR INTELIGENTE INTERACTIVO (DESPLEGABLE) ==================== */}
+        {isQuoterExpanded && (
+          <div
+            id="cotizador-inteligente"
+            className="scroll-mt-24 rounded-3xl border-2 border-[#5eead4]/60 bg-gradient-to-br from-[#1d5479]/95 via-[#184868]/95 to-[#153e5c]/95 p-6 sm:p-10 shadow-[0_25px_70px_rgba(15,45,68,0.65)] mb-20 animate-in fade-in slide-in-from-top-4 duration-300"
+          >
           <div className="flex flex-col lg:flex-row lg:items-end justify-between mb-8 pb-6 border-b border-teal-200/30 gap-4">
             <div>
               <span className="inline-flex items-center gap-1.5 rounded-full bg-[#5eead4]/25 border border-[#99f6e4]/50 px-3.5 py-1 text-xs font-extrabold uppercase tracking-wider text-[#ccfbf1]">
@@ -1595,6 +1662,7 @@ export function SmartPricingAndQuoterSection({
             </div>
           </div>
         </div>
+        )}
 
         {/* ==================== 4. COMPARADOR DE CARACTERÍSTICAS DE PLANES (MÁS CLARO Y LUMINOSO) ==================== */}
         <div id="comparador-planes" className="scroll-mt-24 mb-20">

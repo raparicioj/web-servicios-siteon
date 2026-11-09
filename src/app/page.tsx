@@ -54,21 +54,19 @@ export default async function HomePage() {
             <div className="lg:col-span-6 space-y-6">
               <div className="inline-flex items-center gap-2 rounded-full border border-[#5eead4]/45 bg-[#2dd4bf]/15 px-4 py-1.5 text-[11px] font-extrabold uppercase tracking-widest text-[#99f6e4]">
                 <span className="h-2 w-2 rounded-full bg-[#5eead4] animate-pulse" />
-                <span>Socio Tecnológico de tu Empresa • Viña del Mar & Chile</span>
+                <span>TU SOCIO TECNOLÓGICO</span>
               </div>
 
-              <h1 className="font-display text-4xl sm:text-6xl font-extrabold tracking-tight text-white leading-[1.05]">
-                Soporte TI Sólido. <br />
-                <span className="bg-gradient-to-r from-[#99f6e4] via-[#5eead4] to-[#67e8f9] bg-clip-text text-transparent">
-                  Resultados Medibles.
+              <h1 className="font-display text-4xl sm:text-6xl font-extrabold tracking-tight text-white leading-[1.1]">
+                Tu tecnología debe impulsar tu negocio, no detenerlo.{' '}
+                <span className="bg-gradient-to-r from-[#99f6e4] via-[#5eead4] to-[#67e8f9] bg-clip-text text-transparent block mt-1 sm:mt-2">
+                  Nosotros nos encargamos.
                 </span>
               </h1>
 
               <p className="text-base sm:text-lg text-teal-50/90 leading-relaxed max-w-xl">
-                Acompañamos a empresas y pymes en crecimiento a modernizar su operación,
-                mantener sus computadores y redes sin caídas y construir infraestructura que rinde
-                — desde <strong className="text-white">Soporte TI presencial y remoto</strong> hasta{' '}
-                <strong className="text-white">Servidores, Cloud, Web y Automatización</strong>.
+                Gestionamos, protegemos y optimizamos la tecnología de tu empresa. Desde soporte TI y
+                servidores hasta Cloud, automatización e inteligencia artificial.
               </p>
 
               {/* Botones Píldora en Calipso Claro (#5eead4 / #67e8f9) */}
@@ -77,7 +75,7 @@ export default async function HomePage() {
                   href="#solicitar-asesoria"
                   className="inline-flex items-center justify-center gap-2 rounded-full bg-[#5eead4] hover:bg-[#99f6e4] px-7 py-4 text-sm font-extrabold text-slate-950 shadow-[0_12px_32px_rgba(94,234,212,0.35)] transition-all hover:scale-[1.02]"
                 >
-                  <span>Agendar Diagnóstico Gratis</span>
+                  <span>Agendar diagnóstico gratuito</span>
                   <ArrowRight className="h-4 w-4" />
                 </Link>
 
@@ -85,7 +83,7 @@ export default async function HomePage() {
                   href="/servicios"
                   className="inline-flex items-center justify-center gap-2 rounded-full border border-teal-300/35 bg-[#13354e]/90 hover:bg-[#1a4666] px-7 py-4 text-sm font-bold text-white transition-all"
                 >
-                  <span>Explorar Servicios</span>
+                  <span>Conocer soluciones</span>
                 </Link>
 
                 <a

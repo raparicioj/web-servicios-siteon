@@ -217,7 +217,7 @@ function fetchMqttSnapshot(brokerUrl) {
   });
 }
 
-const PAUSED_TEMPORARILY = true;
+const PAUSED_TEMPORARILY = false;
 
 export default async function handler(req, res) {
   if (PAUSED_TEMPORARILY) {

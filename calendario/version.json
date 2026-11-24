@@ -1,5 +1,5 @@
 {
-  "version": "v39_production_reactivated",
-  "buildTime": 1795542500000,
-  "description": "Reactivacion completa en produccion de Mi Calendario, Panel Admin y Recordatorios WhatsApp 24/7"
+  "version": "v40_greenapi_direct_whatsapp",
+  "buildTime": 1795546300000,
+  "description": "Envio directo de WhatsApp via Green-API en /api/send-whatsapp sin limite de Make.com"
 }

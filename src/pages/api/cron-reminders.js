@@ -1,8 +1,11 @@
 import mqtt from 'mqtt';
 
-const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
-const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
-const WEBHOOK_URL = process.env.SITEON_MAKE_WEBHOOK_URL || '';
+const SUPABASE_URL = (process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://wlwadurbzzhlztxrvndp.supabase.co').trim().replace(/\/+$/, '');
+const SUPABASE_KEY = (process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '').trim();
+const GREEN_API_URL = (process.env.GREEN_API_URL || 'https://7107.api.greenapi.com').trim().replace(/\/+$/, '');
+const GREEN_API_ID = (process.env.GREEN_API_ID || '').trim();
+const GREEN_API_TOKEN = (process.env.GREEN_API_TOKEN || '').trim();
+const WEBHOOK_URL = (process.env.SITEON_MAKE_WEBHOOK_URL || '').trim();
 const TOPIC = 'siteon/mi_calendario/carmen_rodrigo/v16_sync';
 const BROKER = 'mqtt://broker.emqx.io:1883';
 const BACKUP_BROKER = 'mqtt://broker.hivemq.com:1883';
@@ -25,12 +28,34 @@ function getChileTime() {
 }
 
 /**
- * Envío individual por webhook a Make.com (canal WhatsApp)
+ * Envío individual directo por Green-API (primario) con respaldo a webhook Make.com
  */
 async function sendWebhook(to, recipientName, message) {
   const cleanPhone = to.replace(/\D/g, '');
   const e164 = cleanPhone.startsWith('+') ? cleanPhone : `+${cleanPhone}`;
   const plain = cleanPhone.replace(/^\+/, '');
+  const chatId = `${plain}@c.us`;
+
+  // 1. Envío directo a Green-API (sin intermediarios ni límite de créditos Make.com)
+  if (GREEN_API_ID && GREEN_API_TOKEN) {
+    try {
+      const endpoint = `${GREEN_API_URL}/waInstance${GREEN_API_ID}/sendMessage/${GREEN_API_TOKEN}`;
+      const res = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ chatId, message }),
+      });
+      const data = await res.json().catch(() => ({}));
+      return { ok: res.ok, status: res.status, provider: 'green-api', idMessage: data?.idMessage || null };
+    } catch (err) {
+      return { ok: false, provider: 'green-api', error: err.message };
+    }
+  }
+
+  // 2. Fallback a Webhook (si Green-API no está configurado en variables de entorno)
+  if (!WEBHOOK_URL) {
+    return { ok: false, error: 'Neither GREEN_API nor WEBHOOK_URL is configured' };
+  }
 
   const payload = {
     channel: 'whatsapp',
@@ -39,6 +64,7 @@ async function sendWebhook(to, recipientName, message) {
     number: e164,
     phoneNumber: e164,
     plainPhone: plain,
+    chatId,
     recipientName,
     senderName: 'Mi Calendario Cloud ☁️',
     message,
@@ -52,9 +78,9 @@ async function sendWebhook(to, recipientName, message) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
     });
-    return { ok: res.ok, status: res.status };
+    return { ok: res.ok, status: res.status, provider: 'webhook' };
   } catch (err) {
-    return { ok: false, error: err.message };
+    return { ok: false, provider: 'webhook', error: err.message };
   }
 }
 
@@ -241,10 +267,12 @@ export default async function handler(req, res) {
   let source = 'none';
 
   const supabaseEvents = await fetchSupabaseEvents(chile.dateStr);
-  if (supabaseEvents && supabaseEvents.length > 0) {
+  if (supabaseEvents !== null) {
     todayEvents = supabaseEvents;
     source = 'supabase';
-    logEntries.push(`[Supabase] Cargados ${todayEvents.length} eventos para hoy.`);
+    logEntries.push(`[Supabase] Conectado OK. Cargados ${todayEvents.length} eventos para hoy.`);
+  } else {
+    logEntries.push(`[Supabase] No disponible o sin respuesta; usando respaldo MQTT.`);
   }
 
   // Respaldo MQTT para complementar eventos locales recién creados si los hubiera
